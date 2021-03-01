@@ -29,6 +29,7 @@
       <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
     </ul>
+    <button @click="test">ボタン</button>
   </div>
 </template>
 
@@ -38,7 +39,15 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 @Component
 export default class HelloWorld extends Vue {
   @Prop() private msg!: string;
+
+  public test(): void {
+    Vue.axios.get('/').then((response) => {
+      console.log(response.data);
+    });
+  }
 }
+
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
