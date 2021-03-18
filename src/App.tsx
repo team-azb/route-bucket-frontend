@@ -1,31 +1,35 @@
 import { useState } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import 'leaflet/dist/leaflet.css';
 import { nanoid } from 'nanoid';
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents, Polyline, useMapEvent } from 'react-leaflet';
-import { LatLng } from 'leaflet';
+import { MapContainer, TileLayer, Marker, Polyline, useMapEvent } from 'react-leaflet';
+import { LatLng, LatLngExpression, LeafletMouseEvent } from 'leaflet';
 
 const limeOptions = { color: 'lime' }
 
-function ClickLayer({positions, setPositions}: any){
-  const map = useMapEvent('click', (e: any)=>{
-    setPositions([...positions, e.latlng]);
+type ClickLayerProps = {
+  positions: LatLng[],
+  setPositions: React.Dispatch<React.SetStateAction<LatLng[]>>
+}
+
+function ClickLayer(props: ClickLayerProps){
+  useMapEvent('click', (e: LeafletMouseEvent)=>{
+    props.setPositions([...props.positions, e.latlng]);
   })
   
   return null;
 }
 
 function App() {
-  const [positions, setPositions] = useState([]);
+  const [positions, setPositions] = useState< LatLng[]>([]);
 
-  const polyline: any = positions.map((pos: LatLng) => [pos.lat, pos.lng])
+  const polyline: LatLngExpression[] = positions.map((pos: LatLng) => [pos.lat, pos.lng])
 
   const Markers: any = positions.map((pos: LatLng) => {
     return <Marker position={[pos.lat, pos.lng]} key={nanoid()}/>
   })
 
-  function onClickHandler(){
+  function onClickHandler(): void{
     setPositions([]);
   }
 
