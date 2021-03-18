@@ -1,8 +1,33 @@
-import React from 'react';
+import { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import 'leaflet/dist/leaflet.css';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents, Polyline } from 'react-leaflet';
+
+const polyline: any = [
+  [51.505, -0.09],
+  [51.51, -0.1],
+  [51.51, -0.12],
+]
+const limeOptions = { color: 'lime' }
+
+function LocationMarker(){
+  const [position, setPosition]: any = useState(null);
+  const map = useMapEvents({
+    click(){
+      map.locate() //ユーザーの現在地点を取得してlocationfoundイベントを発火させる
+    },
+    locationfound(e: any) {
+      setPosition(e.latlng)
+      map.flyTo(e.latlng, map.getZoom())
+    },
+  })
+  return position === null ? null : (
+    <Marker position={position}>
+      <Popup>You are here</Popup>
+    </Marker>
+  )
+}
 
 function App() {
   return (
@@ -16,6 +41,8 @@ function App() {
           A pretty CSS3 popup. <br /> Easily customizable.
         </Popup>
       </Marker>
+      <LocationMarker />
+      <Polyline pathOptions={limeOptions} positions={polyline} />
     </MapContainer>
   );
 }
