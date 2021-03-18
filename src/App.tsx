@@ -5,14 +5,14 @@ import { nanoid } from 'nanoid';
 import { MapContainer, TileLayer, Marker, Polyline, useMapEvent } from 'react-leaflet';
 import { LatLng, LatLngExpression, LeafletMouseEvent } from 'leaflet';
 
-const limeOptions = { color: 'lime' }
+const limeOptions: {color: string} = { color: 'lime' }
 
 type ClickLayerProps = {
   positions: LatLng[],
   setPositions: React.Dispatch<React.SetStateAction<LatLng[]>>
 }
 
-function ClickLayer(props: ClickLayerProps){
+function ClickLayer(props: ClickLayerProps): null{
   useMapEvent('click', (e: LeafletMouseEvent)=>{
     props.setPositions([...props.positions, e.latlng]);
   })
@@ -20,12 +20,12 @@ function ClickLayer(props: ClickLayerProps){
   return null;
 }
 
-function App() {
+function App(): JSX.Element{
   const [positions, setPositions] = useState< LatLng[]>([]);
 
-  const polyline: LatLngExpression[] = positions.map((pos: LatLng) => [pos.lat, pos.lng])
+  const polyline: LatLngExpression[] = positions.map((pos: LatLng): LatLngExpression => [pos.lat, pos.lng])
 
-  const Markers: any = positions.map((pos: LatLng) => {
+  const Markers: JSX.Element[] = positions.map((pos: LatLng): JSX.Element => {
     return <Marker position={[pos.lat, pos.lng]} key={nanoid()}/>
   })
 
