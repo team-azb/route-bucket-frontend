@@ -2,7 +2,8 @@ import { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import 'leaflet/dist/leaflet.css';
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents, Polyline } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents, Polyline, useMapEvent } from 'react-leaflet';
+import { LatLng } from 'leaflet';
 
 const polyline: any = [
   [51.505, -0.09],
@@ -11,22 +12,22 @@ const polyline: any = [
 ]
 const limeOptions = { color: 'lime' }
 
-function LocationMarker(){
-  const [position, setPosition]: any = useState(null);
-  const map = useMapEvents({
-    click(){
-      map.locate() //ユーザーの現在地点を取得してlocationfoundイベントを発火させる
-    },
-    locationfound(e: any) {
-      setPosition(e.latlng)
-      map.flyTo(e.latlng, map.getZoom())
-    },
+function MarkerComponent(){
+  const [positions, setPositions]: any = useState([]);
+
+  const map = useMapEvent('click', (e: any)=>{
+    setPositions([...positions, e.latlng]);
   })
-  return position === null ? null : (
-    <Marker position={position}>
-      <Popup>You are here</Popup>
-    </Marker>
-  )
+
+  const Markers = positions.map((pos: LatLng) => {
+    return <Marker position={[pos.lat, pos.lng]}/>
+  })
+  
+  return (
+    <>
+    {Markers}
+    </>
+  );
 }
 
 function App() {
@@ -36,13 +37,8 @@ function App() {
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <Marker position={[51.505, -0.09]}>
-        <Popup>
-          A pretty CSS3 popup. <br /> Easily customizable.
-        </Popup>
-      </Marker>
-      <LocationMarker />
-      <Polyline pathOptions={limeOptions} positions={polyline} />
+      <MarkerComponent/>
+      {/* <Polyline pathOptions={limeOptions} positions={polyline} /> */}
     </MapContainer>
   );
 }
