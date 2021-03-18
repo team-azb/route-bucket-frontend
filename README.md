@@ -2,7 +2,7 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Install Node Package
+## Install Node Packages
 
 Before runs the app, run the following command to install all node packages.
 
