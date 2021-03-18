@@ -6,40 +6,33 @@ import { nanoid } from 'nanoid';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, Polyline, useMapEvent } from 'react-leaflet';
 import { LatLng } from 'leaflet';
 
-const polyline: any = [
-  [51.505, -0.09],
-  [51.51, -0.1],
-  [51.51, -0.12],
-]
 const limeOptions = { color: 'lime' }
 
-function MarkerComponent(){
-  const [positions, setPositions]: any = useState([]);
-
+function ClickLayer({positions, setPositions}: any){
   const map = useMapEvent('click', (e: any)=>{
     setPositions([...positions, e.latlng]);
   })
-
-  const Markers = positions.map((pos: LatLng) => {
-    return <Marker position={[pos.lat, pos.lng]} key={nanoid()}/>
-  })
   
-  return (
-    <>
-    {Markers}
-    </>
-  );
+  return null;
 }
 
 function App() {
+  const [positions, setPositions] = useState([]);
+
+  const polyline: any = positions.map((pos: LatLng) => [pos.lat, pos.lng])
+
+  const Markers: any = positions.map((pos: LatLng) => {
+    return <Marker position={[pos.lat, pos.lng]} key={nanoid()}/>
+  })
   return (
     <MapContainer style={{height: '600px'}} center={[51.505, -0.09]} zoom={13} scrollWheelZoom={true}>
       <TileLayer
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <MarkerComponent/>
-      {/* <Polyline pathOptions={limeOptions} positions={polyline} /> */}
+      <ClickLayer positions={positions} setPositions={setPositions}/>
+      {Markers}
+      {polyline === [] ? null : <Polyline pathOptions={limeOptions} positions={polyline} />}
     </MapContainer>
   );
 }
