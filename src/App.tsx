@@ -1,25 +1,47 @@
-import React from 'react';
+import { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import 'leaflet/dist/leaflet.css';
+import { nanoid } from 'nanoid';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents, Polyline, useMapEvent } from 'react-leaflet';
+import { LatLng } from 'leaflet';
+
+const limeOptions = { color: 'lime' }
+
+function ClickLayer({positions, setPositions}: any){
+  const map = useMapEvent('click', (e: any)=>{
+    setPositions([...positions, e.latlng]);
+  })
+  
+  return null;
+}
 
 function App() {
+  const [positions, setPositions] = useState([]);
+
+  const polyline: any = positions.map((pos: LatLng) => [pos.lat, pos.lng])
+
+  const Markers: any = positions.map((pos: LatLng) => {
+    return <Marker position={[pos.lat, pos.lng]} key={nanoid()}/>
+  })
+
+  function onClickHandler(){
+    setPositions([]);
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <MapContainer style={{height: '600px'}} center={[51.505, -0.09]} zoom={13} scrollWheelZoom={true}>
+      {Markers}
+        {polyline === [] ? null : <Polyline pathOptions={limeOptions} positions={polyline} />}
+        <TileLayer
+          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <ClickLayer positions={positions} setPositions={setPositions}/>
+      </MapContainer>
+      <button onClick={onClickHandler}>リセット</button>
+    </>
   );
 }
 
