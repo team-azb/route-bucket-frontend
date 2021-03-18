@@ -2,6 +2,7 @@ import { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import 'leaflet/dist/leaflet.css';
+import { nanoid } from 'nanoid';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, Polyline, useMapEvent } from 'react-leaflet';
 import { LatLng } from 'leaflet';
 
@@ -20,7 +21,7 @@ function MarkerComponent(){
   })
 
   const Markers = positions.map((pos: LatLng) => {
-    return <Marker position={[pos.lat, pos.lng]}/>
+    return <Marker position={[pos.lat, pos.lng]} key={nanoid()}/>
   })
   
   return (
