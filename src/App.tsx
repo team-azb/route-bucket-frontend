@@ -24,16 +24,24 @@ function App() {
   const Markers: any = positions.map((pos: LatLng) => {
     return <Marker position={[pos.lat, pos.lng]} key={nanoid()}/>
   })
+
+  function onClickHandler(){
+    setPositions([]);
+  }
+
   return (
-    <MapContainer style={{height: '600px'}} center={[51.505, -0.09]} zoom={13} scrollWheelZoom={true}>
-      <TileLayer
-        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <ClickLayer positions={positions} setPositions={setPositions}/>
-      {Markers}
-      {polyline === [] ? null : <Polyline pathOptions={limeOptions} positions={polyline} />}
-    </MapContainer>
+    <>
+      <MapContainer style={{height: '600px'}} center={[51.505, -0.09]} zoom={13} scrollWheelZoom={true}>
+        <TileLayer
+          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <ClickLayer positions={positions} setPositions={setPositions}/>
+        {Markers}
+        {polyline === [] ? null : <Polyline pathOptions={limeOptions} positions={polyline} />}
+      </MapContainer>
+      <button onClick={onClickHandler}>リセット</button>
+    </>
   );
 }
 
