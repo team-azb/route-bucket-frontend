@@ -21,7 +21,7 @@ function ClickLayer(props: ClickLayerProps): null{
 }
 
 function App(): JSX.Element{
-  const [positions, setPositions] = useState< LatLng[]>([]);
+  const [positions, setPositions] = useState<LatLng[]>([]);
 
   const polyline: LatLngExpression[] = positions.map((pos: LatLng): LatLngExpression => [pos.lat, pos.lng])
 
