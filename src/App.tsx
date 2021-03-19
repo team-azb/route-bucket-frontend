@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import 'leaflet/dist/leaflet.css';
 import { nanoid } from 'nanoid';
@@ -22,8 +22,11 @@ function ClickLayer(props: ClickLayerProps): null{
 
 function App(): JSX.Element{
   const [positions, setPositions] = useState<LatLng[]>([]);
+  const [polyline, setPolyline] = useState<LatLngExpression[]>([]);
 
-  const polyline: LatLngExpression[] = positions.map((pos: LatLng): LatLngExpression => [pos.lat, pos.lng])
+  useEffect(() => {
+    setPolyline(positions.map((pos: LatLng): LatLngExpression => [pos.lat, pos.lng]))
+  }, [positions]);
 
   const Markers: JSX.Element[] = positions.map((pos: LatLng): JSX.Element => {
     return <Marker position={[pos.lat, pos.lng]} key={nanoid()}/>
