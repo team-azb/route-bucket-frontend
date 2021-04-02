@@ -4,6 +4,16 @@ import 'leaflet/dist/leaflet.css';
 import { nanoid } from 'nanoid';
 import { MapContainer, TileLayer, Marker, Polyline, useMapEvent } from 'react-leaflet';
 import { LatLng, LatLngExpression, LeafletMouseEvent } from 'leaflet';
+import axiosBase from 'axios';
+
+const axios = axiosBase.create({
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json', 
+    'X-Requested-With': 'XMLHttpRequest'
+  },
+  responseType: 'json'  
+});
 
 const limeOptions: {color: string} = { color: 'lime' }
 
@@ -13,8 +23,11 @@ type ClickLayerProps = {
 }
 
 function ClickLayer(props: ClickLayerProps): null{
-  useMapEvent('click', (e: LeafletMouseEvent)=>{
+  useMapEvent('click', async (e: LeafletMouseEvent)=>{
     props.setPositions([...props.positions, e.latlng]);
+    axios.get('/route')
+    .then((res)=>{console.log(res);
+    }).catch((e)=>{console.error(e)});
   })
   
   return null;
