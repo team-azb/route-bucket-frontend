@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import 'leaflet/dist/leaflet.css';
 import { LatLng } from 'leaflet';
 import Map from '../components/Map';
 

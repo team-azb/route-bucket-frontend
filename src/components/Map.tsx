@@ -1,6 +1,7 @@
 import { MapContainer, TileLayer, Marker, Polyline, useMapEvent } from 'react-leaflet';
 import { LatLng, LatLngExpression, LeafletMouseEvent } from 'leaflet';
 import { nanoid } from 'nanoid';
+import 'leaflet/dist/leaflet.css';
 
 const limeOptions: {color: string} = { color: 'lime' }
 
