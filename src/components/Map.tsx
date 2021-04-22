@@ -58,8 +58,12 @@ function Map(props: any){
 
     const polyline: LatLngExpression[] = positions.map((pos: LatLng): LatLngExpression => [pos.lat, pos.lng])
 
-    function onClickHandler(): void{
-        setPositions([]);
+    function onClickClearHandler(): void{
+        async function patchClear(){
+            const res = await axios.patch('/routes/'+props.route+'/clear/');
+            setPositions(res.data.points.map((position: any) => new LatLng(position.latitude, position.longitude)));
+        }
+        patchClear();
     }
 
     function onClickUndoHandler(): void{
@@ -92,7 +96,7 @@ function Map(props: any){
         </MapContainer>
         <button onClick={onClickUndoHandler}>undo</button>
         <button onClick={onClickRedoHandler}>redo</button>
-        <button onClick={onClickHandler}>clear</button>
+        <button onClick={onClickClearHandler}>clear</button>
         </>
     )
 }
