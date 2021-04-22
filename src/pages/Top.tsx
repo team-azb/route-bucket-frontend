@@ -1,9 +1,9 @@
-import Map from '../components/Map';
+import RouteEditor from '../components/RouteEditor'
 
 function Top(): JSX.Element{
   return (
     <>
-      <Map />
+      <RouteEditor/>
     </>
   );
 }
