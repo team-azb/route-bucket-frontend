@@ -61,6 +61,23 @@ function Map(props: any){
     function onClickHandler(): void{
         setPositions([]);
     }
+
+    function onClickUndoHandler(): void{
+        async function patchUndo(){
+            const res = await axios.patch('/routes/'+props.route+'/undo/');
+            setPositions(res.data.points.map((position: any) => new LatLng(position.latitude, position.longitude)));
+        }
+        patchUndo();
+    }
+
+    function onClickRedoHandler(): void{
+        async function pathRedo(){
+            const res = await axios.patch('/routes/'+props.route+'/redo/');
+            setPositions(res.data.points.map((position: any) => new LatLng(position.latitude, position.longitude)));
+        }
+        pathRedo();
+    }
+
     return(
         <>
         <p>現在のルート: {props.route}</p>
@@ -73,8 +90,8 @@ function Map(props: any){
             />
         <ClickLayer route={props.route} positions={positions} setPositions={setPositions}/>
         </MapContainer>
-        <button>undo</button>
-        <button>redo</button>
+        <button onClick={onClickUndoHandler}>undo</button>
+        <button onClick={onClickRedoHandler}>redo</button>
         <button onClick={onClickHandler}>clear</button>
         </>
     )
