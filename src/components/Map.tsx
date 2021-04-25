@@ -13,6 +13,18 @@ type ClickLayerProps = {
     route: string,
     setPositions: React.Dispatch<React.SetStateAction<LatLng[]>>
 }
+
+//axiosのレスポンスデータのpointの型
+type ResponsePoint = {
+    latitude: number,
+    longitude: number
+}
+
+//axiosからのレスポンスのデータのインターフェース
+interface Response{
+    points: ResponsePoint[],
+    message: string
+}
   
 function ClickLayer(props: ClickLayerProps): null{
     useMapEvent('click', (e: LeafletMouseEvent)=>{
@@ -23,9 +35,14 @@ function ClickLayer(props: ClickLayerProps): null{
                     longitude: e.latlng.lng
                 }
             }
-            const res = await axios.patch('/routes/'+props.route+'/add/'+props.positions.length, payload);
-            // console.log(res);
-            props.setPositions(res.data.points.map((position: any) => new LatLng(position.latitude, position.longitude)));
+            try {
+                const res = await axios.patch<Response>('/routes/'+props.route+'/add/'+props.positions.length, payload);
+                props.setPositions(res.data.points.map((position: ResponsePoint) => new LatLng(position.latitude, position.longitude)));
+            } catch (error) {
+                if(error.response.data.message){
+                    console.error(error.response.data.message);
+                }
+            }
         }
         patchAdd()
     })
@@ -39,7 +56,6 @@ function Map(props: any){
     useEffect(() => {       
         async function getRoute(){
             const res = await axios.get('/routes/'+props.route);
-            // console.log(res.data.polyline);
             setPositions(res.data.polyline);
         }
         try {
@@ -47,9 +63,6 @@ function Map(props: any){
         } catch (error) {
             console.error(error);
         }
-        return () => {
-            // cleanup
-        };
     }, [props.route]);
 
     const Markers: JSX.Element[] = positions.map((pos: LatLng): JSX.Element => {
@@ -60,26 +73,48 @@ function Map(props: any){
 
     function onClickClearHandler(): void{
         async function patchClear(){
-            const res = await axios.patch('/routes/'+props.route+'/clear/');
-            setPositions(res.data.points.map((position: any) => new LatLng(position.latitude, position.longitude)));
+            //Todo try/catch使わずに.catchで書き直す
+            try {
+                const res = await axios.patch<Response>('/routes/'+props.route+'/clear/');
+                setPositions(res.data.points.map((position: any) => new LatLng(position.latitude, position.longitude)));
+            } catch (error) {
+                if(error.response.data.message){
+                    console.error(error.response.data.message);
+                }
+            }
+            
         }
         patchClear();
     }
 
     function onClickUndoHandler(): void{
         async function patchUndo(){
-            const res = await axios.patch('/routes/'+props.route+'/undo/');
-            setPositions(res.data.points.map((position: any) => new LatLng(position.latitude, position.longitude)));
+            //Todo try/catch使わずに.catchで書き直す
+            try {
+                const res = await axios.patch<Response>('/routes/'+props.route+'/undo/');
+                setPositions(res.data.points.map((position: any) => new LatLng(position.latitude, position.longitude)));
+            } catch (error) {
+                if(error.response.data.message){
+                    console.error(error.response.data.message);
+                }
+            }
         }
         patchUndo();
     }
 
     function onClickRedoHandler(): void{
-        async function pathRedo(){
-            const res = await axios.patch('/routes/'+props.route+'/redo/');
-            setPositions(res.data.points.map((position: any) => new LatLng(position.latitude, position.longitude)));
+        async function patchRedo(){
+            //Todo try/catch使わずに.catchで書き直す
+            try {
+                const res = await axios.patch<Response>('/routes/'+props.route+'/redo/');
+                setPositions(res.data.points.map((position: any) => new LatLng(position.latitude, position.longitude)));
+            } catch (error) {
+                if(error.response.data.message){
+                    console.error(error.response.data.message);
+                }
+            }
         }
-        pathRedo();
+        patchRedo();
     }
 
     return(
@@ -94,7 +129,9 @@ function Map(props: any){
             />
         <ClickLayer route={props.route} positions={positions} setPositions={setPositions}/>
         </MapContainer>
+        {/* Todo undoできない時はボタンをdisabledにする */}
         <button onClick={onClickUndoHandler}>undo</button>
+        {/* Todo redoできない時はボタンをdisabledにする */}
         <button onClick={onClickRedoHandler}>redo</button>
         <button onClick={onClickClearHandler}>clear</button>
         </>
