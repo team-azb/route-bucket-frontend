@@ -1,11 +1,11 @@
-import RouteEditor from '../components/RouteEditor'
+import RouteWorkbanch from '../components/RouteWorkbench'
 
-function Top(): JSX.Element{
+function TopPage(): JSX.Element{
   return (
     <>
-      <RouteEditor/>
+      <RouteWorkbanch/>
     </>
   );
 }
 
-export default Top;
+export default TopPage;

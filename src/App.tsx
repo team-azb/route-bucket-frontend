@@ -1,10 +1,10 @@
-import Top from './pages/Top'
+import TopPage from './pages/Top'
 import './App.css';
 
 function App(){
   return(
     <>
-    <Top/>
+    <TopPage/>
     </>
   )
 }
