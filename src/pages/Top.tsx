@@ -1,11 +1,11 @@
-import Map from '../components/Map';
+import RouteWorkbanch from '../components/RouteWorkbench'
 
-function Top(): JSX.Element{
+function TopPage(): JSX.Element{
   return (
     <>
-      <Map />
+      <RouteWorkbanch/>
     </>
   );
 }
 
-export default Top;
+export default TopPage;
