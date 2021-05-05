@@ -65,8 +65,27 @@ function RouteEditor(props: any){
         }
     }, [props.route]);
 
-    const Markers: JSX.Element[] = positions.map((pos: LatLng): JSX.Element => {
-        return <Marker position={[pos.lat, pos.lng]} key={nanoid()}/>
+    const Markers: JSX.Element[] = positions.map((pos: LatLng, idx: number): JSX.Element => {
+        async function patchDelete(pos: number){
+            //Todo try/catch使わずに.catchで書き直す
+            try {
+                const res = await axios.patch<Response>(`/routes/${props.route}/remove/${pos}`);
+                setPositions(res.data.points.map((position: any) => new LatLng(position.latitude, position.longitude)));
+            } catch (error) {
+                if(error.response.data.message){
+                    console.error(error.response.data.message);
+                }
+            }
+        }
+
+        return (
+            <Marker
+                position={[pos.lat, pos.lng]}
+                key={nanoid()}
+                eventHandlers={{click: ()=>{patchDelete(idx)}}} //todo: ここの関数を一つにまとめたい
+            >
+            </Marker>
+        )
     })
 
     const polyline: LatLngExpression[] = positions.map((pos: LatLng): LatLngExpression => [pos.lat, pos.lng])
