@@ -7,12 +7,14 @@ import 'leaflet/dist/leaflet.css';
 
 const limeOptions: {color: string} = { color: 'lime' }
 
+//ClickLayerコンポーネントのpropsの型
 type ClickLayerProps = {
     positions: LatLng[],
     route: string,
     setPositions: React.Dispatch<React.SetStateAction<LatLng[]>>
 }
 
+//Polylineコンポーネントのpropsの型
 type PolylineProps = {
     polyline: LatLngExpression[],
     route: string,
@@ -31,6 +33,7 @@ interface Response{
     message: string
 }
 
+//Todo: 別ファイルに移動する
 async function patchAdd(latitude: number, longitude: number, position: number, route: string){
     const payload = {
         coord:{
@@ -49,7 +52,7 @@ async function patchAdd(latitude: number, longitude: number, position: number, r
     }
     return res;
 }
-  
+
 function ClickLayer(props: ClickLayerProps): null{
     useMapEvent('click', async (e: LeafletMouseEvent)=>{
         const res = await patchAdd(e.latlng.lat, e.latlng.lng, props.positions.length, props.route);
@@ -76,6 +79,7 @@ function RouteEditor(props: any): JSX.Element{
         }
     }, [props.route]);
 
+    //Todo: コンポーネントにして、別ファイルに移動
     const Markers: JSX.Element[] = positions.map((pos: LatLng, idx: number): JSX.Element => {
         async function patchDelete(pos: number){
             //Todo try/catch使わずに.catchで書き直す
@@ -101,8 +105,10 @@ function RouteEditor(props: any): JSX.Element{
         )
     })
 
+    //Todo: stateにする
     const polyline: LatLngExpression[] = positions.map((pos: LatLng): LatLngExpression => [pos.lat, pos.lng])
 
+    //Todo: 別ファイルに移動する
     const Polylines: FunctionComponent<PolylineProps> = (props: PolylineProps) => {
         if(props.polyline.length){
             let polylines: JSX.Element[] = new Array(props.polyline.length - 1);
@@ -135,6 +141,7 @@ function RouteEditor(props: any): JSX.Element{
     }
 
     function onClickClearHandler(): void{
+        //Todo: setPositionsは関数に含めずresをreturnする関数に書き直す & 別ファイルに移動
         async function patchClear(){
             //Todo try/catch使わずに.catchで書き直す
             try {
@@ -151,6 +158,7 @@ function RouteEditor(props: any): JSX.Element{
     }
 
     function onClickUndoHandler(): void{
+        //Todo: setPositionsは関数に含めずresをreturnする関数に書き直す & 別ファイルに移動
         async function patchUndo(){
             //Todo try/catch使わずに.catchで書き直す
             try {
@@ -166,6 +174,7 @@ function RouteEditor(props: any): JSX.Element{
     }
 
     function onClickRedoHandler(): void{
+        //Todo: setPositionsは関数に含めずresをreturnする関数に書き直す & 別ファイルに移動
         async function patchRedo(){
             //Todo try/catch使わずに.catchで書き直す
             try {
