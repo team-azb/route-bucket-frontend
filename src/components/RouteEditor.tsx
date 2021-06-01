@@ -2,7 +2,7 @@ import { useState, useEffect, FunctionComponent } from 'react';
 import { MapContainer, TileLayer, Marker, Polyline, useMapEvent } from 'react-leaflet';
 import L, { LatLng, LatLngExpression, LeafletMouseEvent } from 'leaflet';
 import { nanoid } from 'nanoid';
-import axios from 'axios'
+import { getRoute, patchAdd, patchDelete, patchUndo, patchRedo, patchClear } from '../api/route'
 import 'leaflet/dist/leaflet.css';
 
 const limeOptions: {color: string} = { color: 'lime' }
@@ -21,43 +21,11 @@ type PolylineProps = {
     setPositions: React.Dispatch<React.SetStateAction<LatLng[]>>
 }
 
-//axiosのレスポンスデータのpointの型
-type ResponsePoint = {
-    latitude: number,
-    longitude: number
-}
-
-//axiosからのレスポンスのデータのインターフェース
-interface Response{
-    points: ResponsePoint[],
-    message: string
-}
-
-//Todo: 別ファイルに移動する
-async function patchAdd(latitude: number, longitude: number, position: number, route: string){
-    const payload = {
-        coord:{
-            latitude: latitude,
-            longitude: longitude
-        }
-    }
-    let res;
-    try {
-        res = await axios.patch<Response>(`/routes/${route}/add/${position}`, payload);
-        return res
-    } catch (error) {
-        if(error.response.data.message){
-            console.error(error.response.data.message);
-        }
-    }
-    return res;
-}
-
 function ClickLayer(props: ClickLayerProps): null{
     useMapEvent('click', async (e: LeafletMouseEvent)=>{
         const res = await patchAdd(e.latlng.lat, e.latlng.lng, props.positions.length, props.route);
         if(res){
-            props.setPositions(res.data.points.map((position: ResponsePoint) => new LatLng(position.latitude, position.longitude)));
+            props.setPositions(res.data.points.map((position) => new LatLng(position.latitude, position.longitude)));
         }
     })
     return null;
@@ -65,31 +33,35 @@ function ClickLayer(props: ClickLayerProps): null{
 
 function RouteEditor(props: any): JSX.Element{
     const [positions, setPositions] = useState<LatLng[]>([]);
+    const [polyline, setPolyline] = useState<LatLngExpression[]>([]);
 
     //Mapのルート変更時にルートを取得してpositionsを変更する
     useEffect(() => {       
-        async function getRoute(){
-            const res = await axios.get(`/routes/${props.route}`);
-            setPositions(res.data.polyline);
+        let unmounted = false
+        async function func (){
+            const res = await getRoute(props.route)
+            // const res = await axios.get(`/routes/${props.route}`);
+            if(res && !unmounted){
+                setPositions(res.data.polyline);
+            }
         }
-        try {
-            getRoute();
-        } catch (error) {
-            console.error(error);
+        func()
+        return () => {
+            unmounted = true
         }
     }, [props.route]);
 
+    useEffect(() => {
+        setPolyline(positions.map((pos: LatLng): LatLngExpression => [pos.lat, pos.lng]))
+        return () => {};
+    }, [positions]);
+
     //Todo: コンポーネントにして、別ファイルに移動
     const Markers: JSX.Element[] = positions.map((pos: LatLng, idx: number): JSX.Element => {
-        async function patchDelete(pos: number){
-            //Todo try/catch使わずに.catchで書き直す
-            try {
-                const res = await axios.patch<Response>(`/routes/${props.route}/remove/${pos}`);
+        async function onClickMarker(pos: number){
+            const res = await patchDelete(props.route, pos);
+            if(res){
                 setPositions(res.data.points.map((position: any) => new LatLng(position.latitude, position.longitude)));
-            } catch (error) {
-                if(error.response.data.message){
-                    console.error(error.response.data.message);
-                }
             }
         }
 
@@ -98,15 +70,12 @@ function RouteEditor(props: any): JSX.Element{
                 position={[pos.lat, pos.lng]}
                 key={nanoid()}
                 eventHandlers={{click: ()=>{
-                    patchDelete(idx)}
+                    onClickMarker(idx)}
                 }} //todo: ここの関数を一つにまとめたい
             >
             </Marker>
         )
     })
-
-    //Todo: stateにする
-    const polyline: LatLngExpression[] = positions.map((pos: LatLng): LatLngExpression => [pos.lat, pos.lng])
 
     //Todo: 別ファイルに移動する
     const Polylines: FunctionComponent<PolylineProps> = (props: PolylineProps) => {
@@ -124,7 +93,7 @@ function RouteEditor(props: any): JSX.Element{
                                 L.DomEvent.stopPropagation(event) //clickLayerに対してクリックイベントを送らない
                                 const res = await patchAdd(event.latlng.lat, event.latlng.lng, idx + 1, props.route)
                                 if(res){
-                                    props.setPositions(res.data.points.map((position: ResponsePoint) => new LatLng(position.latitude, position.longitude)));
+                                    props.setPositions(res.data.points.map((position) => new LatLng(position.latitude, position.longitude)));
                                 }
                             }
                         }} 
@@ -141,53 +110,25 @@ function RouteEditor(props: any): JSX.Element{
         }
     }
 
-    function onClickClearHandler(): void{
-        //Todo: setPositionsは関数に含めずresをreturnする関数に書き直す & 別ファイルに移動
-        async function patchClear(){
-            //Todo try/catch使わずに.catchで書き直す
-            try {
-                const res = await axios.patch<Response>(`/routes/${props.route}/clear/`);
-                setPositions(res.data.points.map((position: any) => new LatLng(position.latitude, position.longitude)));
-            } catch (error) {
-                if(error.response.data.message){
-                    console.error(error.response.data.message);
-                }
-            }
-            
+    async function onClickClearHandler(): Promise<void>{
+        const res = await patchClear(props.route);
+        if(res){
+            setPositions(res.data.points.map((position: any) => new LatLng(position.latitude, position.longitude)));
         }
-        patchClear();
     }
 
-    function onClickUndoHandler(): void{
-        //Todo: setPositionsは関数に含めずresをreturnする関数に書き直す & 別ファイルに移動
-        async function patchUndo(){
-            //Todo try/catch使わずに.catchで書き直す
-            try {
-                const res = await axios.patch<Response>(`/routes/${props.route}/undo/`);
-                setPositions(res.data.points.map((position: any) => new LatLng(position.latitude, position.longitude)));
-            } catch (error) {
-                if(error.response.data.message){
-                    console.error(error.response.data.message);
-                }
-            }
+    async function onClickUndoHandler(): Promise<void>{
+        const res = await patchUndo(props.route);
+        if(res){
+            setPositions(res.data.points.map((position: any) => new LatLng(position.latitude, position.longitude)));
         }
-        patchUndo();
     }
 
-    function onClickRedoHandler(): void{
-        //Todo: setPositionsは関数に含めずresをreturnする関数に書き直す & 別ファイルに移動
-        async function patchRedo(){
-            //Todo try/catch使わずに.catchで書き直す
-            try {
-                const res = await axios.patch<Response>(`/routes/${props.route}/redo/`);
-                setPositions(res.data.points.map((position: any) => new LatLng(position.latitude, position.longitude)));
-            } catch (error) {
-                if(error.response.data.message){
-                    console.error(error.response.data.message);
-                }
-            }
+    async function onClickRedoHandler(): Promise<void>{
+        const res = await patchRedo(props.route);
+        if(res){
+            setPositions(res.data.points.map((position: any) => new LatLng(position.latitude, position.longitude)));
         }
-        patchRedo();
     }
 
     return(
