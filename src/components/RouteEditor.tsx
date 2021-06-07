@@ -37,15 +37,13 @@ function RouteEditor(props: any): JSX.Element{
 
     //Mapのルート変更時にルートを取得してpositionsを変更する
     useEffect(() => {       
-        let unmounted = false
-        async function func (){
+        let unmounted = false;
+        (async function(){
             const res = await getRoute(props.route)
-            // const res = await axios.get(`/routes/${props.route}`);
             if(res && !unmounted){
                 setPositions(res.data.polyline);
             }
-        }
-        func()
+        })();
         return () => {
             unmounted = true
         }
