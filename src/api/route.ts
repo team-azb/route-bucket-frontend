@@ -1,15 +1,11 @@
 import axios from 'axios'
+import { Postion } from '../types/Position'
 
 //axiosからのレスポンスのデータのインターフェース
 interface Response{
-    points: ResponsePoint[],
+    waypoints: Postion[],
+    linestring: Postion[],
     message: string
-}
-
-//axiosのレスポンスデータのpointの型
-type ResponsePoint = {
-    latitude: number,
-    longitude: number
 }
 
 export async function getRoute(route: string){
