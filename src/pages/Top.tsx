@@ -1,9 +1,9 @@
-import RouteWorkbanch from '../components/RouteWorkbench'
+import RouteWorkbench from '../components/RouteWorkbench'
 
 function TopPage(): JSX.Element{
   return (
     <>
-      <RouteWorkbanch/>
+      <RouteWorkbench/>
     </>
   );
 }
