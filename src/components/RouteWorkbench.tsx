@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import RouteEditor from './RouteEditor'
+import { Link } from 'react-router-dom'
 import { getRoutes } from '../api/routes'
 import { Route } from '../types'
 import axios from 'axios'
@@ -7,7 +7,6 @@ import axios from 'axios'
 function RouteWorkbanch(){
     const [inputValue, setInputValue] = useState<string>('initialState');
     const [routes, setRoutes] = useState<Route[]>([]);
-    const [route, setRoute] = useState<string>('');
 
     useEffect(() => {
         let unmounted = false;
@@ -29,10 +28,9 @@ function RouteWorkbanch(){
 
     async function onClickPost(){
         try {
-            const res = await axios.post('/routes/', {
+            await axios.post('/routes/', {
                 'name': inputValue
             })
-            setRoute(res.data.id);
             const getRes =  await getRoutes()
             if(getRes){
                 setRoutes(getRes.data.routes.map(route => {
@@ -49,8 +47,7 @@ function RouteWorkbanch(){
 
     async function onClickDelete(id: string){
         try {
-            const deleteRes = await axios.delete(`/routes/${id}`)
-            setRoute(deleteRes.data.id);
+            await axios.delete(`/routes/${id}`)
             const getRes =  await getRoutes()
             if(getRes){
                 setRoutes(getRes.data.routes.map(route => {
@@ -70,7 +67,9 @@ function RouteWorkbanch(){
             return(
                 <li key={route.id}>
                     <h3>{route.name}</h3>
-                    <button>ルートを編集</button>
+                    <Link to={`/${route.id}`}>
+                        <button>ルートを編集</button>
+                    </Link>
                     <button onClick={()=>{onClickDelete(route.id)}}>ルートを削除</button>
                     <hr/>
                 </li>

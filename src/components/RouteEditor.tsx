@@ -1,4 +1,5 @@
 import { useState, useEffect, FunctionComponent } from 'react';
+import { useParams } from 'react-router-dom'
 import { MapContainer, TileLayer, Marker, Polyline, useMapEvent } from 'react-leaflet';
 import L, { LatLngExpression, LeafletMouseEvent } from 'leaflet';
 import { nanoid } from 'nanoid';
@@ -23,6 +24,11 @@ type PolylineProps = {
     setWaypoints: React.Dispatch<React.SetStateAction<Position[]>>
 }
 
+//URLのパラメータのinerface
+interface RouteEditorParams{
+    routeId: string
+}
+
 function ClickLayer(props: ClickLayerProps): null{
     useMapEvent('click', async (e: LeafletMouseEvent)=>{
         const res = await patchAdd(e.latlng.lat, e.latlng.lng, props.waypoints.length, props.route);
@@ -34,16 +40,17 @@ function ClickLayer(props: ClickLayerProps): null{
     return null;
 }
 
-function RouteEditor(props: any): JSX.Element{
+function RouteEditor(): JSX.Element{
     const [waypoints, setWaypoints] = useState<Position[]>([]);
     const [linestring, setLinestring] = useState<Position[]>([]);
     const polyline = waypoints.map((pos: Position): LatLngExpression => [pos.latitude, pos.longitude])
+    const { routeId } = useParams<RouteEditorParams>()
 
     //Mapのルート変更時にルートを取得してwaypointsを変更する
     useEffect(() => {       
         let unmounted = false;
         (async () => {
-            const res = await getRoute(props.route)
+            const res = await getRoute(routeId)           
             if(res && !unmounted){
                 setWaypoints(res.data.waypoints);
                 setLinestring(res.data.linestring);
@@ -52,11 +59,11 @@ function RouteEditor(props: any): JSX.Element{
         return () => {
             unmounted = true
         }
-    }, [props.route]);
+    }, [routeId]);
 
     const Markers: JSX.Element[] = waypoints.map((pos: Position, idx: number): JSX.Element => {
         async function onClickMarker(pos: number){
-            const res = await patchDelete(props.route, pos);
+            const res = await patchDelete(routeId, pos);
             if(res){
                 setWaypoints(res.data.waypoints);
                 setLinestring(res.data.linestring);
@@ -75,7 +82,6 @@ function RouteEditor(props: any): JSX.Element{
         )
     })
 
-    //Todo: 別ファイルに移動する
     const Polylines: FunctionComponent<PolylineProps> = (props: PolylineProps) => {
         if(props.polyline.length){
             let polylines: JSX.Element[] = new Array(props.polyline.length - 1);
@@ -110,7 +116,7 @@ function RouteEditor(props: any): JSX.Element{
     }
 
     async function onClickClearHandler(): Promise<void>{
-        const res = await patchClear(props.route);
+        const res = await patchClear(routeId);
         if(res){
             setWaypoints(res.data.waypoints);
             setLinestring(res.data.linestring);
@@ -118,7 +124,7 @@ function RouteEditor(props: any): JSX.Element{
     }
 
     async function onClickUndoHandler(): Promise<void>{
-        const res = await patchUndo(props.route);
+        const res = await patchUndo(routeId);
         if(res){
             setWaypoints(res.data.waypoints);
             setLinestring(res.data.linestring);
@@ -126,7 +132,7 @@ function RouteEditor(props: any): JSX.Element{
     }
 
     async function onClickRedoHandler(): Promise<void>{
-        const res = await patchRedo(props.route);
+        const res = await patchRedo(routeId);
         if(res){
             setWaypoints(res.data.waypoints);
             setLinestring(res.data.linestring);
@@ -135,17 +141,17 @@ function RouteEditor(props: any): JSX.Element{
 
     return(
         <>
-        <p>現在のルート: {props.route}</p>
+        <p>現在のルート: {routeId}</p>
         <MapContainer style={{height: '600px'}} center={[35.68139740310467, 139.7671569841016]} zoom={13} scrollWheelZoom={true}>
             <TileLayer
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             {Markers}
-            <Polylines polyline={polyline} route={props.route} setWaypoints={setWaypoints}/>
+            <Polylines polyline={polyline} route={routeId} setWaypoints={setWaypoints}/>
             <Polyline positions={linestring.map(pos => [pos.latitude, pos.longitude])}/>
         <ClickLayer 
-            route={props.route}
+            route={routeId}
             waypoints={waypoints}
             setWaypoints={setWaypoints}
             setLinestring={setLinestring}
