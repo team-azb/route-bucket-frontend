@@ -2,25 +2,25 @@ import { useState, useEffect, FunctionComponent } from 'react';
 import { MapContainer, TileLayer, Marker, Polyline, useMapEvent } from 'react-leaflet';
 import L, { LatLngExpression, LeafletMouseEvent } from 'leaflet';
 import { nanoid } from 'nanoid';
-import { getRoute, patchAdd, patchDelete, patchUndo, patchRedo, patchClear } from '../api/route'
+import { getRoute, patchAdd, patchDelete, patchUndo, patchRedo, patchClear } from '../api/routes'
 import 'leaflet/dist/leaflet.css';
-import { Postion } from '../types/Position'
+import { Position } from '../types'
 
 const limeOptions: {color: string} = { color: 'lime' }
 
 //ClickLayerコンポーネントのpropsの型
 type ClickLayerProps = {
-    waypoints: Postion[],
+    waypoints: Position[],
     route: string,
-    setWaypoints: React.Dispatch<React.SetStateAction<Postion[]>>,
-    setLinestring: React.Dispatch<React.SetStateAction<Postion[]>>
+    setWaypoints: React.Dispatch<React.SetStateAction<Position[]>>,
+    setLinestring: React.Dispatch<React.SetStateAction<Position[]>>
 }
 
 //Polylineコンポーネントのpropsの型
 type PolylineProps = {
     polyline: LatLngExpression[],
     route: string,
-    setWaypoints: React.Dispatch<React.SetStateAction<Postion[]>>
+    setWaypoints: React.Dispatch<React.SetStateAction<Position[]>>
 }
 
 function ClickLayer(props: ClickLayerProps): null{
@@ -35,9 +35,9 @@ function ClickLayer(props: ClickLayerProps): null{
 }
 
 function RouteEditor(props: any): JSX.Element{
-    const [waypoints, setWaypoints] = useState<Postion[]>([]);
-    const [linestring, setLinestring] = useState<Postion[]>([]);
-    const polyline = waypoints.map((pos: Postion): LatLngExpression => [pos.latitude, pos.longitude])
+    const [waypoints, setWaypoints] = useState<Position[]>([]);
+    const [linestring, setLinestring] = useState<Position[]>([]);
+    const polyline = waypoints.map((pos: Position): LatLngExpression => [pos.latitude, pos.longitude])
 
     //Mapのルート変更時にルートを取得してwaypointsを変更する
     useEffect(() => {       
@@ -54,7 +54,7 @@ function RouteEditor(props: any): JSX.Element{
         }
     }, [props.route]);
 
-    const Markers: JSX.Element[] = waypoints.map((pos: Postion, idx: number): JSX.Element => {
+    const Markers: JSX.Element[] = waypoints.map((pos: Position, idx: number): JSX.Element => {
         async function onClickMarker(pos: number){
             const res = await patchDelete(props.route, pos);
             if(res){
