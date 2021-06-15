@@ -4,8 +4,8 @@ import { MapContainer, TileLayer, Marker, Polyline, useMapEvent } from 'react-le
 import L, { LatLngExpression, LeafletMouseEvent } from 'leaflet';
 import { nanoid } from 'nanoid';
 import { getRoute, patchAdd, patchDelete, patchUndo, patchRedo, patchClear } from '../api/routes'
-import 'leaflet/dist/leaflet.css';
 import { Position } from '../types'
+import 'leaflet/dist/leaflet.css';
 
 const limeOptions: {color: string} = { color: 'lime' }
 
@@ -21,7 +21,8 @@ type ClickLayerProps = {
 type PolylineProps = {
     polyline: LatLngExpression[],
     route: string,
-    setWaypoints: React.Dispatch<React.SetStateAction<Position[]>>
+    setWaypoints: React.Dispatch<React.SetStateAction<Position[]>>,
+    setLinestring: React.Dispatch<React.SetStateAction<Position[]>>
 }
 
 //URLのパラメータのinerface
@@ -98,7 +99,7 @@ function RouteEditor(): JSX.Element{
                                 const res = await patchAdd(event.latlng.lat, event.latlng.lng, idx + 1, props.route)
                                 if(res){
                                     props.setWaypoints(res.data.waypoints);
-                                    setLinestring(res.data.linestring);
+                                    props.setLinestring(res.data.linestring);
                                 }
                             }
                         }} 
@@ -148,7 +149,12 @@ function RouteEditor(): JSX.Element{
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             {Markers}
-            <Polylines polyline={polyline} route={routeId} setWaypoints={setWaypoints}/>
+            <Polylines 
+                polyline={polyline} 
+                route={routeId} 
+                setWaypoints={setWaypoints}
+                setLinestring={setLinestring}
+            />
             <Polyline positions={linestring.map(pos => [pos.latitude, pos.longitude])}/>
         <ClickLayer 
             route={routeId}

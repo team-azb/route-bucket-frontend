@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
 import { getRoutes } from '../api/routes'
 import { Route } from '../types'
-import axios from 'axios'
 
-function RouteWorkbanch(){
-    const [inputValue, setInputValue] = useState<string>('initialState');
+function RouteIndex(){
+    const [inputValue, setInputValue] = useState<string>('');
     const [routes, setRoutes] = useState<Route[]>([]);
 
     useEffect(() => {
@@ -84,7 +84,6 @@ function RouteWorkbanch(){
     }
 
     return(
-        <>
         <div>
             <h2>ルートの作成</h2>
             <input type="text" onChange={event => setInputValue(event.target.value)}/>
@@ -92,8 +91,7 @@ function RouteWorkbanch(){
             <h2>ルートの一覧</h2>
             <Routes/>
         </div>
-        </>
     )
 }
 
-export default RouteWorkbanch;
+export default RouteIndex;
