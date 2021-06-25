@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import axios from 'axios'
-import { getRoutes } from '../api/routes'
+import { getRoutes, postRoutes, deleteRoute } from '../api/routes'
 import { Route } from '../types'
 
 function RouteIndex(){
@@ -28,9 +27,7 @@ function RouteIndex(){
 
     async function onClickPost(){
         try {
-            await axios.post('/routes/', {
-                'name': inputValue
-            })
+            postRoutes(inputValue)
             const getRes =  await getRoutes()
             if(getRes){
                 setRoutes(getRes.data.routes.map(route => {
@@ -47,7 +44,7 @@ function RouteIndex(){
 
     async function onClickDelete(id: string){
         try {
-            await axios.delete(`/routes/${id}`)
+            deleteRoute(id)
             const getRes =  await getRoutes()
             if(getRes){
                 setRoutes(getRes.data.routes.map(route => {

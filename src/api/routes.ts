@@ -103,3 +103,26 @@ export async function patchRedo(route: string){
     }
     return res;
 }
+
+export async function postRoutes(name: string){
+    try {
+        await axios.post('/routes/', {
+            'name': name
+        })
+    } catch (error) {
+        if(error.response.data.message){
+            console.error(error.response.data.message);
+        }
+    }
+}
+
+
+export async function deleteRoute(id: string){
+    try {
+        await axios.delete(`/routes/${id}`)
+    } catch (error) {
+        if(error.response.data.message){
+            console.error(error.response.data.message);
+        }
+    }
+}
