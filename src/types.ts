@@ -7,4 +7,7 @@ export type Position = {
 export type Route = {
     id: string,
     name: string,
+    waypoints?: Position[]
+    linestring?: Position[]
+    elevation_gain?: number
 }

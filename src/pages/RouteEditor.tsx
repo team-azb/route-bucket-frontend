@@ -44,6 +44,7 @@ function ClickLayer(props: ClickLayerProps): null{
 function RouteEditor(): JSX.Element{
     const [waypoints, setWaypoints] = useState<Position[]>([]);
     const [linestring, setLinestring] = useState<Position[]>([]);
+    const [routeName, setRouteName] = useState<string>('');
     const polyline = waypoints.map((pos: Position): LatLngExpression => [pos.latitude, pos.longitude])
     const { routeId } = useParams<RouteEditorParams>()
 
@@ -53,8 +54,9 @@ function RouteEditor(): JSX.Element{
         (async () => {
             const res = await getRoute(routeId)           
             if(res && !unmounted){
-                setWaypoints(res.data.waypoints);
-                setLinestring(res.data.linestring);
+                if (res.data.waypoints) {setWaypoints(res.data.waypoints)};
+                if (res.data.linestring) {setLinestring(res.data.linestring)};
+                setRouteName(res.data.name)
             }
         })();
         return () => {
@@ -142,7 +144,8 @@ function RouteEditor(): JSX.Element{
 
     return(
         <>
-        <p>現在のルート: {routeId}</p>
+        <p>ルートid: {routeId}</p>
+        <p>ルート名: {routeName}</p>
         <MapContainer style={{height: '600px'}} center={[35.68139740310467, 139.7671569841016]} zoom={13} scrollWheelZoom={true}>
             <TileLayer
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'

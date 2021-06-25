@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Position } from '../types'
+import { Position, Route } from '../types'
 
 //axiosからのレスポンスのデータのインターフェース
 interface PatchResponse{
@@ -9,17 +9,15 @@ interface PatchResponse{
 }
 
 interface RoutesResponse{
-    routes: {
-        id: string,
-        name: string,
-        waypoints: Position[]
-    }[]
+    routes: Route[]
 }
+
+interface RouteResponse extends Route{}
 
 export async function getRoute(route: string){
     let res;
     try {
-        res = await axios.get(`/routes/${route}`);
+        res = await axios.get<RouteResponse>(`/routes/${route}`);
     } catch (error) {
         console.error(error)
     }
