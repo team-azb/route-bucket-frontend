@@ -1,6 +1,6 @@
 import { useState, useEffect, FunctionComponent } from 'react';
 import { useParams, Link } from 'react-router-dom'
-import { MapContainer, TileLayer, Marker, Polyline, useMapEvent } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Polyline, useMapEvent, useMap } from 'react-leaflet';
 import L, { LatLngExpression, LeafletMouseEvent } from 'leaflet';
 import { nanoid } from 'nanoid';
 import { getRoute, patchAdd, patchDelete, patchUndo, patchRedo, patchClear } from '../api/routes'
@@ -25,6 +25,15 @@ type PolylineProps = {
     setLinestring: React.Dispatch<React.SetStateAction<Position[]>>
 }
 
+type MakersProps = {
+    waypoints: Position[],
+    route: string,
+    changeCenterFlag: boolean,
+    setChangeCenterFlag: React.Dispatch<React.SetStateAction<boolean>>,
+    setWaypoints: React.Dispatch<React.SetStateAction<Position[]>>,
+    setLinestring: React.Dispatch<React.SetStateAction<Position[]>>
+}
+
 //URLのパラメータのinerface
 interface RouteEditorParams{
     routeId: string
@@ -45,6 +54,7 @@ function RouteEditor(): JSX.Element{
     const [waypoints, setWaypoints] = useState<Position[]>([]);
     const [linestring, setLinestring] = useState<Position[]>([]);
     const [routeName, setRouteName] = useState<string>('');
+    const [changeCenterFlag, setChangeCenterFlag] = useState<boolean>(false);
     const polyline = waypoints.map((pos: Position): LatLngExpression => [pos.latitude, pos.longitude])
     const { routeId } = useParams<RouteEditorParams>()
 
@@ -57,6 +67,7 @@ function RouteEditor(): JSX.Element{
                 if (res.data.waypoints) {setWaypoints(res.data.waypoints)};
                 if (res.data.linestring) {setLinestring(res.data.linestring)};
                 setRouteName(res.data.name)
+                setChangeCenterFlag(true)
             }
         })();
         return () => {
@@ -64,26 +75,41 @@ function RouteEditor(): JSX.Element{
         }
     }, [routeId]);
 
-    const Markers: JSX.Element[] = waypoints.map((pos: Position, idx: number): JSX.Element => {
-        async function onClickMarker(pos: number){
-            const res = await patchDelete(routeId, pos);
-            if(res){
-                setWaypoints(res.data.waypoints);
-                setLinestring(res.data.linestring);
+    const Markers: FunctionComponent<MakersProps> = (props: MakersProps) => {
+        const map = useMap()
+        useEffect(() => {
+            if(props.changeCenterFlag){
+                map.setView([props.waypoints[0].latitude, props.waypoints[0].longitude])
+                props.setChangeCenterFlag(false)
             }
-        }
-
-        return (
-            <Marker
-                position={[pos.latitude, pos.longitude]}
-                key={nanoid()}
-                eventHandlers={{click: ()=>{
-                    onClickMarker(idx)}
-                }} //todo: ここの関数を一つにまとめたい
-            >
-            </Marker>
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, [props.changeCenterFlag]);
+        const markers = props.waypoints.map((pos: Position, idx: number): JSX.Element => {
+            async function onClickMarker(idx: number){
+                const res = await patchDelete(props.route, idx);
+                if(res){
+                    props.setWaypoints(res.data.waypoints);
+                    props.setLinestring(res.data.linestring);
+                }
+            }
+    
+            return (
+                <Marker
+                    position={[pos.latitude, pos.longitude]}
+                    key={nanoid()}
+                    eventHandlers={{click: ()=>{
+                        onClickMarker(idx)}
+                    }} //todo: ここの関数を一つにまとめたい
+                >
+                </Marker>
+            )
+        })
+        return(
+            <>
+            {markers}
+            </>
         )
-    })
+    }
 
     const Polylines: FunctionComponent<PolylineProps> = (props: PolylineProps) => {
         if(props.polyline.length){
@@ -153,7 +179,14 @@ function RouteEditor(): JSX.Element{
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            {Markers}
+            <Markers
+                waypoints={waypoints}
+                route={routeId}
+                changeCenterFlag={changeCenterFlag}
+                setChangeCenterFlag={setChangeCenterFlag}
+                setWaypoints={setWaypoints}
+                setLinestring={setLinestring}
+            />
             <Polylines 
                 polyline={polyline} 
                 route={routeId} 
