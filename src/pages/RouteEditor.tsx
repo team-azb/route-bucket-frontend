@@ -1,5 +1,5 @@
 import { useState, useEffect, FunctionComponent } from 'react';
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { MapContainer, TileLayer, Marker, Polyline, useMapEvent } from 'react-leaflet';
 import L, { LatLngExpression, LeafletMouseEvent } from 'leaflet';
 import { nanoid } from 'nanoid';
@@ -144,6 +144,8 @@ function RouteEditor(): JSX.Element{
 
     return(
         <>
+        <Link to='/'>ルート一覧へ</Link>
+        <hr/>
         <p>ルートid: {routeId}</p>
         <p>ルート名: {routeName}</p>
         <MapContainer style={{height: '600px'}} center={[35.68139740310467, 139.7671569841016]} zoom={13} scrollWheelZoom={true}>
