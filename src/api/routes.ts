@@ -36,7 +36,7 @@ export async function getRoutes(){
     return res;
 }
 
-export async function patchAdd(latitude: number, longitude: number, position: number, route: string){
+export async function patchAdd(latitude: number, longitude: number, index: number, route: string){
     const payload = {
         coord:{
             latitude: latitude,
@@ -45,7 +45,7 @@ export async function patchAdd(latitude: number, longitude: number, position: nu
     }
     let res;
     try {
-        res = await axios.patch<PatchResponse>(`/routes/${route}/add/${position}`, payload);
+        res = await axios.patch<PatchResponse>(`/routes/${route}/add/${index}`, payload);
         return res
     } catch (error) {
         if(error.response.data.message){
