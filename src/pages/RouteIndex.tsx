@@ -27,7 +27,7 @@ function RouteIndex(){
 
     async function onClickPost(){
         try {
-            postRoutes(inputValue)
+            await postRoutes(inputValue)
             const getRes =  await getRoutes()
             if(getRes){
                 setRoutes(getRes.data.routes.map(route => {
@@ -44,7 +44,7 @@ function RouteIndex(){
 
     async function onClickDelete(id: string){
         try {
-            deleteRoute(id)
+            await deleteRoute(id)
             const getRes =  await getRoutes()
             if(getRes){
                 setRoutes(getRes.data.routes.map(route => {
