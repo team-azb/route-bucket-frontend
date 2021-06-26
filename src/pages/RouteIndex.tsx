@@ -12,12 +12,7 @@ function RouteIndex(){
         (async () => {
             const res =  await getRoutes()
             if(res && !unmounted){
-                setRoutes(res.data.routes.map(route => {
-                    return {
-                        id: route.id,
-                        name: route.name,
-                    }
-                }))
+                setRoutes(res.data.routes)
             }
         })()
         return () => {
@@ -30,12 +25,7 @@ function RouteIndex(){
             await postRoutes(inputValue)
             const getRes =  await getRoutes()
             if(getRes){
-                setRoutes(getRes.data.routes.map(route => {
-                    return {
-                        id: route.id,
-                        name: route.name,
-                    }
-                }))
+                setRoutes(getRes.data.routes)
             }
         } catch (error) {
             console.error(error);   
@@ -47,12 +37,7 @@ function RouteIndex(){
             await deleteRoute(id)
             const getRes =  await getRoutes()
             if(getRes){
-                setRoutes(getRes.data.routes.map(route => {
-                    return {
-                        id: route.id,
-                        name: route.name,
-                    }
-                }))
+                setRoutes(getRes.data.routes)
             }
         } catch (error) {
             console.error(error);   
