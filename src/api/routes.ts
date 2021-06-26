@@ -102,6 +102,25 @@ export async function patchRedo(route: string){
     return res;
 }
 
+export async function patchMove(latitude: number, longitude: number, index: number, route: string){
+    const payload = {
+        coord:{
+            latitude: latitude,
+            longitude: longitude
+        }
+    }
+    let res;
+    try {
+        res = await axios.patch<PatchResponse>(`/routes/${route}/move/${index}`, payload);
+        return res
+    } catch (error) {
+        if(error.response.data.message){
+            console.error(error.response.data.message);
+        }
+    }
+    return res;
+}
+
 export async function postRoutes(name: string){
     try {
         await axios.post('/routes/', {

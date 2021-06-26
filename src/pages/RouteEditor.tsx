@@ -1,9 +1,9 @@
-import { useState, useEffect, FunctionComponent } from 'react';
+import { useState, useEffect, FunctionComponent, useRef, createRef, RefObject } from 'react';
 import { useParams, Link } from 'react-router-dom'
 import { MapContainer, TileLayer, Marker, Polyline, useMapEvent, useMap } from 'react-leaflet';
-import L, { LatLngExpression, LeafletMouseEvent } from 'leaflet';
+import L, { LatLngExpression, LeafletMouseEvent, Marker as MarkerType } from 'leaflet';
 import { nanoid } from 'nanoid';
-import { getRoute, patchAdd, patchDelete, patchUndo, patchRedo, patchClear } from '../api/routes'
+import { getRoute, patchAdd, patchDelete, patchUndo, patchRedo, patchClear, patchMove } from '../api/routes'
 import { Position } from '../types'
 import 'leaflet/dist/leaflet.css';
 
@@ -77,6 +77,7 @@ function RouteEditor(): JSX.Element{
 
     const Markers: FunctionComponent<MakersProps> = (props: MakersProps) => {
         const map = useMap()
+        const markerRefs = useRef<Array<RefObject<MarkerType>>>(Array(props.waypoints.length))
         useEffect(() => {
             if(props.changeCenterFlag){
                 if(props.waypoints.length){
@@ -87,6 +88,7 @@ function RouteEditor(): JSX.Element{
         // eslint-disable-next-line react-hooks/exhaustive-deps
         }, [props.changeCenterFlag]);
         const markers = props.waypoints.map((pos: Position, idx: number): JSX.Element => {
+            markerRefs.current[idx] = createRef<MarkerType>()
             async function onClickMarker(idx: number){
                 const res = await patchDelete(props.route, idx);
                 if(res){
@@ -94,13 +96,31 @@ function RouteEditor(): JSX.Element{
                     props.setLinestring(res.data.linestring);
                 }
             }
+
+            async function onDragMarker(idx: number){
+                const newPoint = markerRefs.current[idx].current?.getLatLng()      
+                if(newPoint){   
+                    const res = await patchMove(newPoint.lat, newPoint.lng, idx, props.route)
+                    if(res){
+                        props.setWaypoints(res.data.waypoints);
+                        props.setLinestring(res.data.linestring);
+                    }
+                }
+            }
     
             return (
                 <Marker
+                    ref={markerRefs.current[idx]}
+                    draggable={true}
                     position={[pos.latitude, pos.longitude]}
                     key={nanoid()}
-                    eventHandlers={{click: ()=>{
-                        onClickMarker(idx)}
+                    eventHandlers={{
+                        click: ()=>{
+                            onClickMarker(idx)
+                        },
+                        dragend: () => {
+                            onDragMarker(idx)
+                        }
                     }} //todo: ここの関数を一つにまとめたい
                 >
                 </Marker>
