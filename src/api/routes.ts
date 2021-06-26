@@ -14,10 +14,10 @@ interface RoutesResponse{
 
 interface RouteResponse extends Route{}
 
-export async function getRoute(route: string){
+export async function getRoute(routeId: string){
     let res;
     try {
-        res = await axios.get<RouteResponse>(`/routes/${route}`);
+        res = await axios.get<RouteResponse>(`/routes/${routeId}`);
     } catch (error) {
         console.error(error)
     }
@@ -34,7 +34,7 @@ export async function getRoutes(){
     return res;
 }
 
-export async function patchAdd(latitude: number, longitude: number, index: number, route: string){
+export async function patchAdd(latitude: number, longitude: number, idx: number, routeId: string){
     const payload = {
         coord:{
             latitude: latitude,
@@ -43,7 +43,7 @@ export async function patchAdd(latitude: number, longitude: number, index: numbe
     }
     let res;
     try {
-        res = await axios.patch<PatchResponse>(`/routes/${route}/add/${index}`, payload);
+        res = await axios.patch<PatchResponse>(`/routes/${routeId}/add/${idx}`, payload);
         return res
     } catch (error) {
         if(error.response.data.message){
@@ -53,10 +53,10 @@ export async function patchAdd(latitude: number, longitude: number, index: numbe
     return res;
 }
 
-export async function patchDelete(route: string, pos: number){
+export async function patchDelete(routeId: string, pos: number){
     let res;
     try {
-        res = await axios.patch<PatchResponse>(`/routes/${route}/remove/${pos}`);
+        res = await axios.patch<PatchResponse>(`/routes/${routeId}/remove/${pos}`);
     } catch (error) {
         if(error.response.data.message){
             console.error(error.response.data.message);
@@ -66,10 +66,10 @@ export async function patchDelete(route: string, pos: number){
 }
 
 
-export async function patchClear(route: string){
+export async function patchClear(routeId: string){
     let res;
     try {
-        res = await axios.patch<PatchResponse>(`/routes/${route}/clear/`);
+        res = await axios.patch<PatchResponse>(`/routes/${routeId}/clear/`);
     } catch (error) {
         if(error.response.data.message){
             console.error(error.response.data.message);
@@ -78,10 +78,10 @@ export async function patchClear(route: string){
     return res;
 }
 
-export async function patchUndo(route: string){
+export async function patchUndo(routeId: string){
     let res;
     try {
-        res = await axios.patch<PatchResponse>(`/routes/${route}/undo/`);
+        res = await axios.patch<PatchResponse>(`/routes/${routeId}/undo/`);
     } catch (error) {
         if(error.response.data.message){
             console.error(error.response.data.message);
@@ -90,10 +90,10 @@ export async function patchUndo(route: string){
     return res;
 }
 
-export async function patchRedo(route: string){
+export async function patchRedo(routeId: string){
     let res;
     try {
-        res = await axios.patch<PatchResponse>(`/routes/${route}/redo/`);
+        res = await axios.patch<PatchResponse>(`/routes/${routeId}/redo/`);
     } catch (error) {
         if(error.response.data.message){
             console.error(error.response.data.message);
@@ -102,7 +102,7 @@ export async function patchRedo(route: string){
     return res;
 }
 
-export async function patchMove(latitude: number, longitude: number, index: number, route: string){
+export async function patchMove(latitude: number, longitude: number, idx: number, routeId: string){
     const payload = {
         coord:{
             latitude: latitude,
@@ -111,7 +111,7 @@ export async function patchMove(latitude: number, longitude: number, index: numb
     }
     let res;
     try {
-        res = await axios.patch<PatchResponse>(`/routes/${route}/move/${index}`, payload);
+        res = await axios.patch<PatchResponse>(`/routes/${routeId}/move/${idx}`, payload);
         return res
     } catch (error) {
         if(error.response.data.message){
