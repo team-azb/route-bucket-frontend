@@ -79,7 +79,9 @@ function RouteEditor(): JSX.Element{
         const map = useMap()
         useEffect(() => {
             if(props.changeCenterFlag){
-                map.setView([props.waypoints[0].latitude, props.waypoints[0].longitude])
+                if(props.waypoints.length){
+                    map.setView([props.waypoints[0].latitude, props.waypoints[0].longitude])
+                }
                 props.setChangeCenterFlag(false)
             }
         // eslint-disable-next-line react-hooks/exhaustive-deps
