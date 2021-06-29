@@ -1,4 +1,3 @@
-import { FunctionComponent } from "react";
 import { Polyline } from "react-leaflet";
 import L, { LatLngExpression } from "leaflet";
 import { nanoid } from "nanoid";
@@ -15,9 +14,7 @@ type PolylineProps = {
   setLinestring: React.Dispatch<React.SetStateAction<Position[]>>;
 };
 
-export const Polylines: FunctionComponent<PolylineProps> = (
-  props: PolylineProps
-) => {
+export default function Polylines(props: PolylineProps) {
   if (props.polyline.length) {
     let polylines: JSX.Element[] = new Array(props.polyline.length - 1);
     for (let idx = 0; idx < props.polyline.length - 1; idx++) {
@@ -49,4 +46,4 @@ export const Polylines: FunctionComponent<PolylineProps> = (
   } else {
     return null;
   }
-};
+}

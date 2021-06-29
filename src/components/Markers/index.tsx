@@ -1,10 +1,4 @@
-import {
-  useEffect,
-  FunctionComponent,
-  useRef,
-  createRef,
-  RefObject,
-} from "react";
+import { useEffect, useRef, createRef, RefObject } from "react";
 import { Marker, useMap } from "react-leaflet";
 import { Marker as MarkerType } from "leaflet";
 import { nanoid } from "nanoid";
@@ -20,7 +14,7 @@ type MakersProps = {
   setLinestring: React.Dispatch<React.SetStateAction<Position[]>>;
 };
 
-export const Markers: FunctionComponent<MakersProps> = (props: MakersProps) => {
+export default function Markers(props: MakersProps) {
   const map = useMap();
   const markerRefs = useRef<Array<RefObject<MarkerType>>>(
     Array(props.waypoints.length)
@@ -83,4 +77,4 @@ export const Markers: FunctionComponent<MakersProps> = (props: MakersProps) => {
     }
   );
   return <>{markers}</>;
-};
+}

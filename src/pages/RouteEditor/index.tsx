@@ -10,8 +10,8 @@ import {
   patchClear,
 } from "../../api/routes";
 import { Position } from "../../types";
-import { Markers } from "../../components/Markers";
-import { Polylines } from "../../components/Polylines";
+import Markers from "../../components/Markers";
+import Polylines from "../../components/Polylines";
 import "leaflet/dist/leaflet.css";
 
 //ClickLayerコンポーネントのpropsの型
