@@ -1,35 +1,17 @@
-import { useState, useEffect, FunctionComponent, useRef, createRef, RefObject } from 'react';
+import { useState, useEffect, FunctionComponent } from 'react';
 import { useParams, Link } from 'react-router-dom'
-import { MapContainer, TileLayer, Marker, Polyline, useMapEvent, useMap } from 'react-leaflet';
-import L, { LatLngExpression, LeafletMouseEvent, Marker as MarkerType } from 'leaflet';
-import { nanoid } from 'nanoid';
-import { getRoute, patchAdd, patchDelete, patchUndo, patchRedo, patchClear, patchMove } from '../../api/routes'
+import { MapContainer, TileLayer, Polyline, useMapEvent } from 'react-leaflet';
+import { LatLngExpression, LeafletMouseEvent } from 'leaflet';
+import { getRoute, patchAdd, patchUndo, patchRedo, patchClear } from '../../api/routes'
 import { Position } from '../../types'
+import { Markers } from '../../components/Markers'
+import { Polylines } from '../../components/Polylines'
 import 'leaflet/dist/leaflet.css';
-
-const limeOptions: {color: string} = { color: 'lime' }
 
 //ClickLayerコンポーネントのpropsの型
 type ClickLayerProps = {
     waypoints: Position[],
     route: string,
-    setWaypoints: React.Dispatch<React.SetStateAction<Position[]>>,
-    setLinestring: React.Dispatch<React.SetStateAction<Position[]>>
-}
-
-//Polylineコンポーネントのpropsの型
-type PolylineProps = {
-    polyline: LatLngExpression[],
-    route: string,
-    setWaypoints: React.Dispatch<React.SetStateAction<Position[]>>,
-    setLinestring: React.Dispatch<React.SetStateAction<Position[]>>
-}
-
-type MakersProps = {
-    waypoints: Position[],
-    route: string,
-    changeCenterFlag: boolean,
-    setChangeCenterFlag: React.Dispatch<React.SetStateAction<boolean>>,
     setWaypoints: React.Dispatch<React.SetStateAction<Position[]>>,
     setLinestring: React.Dispatch<React.SetStateAction<Position[]>>
 }
@@ -50,7 +32,7 @@ function ClickLayer(props: ClickLayerProps): null{
     return null;
 }
 
-function RouteEditor(): JSX.Element{
+const RouteEditor: FunctionComponent = () => {
     const [waypoints, setWaypoints] = useState<Position[]>([]);
     const [linestring, setLinestring] = useState<Position[]>([]);
     const [routeName, setRouteName] = useState<string>('');
@@ -74,97 +56,6 @@ function RouteEditor(): JSX.Element{
             unmounted = true
         }
     }, [routeId]);
-
-    const Markers: FunctionComponent<MakersProps> = (props: MakersProps) => {
-        const map = useMap()
-        const markerRefs = useRef<Array<RefObject<MarkerType>>>(Array(props.waypoints.length))
-        useEffect(() => {
-            if(props.changeCenterFlag){
-                if(props.waypoints.length){
-                    map.setView([props.waypoints[0].latitude, props.waypoints[0].longitude])
-                }
-                props.setChangeCenterFlag(false)
-            }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, [props.changeCenterFlag]);
-        const markers = props.waypoints.map((pos: Position, idx: number): JSX.Element => {
-            markerRefs.current[idx] = createRef<MarkerType>()
-            async function onClickMarker(idx: number){
-                const res = await patchDelete(props.route, idx);
-                if(res){
-                    props.setWaypoints(res.data.waypoints);
-                    props.setLinestring(res.data.linestring);
-                }
-            }
-
-            async function onDragMarker(idx: number){
-                const newPoint = markerRefs.current[idx].current?.getLatLng()      
-                if(newPoint){   
-                    const res = await patchMove(newPoint.lat, newPoint.lng, idx, props.route)
-                    if(res){
-                        props.setWaypoints(res.data.waypoints);
-                        props.setLinestring(res.data.linestring);
-                    }
-                }
-            }
-    
-            return (
-                <Marker
-                    ref={markerRefs.current[idx]}
-                    draggable={true}
-                    position={[pos.latitude, pos.longitude]}
-                    key={nanoid()}
-                    eventHandlers={{
-                        click: ()=>{
-                            onClickMarker(idx)
-                        },
-                        dragend: () => {
-                            onDragMarker(idx)
-                        }
-                    }} //todo: ここの関数を一つにまとめたい
-                >
-                </Marker>
-            )
-        })
-        return(
-            <>
-            {markers}
-            </>
-        )
-    }
-
-    const Polylines: FunctionComponent<PolylineProps> = (props: PolylineProps) => {
-        if(props.polyline.length){
-            let polylines: JSX.Element[] = new Array(props.polyline.length - 1);
-            for(let idx = 0; idx < props.polyline.length - 1; idx++){
-                polylines[idx] = (
-                    //Todo: 線の太さを上げて、線をクリックしやすくする
-                    <Polyline
-                        pathOptions={limeOptions} 
-                        positions={[polyline[idx], polyline[idx + 1]]}
-                        key={nanoid()}
-                        eventHandlers={{click: 
-                            async (event: L.LeafletMouseEvent)=>{
-                                L.DomEvent.stopPropagation(event) //clickLayerに対してクリックイベントを送らない
-                                const res = await patchAdd(event.latlng.lat, event.latlng.lng, idx + 1, props.route)
-                                if(res){
-                                    props.setWaypoints(res.data.waypoints);
-                                    props.setLinestring(res.data.linestring);
-                                }
-                            }
-                        }} 
-                    />
-                )
-            }
-            return(
-                <>
-                {polylines}
-                </>
-            )
-        }else{
-            return null
-        }
-    }
 
     async function onClickClearHandler(): Promise<void>{
         const res = await patchClear(routeId);
@@ -232,4 +123,4 @@ function RouteEditor(): JSX.Element{
     )
 }
 
-export default RouteEditor;
+export default RouteEditor
