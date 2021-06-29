@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { getRoutes, postRoutes, deleteRoute } from '../api/routes'
-import { Route } from '../types'
+import { getRoutes, postRoutes, deleteRoute } from '../../api/routes'
+import { Route } from '../../types'
 
 function RouteIndex(){
     const [inputValue, setInputValue] = useState<string>('');

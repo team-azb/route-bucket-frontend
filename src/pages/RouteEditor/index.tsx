@@ -3,8 +3,8 @@ import { useParams, Link } from 'react-router-dom'
 import { MapContainer, TileLayer, Marker, Polyline, useMapEvent, useMap } from 'react-leaflet';
 import L, { LatLngExpression, LeafletMouseEvent, Marker as MarkerType } from 'leaflet';
 import { nanoid } from 'nanoid';
-import { getRoute, patchAdd, patchDelete, patchUndo, patchRedo, patchClear, patchMove } from '../api/routes'
-import { Position } from '../types'
+import { getRoute, patchAdd, patchDelete, patchUndo, patchRedo, patchClear, patchMove } from '../../api/routes'
+import { Position } from '../../types'
 import 'leaflet/dist/leaflet.css';
 
 const limeOptions: {color: string} = { color: 'lime' }
