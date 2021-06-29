@@ -14,6 +14,10 @@ interface RoutesResponse{
 
 interface RouteResponse extends Route{}
 
+interface RouteRequest{
+    coord: Position
+}
+
 export async function getRoute(routeId: string){
     let res;
     try {
@@ -35,7 +39,7 @@ export async function getRoutes(){
 }
 
 export async function patchAdd(latitude: number, longitude: number, idx: number, routeId: string){
-    const payload = {
+    const payload: RouteRequest = {
         coord:{
             latitude: latitude,
             longitude: longitude
@@ -103,7 +107,7 @@ export async function patchRedo(routeId: string){
 }
 
 export async function patchMove(latitude: number, longitude: number, idx: number, routeId: string){
-    const payload = {
+    const payload: RouteRequest = {
         coord:{
             latitude: latitude,
             longitude: longitude
