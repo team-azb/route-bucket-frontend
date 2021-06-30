@@ -45,12 +45,12 @@ export default function Markers(props: MakersProps) {
       async function onDragMarker(idx: number) {
         const newPoint = markerRefs.current[idx].current?.getLatLng();
         if (newPoint) {
-          const res = await patchMove(
-            newPoint.lat,
-            newPoint.lng,
-            idx,
-            props.route
-          );
+          const res = await patchMove(props.route, idx, {
+            coord: {
+              latitude: newPoint.lat,
+              longitude: newPoint.lng,
+            },
+          });
           if (res) {
             props.setWaypoints(res.data.waypoints);
             props.setLinestring(res.data.linestring);

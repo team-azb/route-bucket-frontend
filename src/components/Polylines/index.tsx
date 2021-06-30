@@ -27,12 +27,12 @@ export default function Polylines(props: PolylineProps) {
           eventHandlers={{
             click: async (event: L.LeafletMouseEvent) => {
               L.DomEvent.stopPropagation(event); //clickLayerに対してクリックイベントを送らない
-              const res = await patchAdd(
-                event.latlng.lat,
-                event.latlng.lng,
-                idx + 1,
-                props.route
-              );
+              const res = await patchAdd(props.route, idx + 1, {
+                coord: {
+                  latitude: event.latlng.lat,
+                  longitude: event.latlng.lng,
+                },
+              });
               if (res) {
                 props.setWaypoints(res.data.waypoints);
                 props.setLinestring(res.data.linestring);

@@ -14,7 +14,7 @@ interface RoutesResponse{
 
 interface RouteResponse extends Route{}
 
-interface RouteRequest{
+interface RouteRequestBody{
     coord: Position
 }
 
@@ -38,13 +38,7 @@ export async function getRoutes(){
     return res;
 }
 
-export async function patchAdd(latitude: number, longitude: number, idx: number, routeId: string){
-    const payload: RouteRequest = {
-        coord:{
-            latitude: latitude,
-            longitude: longitude
-        }
-    }
+export async function patchAdd(routeId: string, idx: number, payload: RouteRequestBody){
     let res;
     try {
         res = await axios.patch<PatchResponse>(`/routes/${routeId}/add/${idx}`, payload);
@@ -106,13 +100,7 @@ export async function patchRedo(routeId: string){
     return res;
 }
 
-export async function patchMove(latitude: number, longitude: number, idx: number, routeId: string){
-    const payload: RouteRequest = {
-        coord:{
-            latitude: latitude,
-            longitude: longitude
-        }
-    }
+export async function patchMove(routeId: string, idx: number, payload: RouteRequestBody){
     let res;
     try {
         res = await axios.patch<PatchResponse>(`/routes/${routeId}/move/${idx}`, payload);

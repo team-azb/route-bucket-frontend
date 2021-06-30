@@ -29,12 +29,12 @@ interface RouteEditorParams {
 
 function ClickLayer(props: ClickLayerProps): null {
   useMapEvent("click", async (e: LeafletMouseEvent) => {
-    const res = await patchAdd(
-      e.latlng.lat,
-      e.latlng.lng,
-      props.waypoints.length,
-      props.route
-    );
+    const res = await patchAdd(props.route, props.waypoints.length, {
+      coord: {
+        latitude: e.latlng.lat,
+        longitude: e.latlng.lng,
+      },
+    });
     if (res) {
       props.setWaypoints(res.data.waypoints);
       props.setLinestring(res.data.linestring);
