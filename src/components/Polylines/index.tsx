@@ -1,28 +1,31 @@
 import { Polyline } from "react-leaflet";
-import L, { LatLngExpression } from "leaflet";
+import L from "leaflet";
 import { nanoid } from "nanoid";
 import { patchAdd } from "../../api/routes";
-import { Position } from "../../types";
+import { Position, Segment } from "../../types";
 
 const limeOptions: { color: string } = { color: "lime" };
 
 //Polylineコンポーネントのpropsの型
 type PolylineProps = {
-  polyline: LatLngExpression[];
+  segments: Segment[];
   route: string;
   setWaypoints: React.Dispatch<React.SetStateAction<Position[]>>;
-  setLinestring: React.Dispatch<React.SetStateAction<Position[]>>;
+  setSegments: React.Dispatch<React.SetStateAction<Segment[]>>;
 };
 
 export default function Polylines(props: PolylineProps) {
-  if (props.polyline.length) {
-    let polylines: JSX.Element[] = new Array(props.polyline.length - 1);
-    for (let idx = 0; idx < props.polyline.length - 1; idx++) {
+  if (props.segments.length) {
+    let polylines: JSX.Element[] = new Array(props.segments.length);
+    for (let idx = 0; idx < props.segments.length; idx++) {
       polylines[idx] = (
         //Todo: 線の太さを上げて、線をクリックしやすくする
         <Polyline
           pathOptions={limeOptions}
-          positions={[props.polyline[idx], props.polyline[idx + 1]]}
+          positions={props.segments[idx]["points"].map((point) => [
+            point.latitude,
+            point.longitude,
+          ])}
           key={nanoid()}
           eventHandlers={{
             click: async (event: L.LeafletMouseEvent) => {
@@ -35,7 +38,7 @@ export default function Polylines(props: PolylineProps) {
               });
               if (res) {
                 props.setWaypoints(res.data.waypoints);
-                props.setLinestring(res.data.linestring);
+                props.setSegments(res.data.segments);
               }
             },
           }}

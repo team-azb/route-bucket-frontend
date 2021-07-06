@@ -3,7 +3,7 @@ import { Marker, useMap } from "react-leaflet";
 import { Marker as MarkerType } from "leaflet";
 import { nanoid } from "nanoid";
 import { patchDelete, patchMove } from "../../api/routes";
-import { Position } from "../../types";
+import { Position, Segment } from "../../types";
 
 type MakersProps = {
   waypoints: Position[];
@@ -11,7 +11,7 @@ type MakersProps = {
   changeCenterFlag: boolean;
   setChangeCenterFlag: React.Dispatch<React.SetStateAction<boolean>>;
   setWaypoints: React.Dispatch<React.SetStateAction<Position[]>>;
-  setLinestring: React.Dispatch<React.SetStateAction<Position[]>>;
+  setSegments: React.Dispatch<React.SetStateAction<Segment[]>>;
 };
 
 export default function Markers(props: MakersProps) {
@@ -38,7 +38,7 @@ export default function Markers(props: MakersProps) {
         const res = await patchDelete(props.route, idx);
         if (res) {
           props.setWaypoints(res.data.waypoints);
-          props.setLinestring(res.data.linestring);
+          props.setSegments(res.data.segments);
         }
       }
 
@@ -53,7 +53,7 @@ export default function Markers(props: MakersProps) {
           });
           if (res) {
             props.setWaypoints(res.data.waypoints);
-            props.setLinestring(res.data.linestring);
+            props.setSegments(res.data.segments);
           }
         }
       }

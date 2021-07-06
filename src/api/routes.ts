@@ -1,10 +1,10 @@
 import axios from 'axios'
-import { Position, Route } from '../types'
+import { Position, Route, Segment } from '../types'
 
 //axiosからのレスポンスのデータのインターフェース
 interface PatchResponse{
     waypoints: Position[],
-    linestring: Position[],
+    segments: Segment[],
     message: string
 }
 
