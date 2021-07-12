@@ -12,6 +12,7 @@ import {
 import { Position, Segment } from "../../types";
 import Markers from "../../components/Markers";
 import Polylines from "../../components/Polylines";
+import EditableNameDisplay from "../../components/EditableNameDisplay";
 import "leaflet/dist/leaflet.css";
 
 //ClickLayerコンポーネントのpropsの型
@@ -47,6 +48,7 @@ const RouteEditor: FunctionComponent = () => {
   const [waypoints, setWaypoints] = useState<Position[]>([]);
   const [segments, setSegments] = useState<Segment[]>([]);
   const [routeName, setRouteName] = useState<string>("");
+  const [elevationGain, setElevationGain] = useState<number>(0);
   const [changeCenterFlag, setChangeCenterFlag] = useState<boolean>(false);
   const { routeId } = useParams<RouteEditorParams>();
 
@@ -62,6 +64,7 @@ const RouteEditor: FunctionComponent = () => {
         if (res.data.segments) {
           setSegments(res.data.segments);
         }
+        setElevationGain(res.data.elevation_gain || 0);
         setRouteName(res.data.name);
         setChangeCenterFlag(true);
       }
@@ -100,7 +103,14 @@ const RouteEditor: FunctionComponent = () => {
       <Link to="/">ルート一覧へ</Link>
       <hr />
       <p>ルートid: {routeId}</p>
-      <p>ルート名: {routeName}</p>
+
+      <EditableNameDisplay
+        routeId={routeId}
+        setRouteName={setRouteName}
+        routeName={routeName}
+      />
+
+      <p>獲得標高: {elevationGain}m</p>
       <MapContainer
         style={{ height: "600px" }}
         center={[35.68139740310467, 139.7671569841016]}

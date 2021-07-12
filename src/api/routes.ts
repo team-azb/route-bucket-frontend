@@ -18,6 +18,10 @@ interface RouteRequestBody{
     coord: Position
 }
 
+interface RenameRequestBody{
+    name: string
+}
+
 export async function getRoute(routeId: string){
     let res;
     try {
@@ -111,6 +115,17 @@ export async function patchMove(routeId: string, idx: number, payload: RouteRequ
         }
     }
     return res;
+}
+
+export async function patchRename(routeId: string, payload: RenameRequestBody){
+    try {
+        let res = await axios.patch<RouteResponse>(`/routes/${routeId}/rename/`, payload);
+        return res
+    } catch (error) {
+        if(error.response.data.message){
+            console.error(error.response.data.message);
+        }
+    }
 }
 
 export async function postRoutes(name: string){
