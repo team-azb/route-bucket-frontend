@@ -79,6 +79,7 @@ const RouteEditor: FunctionComponent = () => {
     if (res) {
       setWaypoints(res.data.waypoints);
       setSegments(res.data.segments);
+      setElevationGain(res.data.elevation_gain || 0);
     }
   }
 
@@ -87,6 +88,7 @@ const RouteEditor: FunctionComponent = () => {
     if (res) {
       setWaypoints(res.data.waypoints);
       setSegments(res.data.segments);
+      setElevationGain(res.data.elevation_gain || 0);
     }
   }
 
@@ -95,6 +97,7 @@ const RouteEditor: FunctionComponent = () => {
     if (res) {
       setWaypoints(res.data.waypoints);
       setSegments(res.data.segments);
+      setElevationGain(res.data.elevation_gain || 0);
     }
   }
 
@@ -128,12 +131,14 @@ const RouteEditor: FunctionComponent = () => {
           setChangeCenterFlag={setChangeCenterFlag}
           setWaypoints={setWaypoints}
           setSegments={setSegments}
+          setElevationGain={setElevationGain}
         />
         <Polylines
           segments={segments}
           route={routeId}
           setWaypoints={setWaypoints}
           setSegments={setSegments}
+          setElevationGain={setElevationGain}
         />
         <ClickLayer
           route={routeId}

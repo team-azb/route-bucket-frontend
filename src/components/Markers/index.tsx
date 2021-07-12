@@ -12,7 +12,8 @@ type MakersProps = {
   setChangeCenterFlag: React.Dispatch<React.SetStateAction<boolean>>;
   setWaypoints: React.Dispatch<React.SetStateAction<Position[]>>;
   setSegments: React.Dispatch<React.SetStateAction<Segment[]>>;
-};
+  setElevationGain: React.Dispatch<React.SetStateAction<number>>;
+}
 
 export default function Markers(props: MakersProps) {
   const map = useMap();
@@ -39,6 +40,7 @@ export default function Markers(props: MakersProps) {
         if (res) {
           props.setWaypoints(res.data.waypoints);
           props.setSegments(res.data.segments);
+          props.setElevationGain(res.data.elevation_gain);
         }
       }
 
@@ -54,6 +56,7 @@ export default function Markers(props: MakersProps) {
           if (res) {
             props.setWaypoints(res.data.waypoints);
             props.setSegments(res.data.segments);
+            props.setElevationGain(res.data.elevation_gain);
           }
         }
       }

@@ -5,7 +5,8 @@ import { Position, Route, Segment } from '../types'
 interface PatchResponse{
     waypoints: Position[],
     segments: Segment[],
-    message: string
+    message: string,
+    elevation_gain: number
 }
 
 interface RoutesResponse{

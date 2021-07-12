@@ -12,6 +12,7 @@ type PolylineProps = {
   route: string;
   setWaypoints: React.Dispatch<React.SetStateAction<Position[]>>;
   setSegments: React.Dispatch<React.SetStateAction<Segment[]>>;
+  setElevationGain: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export default function Polylines(props: PolylineProps) {
@@ -39,6 +40,7 @@ export default function Polylines(props: PolylineProps) {
               if (res) {
                 props.setWaypoints(res.data.waypoints);
                 props.setSegments(res.data.segments);
+                props.setElevationGain(res.data.elevation_gain);
               }
             },
           }}
