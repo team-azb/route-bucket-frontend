@@ -21,6 +21,7 @@ type ClickLayerProps = {
   route: string;
   setWaypoints: React.Dispatch<React.SetStateAction<Position[]>>;
   setSegments: React.Dispatch<React.SetStateAction<Segment[]>>;
+  setElevationGain: React.Dispatch<React.SetStateAction<number>>;
 };
 
 //URLのパラメータのinerface
@@ -39,6 +40,7 @@ function ClickLayer(props: ClickLayerProps): null {
     if (res) {
       props.setWaypoints(res.data.waypoints);
       props.setSegments(res.data.segments);
+      props.setElevationGain(res.data.elevation_gain)
     }
   });
   return null;
@@ -145,6 +147,7 @@ const RouteEditor: FunctionComponent = () => {
           waypoints={waypoints}
           setWaypoints={setWaypoints}
           setSegments={setSegments}
+          setElevationGain={setElevationGain}
         />
       </MapContainer>
       {/* Todo undoできない時はボタンをdisabledにする */}
