@@ -4,7 +4,7 @@ import { nanoid } from "nanoid";
 import { patchAdd } from "../../api/routes";
 import { Position, Segment } from "../../types";
 
-const limeOptions: { color: string } = { color: "lime" };
+const blueOptions: { color: string } = { color: "#0000cd" };
 
 //Polylineコンポーネントのpropsの型
 type PolylineProps = {
@@ -22,7 +22,7 @@ export default function Polylines(props: PolylineProps) {
       polylines[idx] = (
         //Todo: 線の太さを上げて、線をクリックしやすくする
         <Polyline
-          pathOptions={limeOptions}
+          pathOptions={blueOptions}
           positions={props.segments[idx]["points"].map((point) => [
             point.latitude,
             point.longitude,
