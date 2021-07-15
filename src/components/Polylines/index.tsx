@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Polyline, Marker } from "react-leaflet";
+import { Polyline, Marker, useMapEvent } from "react-leaflet";
 import { Marker as MarkerType, PathOptions } from "leaflet";
 import L from "leaflet";
 import { nanoid } from "nanoid";
@@ -9,7 +9,7 @@ import { TempMarkerIcon } from "./tempMarkerIcon";
 
 const blueOptions: PathOptions = { 
   color: "#0000cd",
-  weight: 4
+  weight: 5
 };
 
 //Polylineコンポーネントのpropsの型
@@ -28,6 +28,11 @@ export default function Polylines(props: PolylineProps) {
   const [tempMarkerInfo, setTempMarkerInfo] = useState<TempMarkerInfo>({
     position: null,
     index: null,
+  });
+  const [zoomSize, setZoomSize] = useState<number>(13)
+
+  useMapEvent("zoomend", (event) => {
+    setZoomSize(event.target._zoom)
   });
 
   async function onDragMarker() {
@@ -87,7 +92,7 @@ export default function Polylines(props: PolylineProps) {
         {polylines}
         {tempMarkerInfo.position && (
           <Marker
-            icon={TempMarkerIcon}
+            icon={TempMarkerIcon(zoomSize)}
             ref={markerRef}
             draggable={true}
             position={tempMarkerInfo.position}
