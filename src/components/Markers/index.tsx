@@ -4,7 +4,7 @@ import { Marker as MarkerType } from "leaflet";
 import { nanoid } from "nanoid";
 import { patchDelete, patchMove } from "../../api/routes";
 import { Position, Route } from "../../types";
-import { MarkerIcon } from "./markerIcon";
+import { MarkerIcon, GoalMarkerIcon, StartMarkerIcon } from "./markerIcon";
 
 type MakersProps = {
   changeCenterFlag: boolean;
@@ -32,6 +32,12 @@ export default function Markers(props: MakersProps) {
   }, [props.changeCenterFlag]);
   const markers = props.route.waypoints.map(
     (pos: Position, idx: number): JSX.Element => {
+      const markerIcon =
+        idx === 0
+          ? StartMarkerIcon
+          : idx === props.routeInfo.waypoints.length - 1
+          ? GoalMarkerIcon
+          : MarkerIcon;
       markerRefs.current[idx] = createRef<MarkerType>();
       async function onClickMarker(idx: number) {
         const res = await patchDelete(props.route.id, idx);
@@ -57,7 +63,8 @@ export default function Markers(props: MakersProps) {
 
       return (
         <Marker
-          icon={MarkerIcon}
+          icon={markerIcon}
+          zIndexOffset={idx === 0 ? props.routeInfo.waypoints.length : idx}
           ref={markerRefs.current[idx]}
           draggable={true}
           position={[pos.latitude, pos.longitude]}
