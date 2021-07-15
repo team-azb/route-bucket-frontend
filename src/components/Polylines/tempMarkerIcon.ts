@@ -1,9 +1,9 @@
-import L from 'leaflet'
+import L from "leaflet";
 
-export const TempMarkerIcon = (zoomSize: number) => { 
-    return new L.Icon({
-    iconUrl: "circle_black_24dp.svg",
-    iconRetinaUrl: "circle_black_24dp.svg",
+export const TempMarkerIcon = (zoomSize: number) => {
+  return new L.Icon({
+    iconUrl: "icons/circle_black_24dp.svg",
+    iconRetinaUrl: "icons/circle_black_24dp.svg",
     iconSize: new L.Point(zoomSize, zoomSize),
-})
-}
+  });
+};
