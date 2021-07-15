@@ -7,9 +7,9 @@ import { patchAdd, patchMove } from "../../api/routes";
 import { Route } from "../../types";
 import { TempMarkerIcon } from "./tempMarkerIcon";
 
-const blueOptions: PathOptions = { 
+const blueOptions: PathOptions = {
   color: "#0000cd",
-  weight: 5
+  weight: 5,
 };
 
 //Polylineコンポーネントのpropsの型
@@ -29,10 +29,10 @@ export default function Polylines(props: PolylineProps) {
     position: null,
     index: null,
   });
-  const [zoomSize, setZoomSize] = useState<number>(13)
+  const [zoomSize, setZoomSize] = useState<number>(13);
 
   useMapEvent("zoomend", (event) => {
-    setZoomSize(event.target._zoom)
+    setZoomSize(event.target._zoom);
   });
 
   async function onDragMarker() {
@@ -51,61 +51,61 @@ export default function Polylines(props: PolylineProps) {
     }
   }
 
-  if (props.route.segments.length) {
-    let polylines: JSX.Element[] = new Array(props.route.segments.length);
-    for (let idx = 0; idx < props.route.segments.length; idx++) {
-      polylines[idx] = (
-        //Todo: 線の太さを上げて、線をクリックしやすくする
-        <Polyline
-          pathOptions={blueOptions}
-          positions={props.route.segments[idx]["points"].map((point) => [
-            point.latitude,
-            point.longitude,
-          ])}
-          key={nanoid()}
+  async function onClickMarker(latlng: L.LatLng, index: number) {
+    const res = await patchAdd(props.route.id, index, {
+      coord: {
+        latitude: latlng.lat,
+        longitude: latlng.lng,
+      },
+    });
+    if (res) {
+      props.setRoute({ ...props.route, ...res.data });
+    }
+  }
+  let polylines: JSX.Element[] = new Array(props.route.segments.length);
+  for (let idx = 0; idx < props.route.segments.length; idx++) {
+    polylines[idx] = (
+      //Todo: 線の太さを上げて、線をクリックしやすくする
+      <Polyline
+        pathOptions={blueOptions}
+        positions={props.route.segments[idx]["points"].map((point) => [
+          point.latitude,
+          point.longitude,
+        ])}
+        key={nanoid()}
+        eventHandlers={{
+          mouseover: (event) => {
+            setTempMarkerInfo({
+              ...tempMarkerInfo,
+              index: idx,
+              position: event.latlng,
+            });
+          },
+        }}
+      />
+    );
+  }
+  return (
+    <>
+      {polylines}
+      {tempMarkerInfo.position && (
+        <Marker
+          icon={TempMarkerIcon(zoomSize)}
+          ref={markerRef}
+          draggable={true}
+          position={tempMarkerInfo.position}
           eventHandlers={{
             click: async (event: L.LeafletMouseEvent) => {
               L.DomEvent.stopPropagation(event); //clickLayerに対してクリックイベントを送らない
-              const res = await patchAdd(props.route.id, idx + 1, {
-                coord: {
-                  latitude: event.latlng.lat,
-                  longitude: event.latlng.lng,
-                },
-              });
-              if (res) {
-                props.setRoute({ ...props.route, ...res.data });
-              }
+              tempMarkerInfo.index &&
+                onClickMarker(event.latlng, tempMarkerInfo.index + 1);
             },
-            mouseover: (event) => {
-              setTempMarkerInfo({
-                ...tempMarkerInfo,
-                index: idx,
-                position: event.latlng,
-              });
+            dragend: () => {
+              onDragMarker();
             },
           }}
         />
-      );
-    }
-    return (
-      <>
-        {polylines}
-        {tempMarkerInfo.position && (
-          <Marker
-            icon={TempMarkerIcon(zoomSize)}
-            ref={markerRef}
-            draggable={true}
-            position={tempMarkerInfo.position}
-            eventHandlers={{
-              dragend: () => {
-                onDragMarker();
-              },
-            }}
-          />
-        )}
-      </>
-    );
-  } else {
-    return null;
-  }
+      )}
+    </>
+  );
 }
