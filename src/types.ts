@@ -1,8 +1,8 @@
 export type Position = {
-    latitude: number,
-    longitude: number,
-    evelation?: number,
-}
+  latitude: number;
+  longitude: number;
+  evelation?: number;
+};
 
 export type RouteInfo = {
     id: string,
@@ -12,12 +12,12 @@ export type RouteInfo = {
 export type RouteGeometry = {
     waypoints: Position[],
     segments: Segment[],
-    elevation_gain: number
+    elevation_gain?: number
 }
 
 export type Route = RouteInfo & RouteGeometry
 
 export type Segment = {
-    points: Position[],
-    distance: number
-}
+  points: Position[];
+  distance: number;
+};
