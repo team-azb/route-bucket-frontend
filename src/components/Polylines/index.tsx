@@ -1,12 +1,16 @@
 import { useState, useRef } from "react";
 import { Polyline, Marker } from "react-leaflet";
-import { Marker as MarkerType } from "leaflet";
+import { Marker as MarkerType, PathOptions } from "leaflet";
 import L from "leaflet";
 import { nanoid } from "nanoid";
 import { patchAdd, patchMove } from "../../api/routes";
 import { Route } from "../../types";
+import { TempMarkerIcon } from "./tempMarkerIcon";
 
-const blueOptions: { color: string } = { color: "#0000cd" };
+const blueOptions: PathOptions = { 
+  color: "#0000cd",
+  weight: 4
+};
 
 //Polylineコンポーネントのpropsの型
 type PolylineProps = {
@@ -83,6 +87,7 @@ export default function Polylines(props: PolylineProps) {
         {polylines}
         {tempMarkerInfo.position && (
           <Marker
+            icon={TempMarkerIcon}
             ref={markerRef}
             draggable={true}
             position={tempMarkerInfo.position}
