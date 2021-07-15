@@ -7,7 +7,7 @@ import { patchAdd } from "../../api/routes";
 import { Route } from "../../types";
 import { TempMarkerIcon } from "./tempMarkerIcon";
 
-const blueOptions: PathOptions = {
+const pathOptions: PathOptions = {
   color: "#0000cd",
   weight: 5,
 };
@@ -67,7 +67,7 @@ export default function Polylines(props: PolylineProps) {
     polylines[idx] = (
       //Todo: 線の太さを上げて、線をクリックしやすくする
       <Polyline
-        pathOptions={blueOptions}
+        pathOptions={pathOptions}
         positions={props.route.segments[idx]["points"].map((point) => [
           point.latitude,
           point.longitude,
