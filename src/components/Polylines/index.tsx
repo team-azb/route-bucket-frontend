@@ -1,7 +1,9 @@
-import { Polyline } from "react-leaflet";
+import { useState, useRef } from "react";
+import { Polyline, Marker } from "react-leaflet";
+import { Marker as MarkerType } from "leaflet";
 import L from "leaflet";
 import { nanoid } from "nanoid";
-import { patchAdd } from "../../api/routes";
+import { patchAdd, patchMove } from "../../api/routes";
 import { Route } from "../../types";
 
 const blueOptions: { color: string } = { color: "#0000cd" };
@@ -12,7 +14,34 @@ type PolylineProps = {
   setRouteInfo: React.Dispatch<React.SetStateAction<Route>>;
 };
 
+type TempMarkerInfo = {
+  position: L.LatLng | null;
+  index: number | null;
+};
+
 export default function Polylines(props: PolylineProps) {
+  const markerRef = useRef<MarkerType>(null);
+  const [tempMarkerInfo, setTempMarkerInfo] = useState<TempMarkerInfo>({
+    position: null,
+    index: null,
+  });
+
+  async function onDragMarker() {
+    const newPoint = markerRef.current?.getLatLng();
+    if (newPoint && tempMarkerInfo.index) {
+      const res = await patchMove(props.routeInfo.id, tempMarkerInfo.index, {
+        coord: {
+          latitude: newPoint.lat,
+          longitude: newPoint.lng,
+        },
+      });
+      if (res) {
+        props.setRouteInfo({ ...props.routeInfo, ...res.data });
+        setTempMarkerInfo({ index: null, position: null });
+      }
+    }
+  }
+
   if (props.routeInfo.segments.length) {
     let polylines: JSX.Element[] = new Array(props.routeInfo.segments.length);
     for (let idx = 0; idx < props.routeInfo.segments.length; idx++) {
@@ -38,11 +67,34 @@ export default function Polylines(props: PolylineProps) {
                 props.setRouteInfo({ ...props.routeInfo, ...res.data });
               }
             },
+            mouseover: (event) => {
+              setTempMarkerInfo({
+                ...tempMarkerInfo,
+                index: idx,
+                position: event.latlng,
+              });
+            },
           }}
         />
       );
     }
-    return <>{polylines}</>;
+    return (
+      <>
+        {polylines}
+        {tempMarkerInfo.position && (
+          <Marker
+            ref={markerRef}
+            draggable={true}
+            position={tempMarkerInfo.position}
+            eventHandlers={{
+              dragend: () => {
+                onDragMarker();
+              },
+            }}
+          />
+        )}
+      </>
+    );
   } else {
     return null;
   }
