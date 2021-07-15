@@ -7,9 +7,9 @@ import { patchAdd, patchMove } from "../../api/routes";
 import { Route } from "../../types";
 import { TempMarkerIcon } from "./tempMarkerIcon";
 
-const blueOptions: PathOptions = { 
+const blueOptions: PathOptions = {
   color: "#0000cd",
-  weight: 5
+  weight: 5,
 };
 
 //Polylineコンポーネントのpropsの型
@@ -29,10 +29,10 @@ export default function Polylines(props: PolylineProps) {
     position: null,
     index: null,
   });
-  const [zoomSize, setZoomSize] = useState<number>(13)
+  const [zoomSize, setZoomSize] = useState<number>(13);
 
   useMapEvent("zoomend", (event) => {
-    setZoomSize(event.target._zoom)
+    setZoomSize(event.target._zoom);
   });
 
   async function onDragMarker() {
@@ -51,6 +51,18 @@ export default function Polylines(props: PolylineProps) {
     }
   }
 
+  async function onClickMarker(latlng: L.LatLng, index: number) {
+    const res = await patchAdd(props.routeInfo.id, index, {
+      coord: {
+        latitude: latlng.lat,
+        longitude: latlng.lng,
+      },
+    });
+    if (res) {
+      props.setRouteInfo({ ...props.routeInfo, ...res.data });
+    }
+  }
+
   if (props.routeInfo.segments.length) {
     let polylines: JSX.Element[] = new Array(props.routeInfo.segments.length);
     for (let idx = 0; idx < props.routeInfo.segments.length; idx++) {
@@ -64,18 +76,6 @@ export default function Polylines(props: PolylineProps) {
           ])}
           key={nanoid()}
           eventHandlers={{
-            click: async (event: L.LeafletMouseEvent) => {
-              L.DomEvent.stopPropagation(event); //clickLayerに対してクリックイベントを送らない
-              const res = await patchAdd(props.routeInfo.id, idx + 1, {
-                coord: {
-                  latitude: event.latlng.lat,
-                  longitude: event.latlng.lng,
-                },
-              });
-              if (res) {
-                props.setRouteInfo({ ...props.routeInfo, ...res.data });
-              }
-            },
             mouseover: (event) => {
               setTempMarkerInfo({
                 ...tempMarkerInfo,
@@ -97,6 +97,11 @@ export default function Polylines(props: PolylineProps) {
             draggable={true}
             position={tempMarkerInfo.position}
             eventHandlers={{
+              click: async (event: L.LeafletMouseEvent) => {
+                L.DomEvent.stopPropagation(event); //clickLayerに対してクリックイベントを送らない
+                tempMarkerInfo.index &&
+                  onClickMarker(event.latlng, tempMarkerInfo.index + 1);
+              },
               dragend: () => {
                 onDragMarker();
               },

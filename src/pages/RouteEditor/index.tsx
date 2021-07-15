@@ -70,7 +70,6 @@ const RouteEditor: FunctionComponent = () => {
     };
   }, [routeId]);
 
-
   async function onClickClearHandler(): Promise<void> {
     const res = await patchClear(routeId);
     if (res) {
