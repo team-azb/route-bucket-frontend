@@ -1,27 +1,27 @@
 import { useState, useEffect } from "react";
 import { patchRename } from "../../api/routes";
+import { Route } from "../../types";
 
 type EditableNameDisplayProps = {
-  routeName: string;
-  routeId: string;
-  setRouteName: React.Dispatch<React.SetStateAction<string>>;
+  routeInfo: Route;
+  setRouteInfo: React.Dispatch<React.SetStateAction<Route>>;
 };
 
 export default function EditableNameDisplay(props: EditableNameDisplayProps) {
   const [isEditable, setIsEditable] = useState<boolean>(false);
-  const [nameInput, setNameInput] = useState<string>(props.routeName);
+  const [nameInput, setNameInput] = useState<string>(props.routeInfo.name);
 
   useEffect(() => {
-    setNameInput(props.routeName);
-  }, [props.routeName]);
+    setNameInput(props.routeInfo.name);
+  }, [props.routeInfo.name]);
 
   async function onSubmitName() {
     setIsEditable(!isEditable);
-    const res = await patchRename(props.routeId, {
+    const res = await patchRename(props.routeInfo.id, {
       name: nameInput,
     });
     if (res) {
-      props.setRouteName(res.data.name);
+      props.setRouteInfo({ ...props.routeInfo, ...res.data });
     }
   }
   return (

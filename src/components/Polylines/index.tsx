@@ -2,28 +2,25 @@ import { Polyline } from "react-leaflet";
 import L from "leaflet";
 import { nanoid } from "nanoid";
 import { patchAdd } from "../../api/routes";
-import { Position, Segment } from "../../types";
+import { Route } from "../../types";
 
 const blueOptions: { color: string } = { color: "#0000cd" };
 
 //Polylineコンポーネントのpropsの型
 type PolylineProps = {
-  segments: Segment[];
-  route: string;
-  setWaypoints: React.Dispatch<React.SetStateAction<Position[]>>;
-  setSegments: React.Dispatch<React.SetStateAction<Segment[]>>;
-  setElevationGain: React.Dispatch<React.SetStateAction<number>>;
+  routeInfo: Route;
+  setRouteInfo: React.Dispatch<React.SetStateAction<Route>>;
 };
 
 export default function Polylines(props: PolylineProps) {
-  if (props.segments.length) {
-    let polylines: JSX.Element[] = new Array(props.segments.length);
-    for (let idx = 0; idx < props.segments.length; idx++) {
+  if (props.routeInfo.segments.length) {
+    let polylines: JSX.Element[] = new Array(props.routeInfo.segments.length);
+    for (let idx = 0; idx < props.routeInfo.segments.length; idx++) {
       polylines[idx] = (
         //Todo: 線の太さを上げて、線をクリックしやすくする
         <Polyline
           pathOptions={blueOptions}
-          positions={props.segments[idx]["points"].map((point) => [
+          positions={props.routeInfo.segments[idx]["points"].map((point) => [
             point.latitude,
             point.longitude,
           ])}
@@ -31,16 +28,14 @@ export default function Polylines(props: PolylineProps) {
           eventHandlers={{
             click: async (event: L.LeafletMouseEvent) => {
               L.DomEvent.stopPropagation(event); //clickLayerに対してクリックイベントを送らない
-              const res = await patchAdd(props.route, idx + 1, {
+              const res = await patchAdd(props.routeInfo.id, idx + 1, {
                 coord: {
                   latitude: event.latlng.lat,
                   longitude: event.latlng.lng,
                 },
               });
               if (res) {
-                props.setWaypoints(res.data.waypoints);
-                props.setSegments(res.data.segments);
-                props.setElevationGain(res.data.elevation_gain);
+                props.setRouteInfo({ ...props.routeInfo, ...res.data });
               }
             },
           }}
