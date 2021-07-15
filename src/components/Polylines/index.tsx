@@ -3,7 +3,7 @@ import { Polyline, Marker, useMapEvent } from "react-leaflet";
 import { Marker as MarkerType, PathOptions } from "leaflet";
 import L from "leaflet";
 import { nanoid } from "nanoid";
-import { patchAdd, patchMove } from "../../api/routes";
+import { patchAdd } from "../../api/routes";
 import { Route } from "../../types";
 import { TempMarkerIcon } from "./tempMarkerIcon";
 
@@ -37,8 +37,8 @@ export default function Polylines(props: PolylineProps) {
 
   async function onDragMarker() {
     const newPoint = markerRef.current?.getLatLng();
-    if (newPoint && tempMarkerInfo.index) {
-      const res = await patchMove(props.route.id, tempMarkerInfo.index, {
+    if (newPoint && tempMarkerInfo.index !== null) {
+      const res = await patchAdd(props.route.id, tempMarkerInfo.index + 1, {
         coord: {
           latitude: newPoint.lat,
           longitude: newPoint.lng,
