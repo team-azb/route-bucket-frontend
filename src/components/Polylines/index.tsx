@@ -1,41 +1,41 @@
 import { Polyline } from "react-leaflet";
-import L, { LatLngExpression } from "leaflet";
+import L from "leaflet";
 import { nanoid } from "nanoid";
 import { patchAdd } from "../../api/routes";
-import { Position } from "../../types";
+import { Route } from "../../types";
 
-const limeOptions: { color: string } = { color: "lime" };
+const blueOptions: { color: string } = { color: "#0000cd" };
 
 //Polylineコンポーネントのpropsの型
 type PolylineProps = {
-  polyline: LatLngExpression[];
-  route: string;
-  setWaypoints: React.Dispatch<React.SetStateAction<Position[]>>;
-  setLinestring: React.Dispatch<React.SetStateAction<Position[]>>;
+  routeInfo: Route;
+  setRouteInfo: React.Dispatch<React.SetStateAction<Route>>;
 };
 
 export default function Polylines(props: PolylineProps) {
-  if (props.polyline.length) {
-    let polylines: JSX.Element[] = new Array(props.polyline.length - 1);
-    for (let idx = 0; idx < props.polyline.length - 1; idx++) {
+  if (props.routeInfo.segments.length) {
+    let polylines: JSX.Element[] = new Array(props.routeInfo.segments.length);
+    for (let idx = 0; idx < props.routeInfo.segments.length; idx++) {
       polylines[idx] = (
         //Todo: 線の太さを上げて、線をクリックしやすくする
         <Polyline
-          pathOptions={limeOptions}
-          positions={[props.polyline[idx], props.polyline[idx + 1]]}
+          pathOptions={blueOptions}
+          positions={props.routeInfo.segments[idx]["points"].map((point) => [
+            point.latitude,
+            point.longitude,
+          ])}
           key={nanoid()}
           eventHandlers={{
             click: async (event: L.LeafletMouseEvent) => {
               L.DomEvent.stopPropagation(event); //clickLayerに対してクリックイベントを送らない
-              const res = await patchAdd(props.route, idx + 1, {
+              const res = await patchAdd(props.routeInfo.id, idx + 1, {
                 coord: {
                   latitude: event.latlng.lat,
                   longitude: event.latlng.lng,
                 },
               });
               if (res) {
-                props.setWaypoints(res.data.waypoints);
-                props.setLinestring(res.data.linestring);
+                props.setRouteInfo({ ...props.routeInfo, ...res.data });
               }
             },
           }}
