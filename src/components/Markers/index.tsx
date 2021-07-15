@@ -4,6 +4,7 @@ import { Marker as MarkerType } from "leaflet";
 import { nanoid } from "nanoid";
 import { patchDelete, patchMove } from "../../api/routes";
 import { Position, Route } from "../../types";
+import { MarkerIcon } from "./markerIcon";
 
 type MakersProps = {
   changeCenterFlag: boolean;
@@ -56,6 +57,7 @@ export default function Markers(props: MakersProps) {
 
       return (
         <Marker
+          icon={MarkerIcon}
           ref={markerRefs.current[idx]}
           draggable={true}
           position={[pos.latitude, pos.longitude]}
