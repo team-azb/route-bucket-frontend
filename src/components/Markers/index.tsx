@@ -35,7 +35,7 @@ export default function Markers(props: MakersProps) {
       const markerIcon =
         idx === 0
           ? StartMarkerIcon
-          : idx === props.routeInfo.waypoints.length - 1
+          : idx === props.route.waypoints.length - 1
           ? GoalMarkerIcon
           : MarkerIcon;
       markerRefs.current[idx] = createRef<MarkerType>();
@@ -65,7 +65,7 @@ export default function Markers(props: MakersProps) {
         <Marker
           icon={markerIcon}
           zIndexOffset={
-            idx === 0 ? props.routeInfo.waypoints.length * 100 : idx * 100
+            idx === 0 ? props.route.waypoints.length * 100 : idx * 100
           }
           ref={markerRefs.current[idx]}
           draggable={true}
