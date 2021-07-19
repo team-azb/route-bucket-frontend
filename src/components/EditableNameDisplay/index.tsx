@@ -33,6 +33,10 @@ function NameInput(props: NameInputProps) {
     }
   }
 
+  function onQuitEditing() {
+    props.setIsEditable(!props.isEditable);
+  }
+
   return (
     <>
       <p style={{ display: "inline" }}>
@@ -54,6 +58,13 @@ function NameInput(props: NameInputProps) {
         value="更新"
       />
 
+      <input
+        onClick={() => {
+          onQuitEditing();
+        }}
+        type="button"
+        value="キャンセル"
+      />
     </>
   );
 }
