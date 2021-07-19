@@ -13,37 +13,33 @@ type PolylineProps = {
 };
 
 export default function Polylines(props: PolylineProps) {
-  if (props.routeInfo.segments.length) {
-    let polylines: JSX.Element[] = new Array(props.routeInfo.segments.length);
-    for (let idx = 0; idx < props.routeInfo.segments.length; idx++) {
-      polylines[idx] = (
-        //Todo: 線の太さを上げて、線をクリックしやすくする
-        <Polyline
-          pathOptions={blueOptions}
-          positions={props.routeInfo.segments[idx]["points"].map((point) => [
-            point.latitude,
-            point.longitude,
-          ])}
-          key={nanoid()}
-          eventHandlers={{
-            click: async (event: L.LeafletMouseEvent) => {
-              L.DomEvent.stopPropagation(event); //clickLayerに対してクリックイベントを送らない
-              const res = await patchAdd(props.routeInfo.id, idx + 1, {
-                coord: {
-                  latitude: event.latlng.lat,
-                  longitude: event.latlng.lng,
-                },
-              });
-              if (res) {
-                props.setRouteInfo({ ...props.routeInfo, ...res.data });
-              }
-            },
-          }}
-        />
-      );
-    }
-    return <>{polylines}</>;
-  } else {
-    return null;
+  let polylines: JSX.Element[] = new Array(props.routeInfo.segments.length);
+  for (let idx = 0; idx < props.routeInfo.segments.length; idx++) {
+    polylines[idx] = (
+      //Todo: 線の太さを上げて、線をクリックしやすくする
+      <Polyline
+        pathOptions={blueOptions}
+        positions={props.routeInfo.segments[idx]["points"].map((point) => [
+          point.latitude,
+          point.longitude,
+        ])}
+        key={nanoid()}
+        eventHandlers={{
+          click: async (event: L.LeafletMouseEvent) => {
+            L.DomEvent.stopPropagation(event); //clickLayerに対してクリックイベントを送らない
+            const res = await patchAdd(props.routeInfo.id, idx + 1, {
+              coord: {
+                latitude: event.latlng.lat,
+                longitude: event.latlng.lng,
+              },
+            });
+            if (res) {
+              props.setRouteInfo({ ...props.routeInfo, ...res.data });
+            }
+          },
+        }}
+      />
+    );
   }
+  return <>{polylines}</>;
 }
