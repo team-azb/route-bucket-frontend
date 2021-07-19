@@ -1,7 +1,7 @@
 import { useState, useEffect, FunctionComponent } from "react";
 import { useParams, Link } from "react-router-dom";
-import { MapContainer, TileLayer, Polyline, useMapEvent } from "react-leaflet";
-import { LatLngExpression, LeafletMouseEvent } from "leaflet";
+import { MapContainer, TileLayer, useMapEvent } from "react-leaflet";
+import { LeafletMouseEvent } from "leaflet";
 import {
   getRoute,
   patchAdd,
@@ -9,17 +9,16 @@ import {
   patchRedo,
   patchClear,
 } from "../../api/routes";
-import { Position } from "../../types";
 import Markers from "../../components/Markers";
 import Polylines from "../../components/Polylines";
+import EditableNameDisplay from "../../components/EditableNameDisplay";
+import { Route } from "../../types";
 import "leaflet/dist/leaflet.css";
 
 //ClickLayerコンポーネントのpropsの型
 type ClickLayerProps = {
-  waypoints: Position[];
-  route: string;
-  setWaypoints: React.Dispatch<React.SetStateAction<Position[]>>;
-  setLinestring: React.Dispatch<React.SetStateAction<Position[]>>;
+  route: Route;
+  setRoute: React.Dispatch<React.SetStateAction<Route>>;
 };
 
 //URLのパラメータのinerface
@@ -29,29 +28,29 @@ interface RouteEditorParams {
 
 function ClickLayer(props: ClickLayerProps): null {
   useMapEvent("click", async (e: LeafletMouseEvent) => {
-    const res = await patchAdd(props.route, props.waypoints.length, {
+    const res = await patchAdd(props.route.id, props.route.waypoints.length, {
       coord: {
         latitude: e.latlng.lat,
         longitude: e.latlng.lng,
       },
     });
     if (res) {
-      props.setWaypoints(res.data.waypoints);
-      props.setLinestring(res.data.linestring);
+      props.setRoute({ ...props.route, ...res.data });
     }
   });
   return null;
 }
 
 const RouteEditor: FunctionComponent = () => {
-  const [waypoints, setWaypoints] = useState<Position[]>([]);
-  const [linestring, setLinestring] = useState<Position[]>([]);
-  const [routeName, setRouteName] = useState<string>("");
-  const [changeCenterFlag, setChangeCenterFlag] = useState<boolean>(false);
-  const polyline = waypoints.map(
-    (pos: Position): LatLngExpression => [pos.latitude, pos.longitude]
-  );
   const { routeId } = useParams<RouteEditorParams>();
+  const [route, setRoute] = useState<Route>({
+    id: routeId,
+    name: "",
+    waypoints: [],
+    segments: [],
+    elevation_gain: 0,
+  });
+  const [changeCenterFlag, setChangeCenterFlag] = useState<boolean>(false);
 
   //Mapのルート変更時にルートを取得してwaypointsを変更する
   useEffect(() => {
@@ -59,14 +58,7 @@ const RouteEditor: FunctionComponent = () => {
     (async () => {
       const res = await getRoute(routeId);
       if (res && !unmounted) {
-        if (res.data.waypoints) {
-          setWaypoints(res.data.waypoints);
-        }
-        if (res.data.linestring) {
-          setLinestring(res.data.linestring);
-        }
-        setRouteName(res.data.name);
-        setChangeCenterFlag(true);
+        setRoute({ ...res.data });
       }
     })();
     return () => {
@@ -77,24 +69,21 @@ const RouteEditor: FunctionComponent = () => {
   async function onClickClearHandler(): Promise<void> {
     const res = await patchClear(routeId);
     if (res) {
-      setWaypoints(res.data.waypoints);
-      setLinestring(res.data.linestring);
+      setRoute({ ...route, ...res.data });
     }
   }
 
   async function onClickUndoHandler(): Promise<void> {
     const res = await patchUndo(routeId);
     if (res) {
-      setWaypoints(res.data.waypoints);
-      setLinestring(res.data.linestring);
+      setRoute({ ...route, ...res.data });
     }
   }
 
   async function onClickRedoHandler(): Promise<void> {
     const res = await patchRedo(routeId);
     if (res) {
-      setWaypoints(res.data.waypoints);
-      setLinestring(res.data.linestring);
+      setRoute({ ...route, ...res.data });
     }
   }
 
@@ -103,7 +92,10 @@ const RouteEditor: FunctionComponent = () => {
       <Link to="/">ルート一覧へ</Link>
       <hr />
       <p>ルートid: {routeId}</p>
-      <p>ルート名: {routeName}</p>
+
+      <EditableNameDisplay route={route} setRoute={setRoute} />
+
+      <p>獲得標高: {route.elevation_gain}m</p>
       <MapContainer
         style={{ height: "600px" }}
         center={[35.68139740310467, 139.7671569841016]}
@@ -115,28 +107,13 @@ const RouteEditor: FunctionComponent = () => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <Markers
-          waypoints={waypoints}
-          route={routeId}
           changeCenterFlag={changeCenterFlag}
+          route={route}
+          setRoute={setRoute}
           setChangeCenterFlag={setChangeCenterFlag}
-          setWaypoints={setWaypoints}
-          setLinestring={setLinestring}
         />
-        <Polylines
-          polyline={polyline}
-          route={routeId}
-          setWaypoints={setWaypoints}
-          setLinestring={setLinestring}
-        />
-        <Polyline
-          positions={linestring.map((pos) => [pos.latitude, pos.longitude])}
-        />
-        <ClickLayer
-          route={routeId}
-          waypoints={waypoints}
-          setWaypoints={setWaypoints}
-          setLinestring={setLinestring}
-        />
+        <Polylines route={route} setRoute={setRoute} />
+        <ClickLayer route={route} setRoute={setRoute} />
       </MapContainer>
       {/* Todo undoできない時はボタンをdisabledにする */}
       <button onClick={onClickUndoHandler}>undo</button>
