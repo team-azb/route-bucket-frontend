@@ -7,49 +7,49 @@ import { Position, Route } from "../../types";
 
 type MakersProps = {
   changeCenterFlag: boolean;
-  routeInfo: Route;
-  setRouteInfo: React.Dispatch<React.SetStateAction<Route>>;
+  route: Route;
+  setRoute: React.Dispatch<React.SetStateAction<Route>>;
   setChangeCenterFlag: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function Markers(props: MakersProps) {
   const map = useMap();
   const markerRefs = useRef<Array<RefObject<MarkerType>>>(
-    Array(props.routeInfo.waypoints.length)
+    Array(props.route.waypoints.length)
   );
   useEffect(() => {
     if (props.changeCenterFlag) {
-      if (props.routeInfo.waypoints.length) {
+      if (props.route.waypoints.length) {
         map.setView([
-          props.routeInfo.waypoints[0].latitude,
-          props.routeInfo.waypoints[0].longitude,
+          props.route.waypoints[0].latitude,
+          props.route.waypoints[0].longitude,
         ]);
       }
       props.setChangeCenterFlag(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.changeCenterFlag]);
-  const markers = props.routeInfo.waypoints.map(
+  const markers = props.route.waypoints.map(
     (pos: Position, idx: number): JSX.Element => {
       markerRefs.current[idx] = createRef<MarkerType>();
       async function onClickMarker(idx: number) {
-        const res = await patchDelete(props.routeInfo.id, idx);
+        const res = await patchDelete(props.route.id, idx);
         if (res) {
-          props.setRouteInfo({ ...props.routeInfo, ...res.data });
+          props.setRoute({ ...props.route, ...res.data });
         }
       }
 
       async function onDragMarker(idx: number) {
         const newPoint = markerRefs.current[idx].current?.getLatLng();
         if (newPoint) {
-          const res = await patchMove(props.routeInfo.id, idx, {
+          const res = await patchMove(props.route.id, idx, {
             coord: {
               latitude: newPoint.lat,
               longitude: newPoint.lng,
             },
           });
           if (res) {
-            props.setRouteInfo({ ...props.routeInfo, ...res.data });
+            props.setRoute({ ...props.route, ...res.data });
           }
         }
       }

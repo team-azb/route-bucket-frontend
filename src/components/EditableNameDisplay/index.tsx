@@ -3,33 +3,33 @@ import { patchRename } from "../../api/routes";
 import { Route } from "../../types";
 
 type EditableNameDisplayProps = {
-  routeInfo: Route;
-  setRouteInfo: React.Dispatch<React.SetStateAction<Route>>;
+  route: Route;
+  setRoute: React.Dispatch<React.SetStateAction<Route>>;
 };
 
 type NameInputProps = {
-  routeInfo: Route;
-  setRouteInfo: React.Dispatch<React.SetStateAction<Route>>;
+  route: Route;
+  setRoute: React.Dispatch<React.SetStateAction<Route>>;
   isEditable: boolean;
   setIsEditable: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 type NameDisplayProps = {
-  routeInfo: Route;
+  route: Route;
   isEditable: boolean;
   setIsEditable: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 function NameInput(props: NameInputProps) {
-  const [nameInput, setNameInput] = useState<string>(props.routeInfo.name);
+  const [nameInput, setNameInput] = useState<string>(props.route.name);
 
   async function onSubmitName() {
     props.setIsEditable(!props.isEditable);
-    const res = await patchRename(props.routeInfo.id, {
+    const res = await patchRename(props.route.id, {
       name: nameInput,
     });
     if (res) {
-      props.setRouteInfo({ ...props.routeInfo, ...res.data });
+      props.setRoute({ ...props.route, ...res.data });
     }
   }
 
@@ -53,6 +53,7 @@ function NameInput(props: NameInputProps) {
         type="button"
         value="更新"
       />
+
     </>
   );
 }
@@ -60,7 +61,7 @@ function NameInput(props: NameInputProps) {
 function NameDisplay(props: NameDisplayProps) {
   return (
     <>
-      <p style={{ display: "inline" }}>ルート名: {props.routeInfo.name}</p>
+      <p style={{ display: "inline" }}>ルート名: {props.route.name}</p>
       <input
         onClick={() => {
           props.setIsEditable(!props.isEditable);
@@ -79,14 +80,14 @@ export default function EditableNameDisplay(props: EditableNameDisplayProps) {
     <>
       {isEditable ? (
         <NameInput
-          routeInfo={props.routeInfo}
-          setRouteInfo={props.setRouteInfo}
+          route={props.route}
+          setRoute={props.setRoute}
           isEditable={isEditable}
           setIsEditable={setIsEditable}
         />
       ) : (
         <NameDisplay
-          routeInfo={props.routeInfo}
+          route={props.route}
           isEditable={isEditable}
           setIsEditable={setIsEditable}
         />

@@ -1,12 +1,8 @@
 import axios from 'axios'
-import { Position, Route, Segment } from '../types'
+import { Position, Route, RouteGeometry } from '../types'
 
 //axiosからのレスポンスのデータのインターフェース
-interface PatchResponse{
-    waypoints: Position[],
-    segments: Segment[],
-    elevation_gain: number
-}
+interface PatchResponse extends RouteGeometry{}
 
 interface RoutesResponse{
     routes: Route[]

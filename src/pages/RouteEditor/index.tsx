@@ -17,8 +17,8 @@ import "leaflet/dist/leaflet.css";
 
 //ClickLayerコンポーネントのpropsの型
 type ClickLayerProps = {
-  routeInfo: Route;
-  setRouteInfo: React.Dispatch<React.SetStateAction<Route>>;
+  route: Route;
+  setRoute: React.Dispatch<React.SetStateAction<Route>>;
 };
 
 //URLのパラメータのinerface
@@ -28,18 +28,14 @@ interface RouteEditorParams {
 
 function ClickLayer(props: ClickLayerProps): null {
   useMapEvent("click", async (e: LeafletMouseEvent) => {
-    const res = await patchAdd(
-      props.routeInfo.id,
-      props.routeInfo.waypoints.length,
-      {
-        coord: {
-          latitude: e.latlng.lat,
-          longitude: e.latlng.lng,
-        },
-      }
-    );
+    const res = await patchAdd(props.route.id, props.route.waypoints.length, {
+      coord: {
+        latitude: e.latlng.lat,
+        longitude: e.latlng.lng,
+      },
+    });
     if (res) {
-      props.setRouteInfo({ ...props.routeInfo, ...res.data });
+      props.setRoute({ ...props.route, ...res.data });
     }
   });
   return null;
@@ -47,7 +43,7 @@ function ClickLayer(props: ClickLayerProps): null {
 
 const RouteEditor: FunctionComponent = () => {
   const { routeId } = useParams<RouteEditorParams>();
-  const [routeInfo, setRouteInfo] = useState<Route>({
+  const [route, setRoute] = useState<Route>({
     id: routeId,
     name: "",
     waypoints: [],
@@ -62,7 +58,7 @@ const RouteEditor: FunctionComponent = () => {
     (async () => {
       const res = await getRoute(routeId);
       if (res && !unmounted) {
-        setRouteInfo({ ...res.data });
+        setRoute({ ...res.data });
       }
     })();
     return () => {
@@ -73,21 +69,21 @@ const RouteEditor: FunctionComponent = () => {
   async function onClickClearHandler(): Promise<void> {
     const res = await patchClear(routeId);
     if (res) {
-      setRouteInfo({ ...routeInfo, ...res.data });
+      setRoute({ ...route, ...res.data });
     }
   }
 
   async function onClickUndoHandler(): Promise<void> {
     const res = await patchUndo(routeId);
     if (res) {
-      setRouteInfo({ ...routeInfo, ...res.data });
+      setRoute({ ...route, ...res.data });
     }
   }
 
   async function onClickRedoHandler(): Promise<void> {
     const res = await patchRedo(routeId);
     if (res) {
-      setRouteInfo({ ...routeInfo, ...res.data });
+      setRoute({ ...route, ...res.data });
     }
   }
 
@@ -97,9 +93,9 @@ const RouteEditor: FunctionComponent = () => {
       <hr />
       <p>ルートid: {routeId}</p>
 
-      <EditableNameDisplay routeInfo={routeInfo} setRouteInfo={setRouteInfo} />
+      <EditableNameDisplay route={route} setRoute={setRoute} />
 
-      <p>獲得標高: {routeInfo.elevation_gain}m</p>
+      <p>獲得標高: {route.elevation_gain}m</p>
       <MapContainer
         style={{ height: "600px" }}
         center={[35.68139740310467, 139.7671569841016]}
@@ -112,12 +108,12 @@ const RouteEditor: FunctionComponent = () => {
         />
         <Markers
           changeCenterFlag={changeCenterFlag}
-          routeInfo={routeInfo}
-          setRouteInfo={setRouteInfo}
+          route={route}
+          setRoute={setRoute}
           setChangeCenterFlag={setChangeCenterFlag}
         />
-        <Polylines routeInfo={routeInfo} setRouteInfo={setRouteInfo} />
-        <ClickLayer routeInfo={routeInfo} setRouteInfo={setRouteInfo} />
+        <Polylines route={route} setRoute={setRoute} />
+        <ClickLayer route={route} setRoute={setRoute} />
       </MapContainer>
       {/* Todo undoできない時はボタンをdisabledにする */}
       <button onClick={onClickUndoHandler}>undo</button>
