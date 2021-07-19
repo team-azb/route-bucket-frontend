@@ -1,8 +1,8 @@
-import axios from 'axios'
-import { Position, Route, RouteGeometry } from '../types'
+import axios from "axios";
+import { Position, Route, RouteGeometry } from "../types";
 
 //axiosからのレスポンスのデータのインターフェース
-interface PatchResponse extends RouteGeometry{}
+interface PatchResponse extends RouteGeometry {}
 
 interface RoutesResponse {
   routes: Route[];

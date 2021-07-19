@@ -5,17 +5,17 @@ export type Position = {
 };
 
 export type RouteInfo = {
-    id: string,
-    name: string,
-}
+  id: string;
+  name: string;
+};
 
 export type RouteGeometry = {
-    waypoints: Position[],
-    segments: Segment[],
-    elevation_gain?: number
-}
+  waypoints: Position[];
+  segments: Segment[];
+  elevation_gain?: number;
+};
 
-export type Route = RouteInfo & RouteGeometry
+export type Route = RouteInfo & RouteGeometry;
 
 export type Segment = {
   points: Position[];
