@@ -1,6 +1,6 @@
 import { useState, useEffect, FunctionComponent } from "react";
 import { useParams, Link } from "react-router-dom";
-import { MapContainer, TileLayer, useMapEvent } from "react-leaflet";
+import { MapContainer, TileLayer, useMapEvent, Marker } from "react-leaflet";
 import { LeafletMouseEvent } from "leaflet";
 import {
   getRoute,
@@ -12,6 +12,7 @@ import {
 import Markers from "../../components/Markers";
 import Polylines from "../../components/Polylines";
 import EditableNameDisplay from "../../components/EditableNameDisplay";
+import ElevationGraph from "../../components/ElevationGraph";
 import { Route } from "../../types";
 import "leaflet/dist/leaflet.css";
 
@@ -51,6 +52,7 @@ const RouteEditor: FunctionComponent = () => {
     elevation_gain: 0,
   });
   const [changeCenterFlag, setChangeCenterFlag] = useState<boolean>(false);
+  const [tempMarkerPosition, setTempMarkerPosition] = useState<L.LatLng | null>(null);
 
   //Mapのルート変更時にルートを取得してwaypointsを変更する
   useEffect(() => {
@@ -114,12 +116,14 @@ const RouteEditor: FunctionComponent = () => {
         />
         <Polylines route={route} setRoute={setRoute} />
         <ClickLayer route={route} setRoute={setRoute} />
+        {tempMarkerPosition && <Marker position={tempMarkerPosition}/>}
       </MapContainer>
       {/* Todo undoできない時はボタンをdisabledにする */}
       <button onClick={onClickUndoHandler}>undo</button>
       {/* Todo redoできない時はボタンをdisabledにする */}
       <button onClick={onClickRedoHandler}>redo</button>
       <button onClick={onClickClearHandler}>clear</button>
+      <ElevationGraph segments={route.segments} setTempMarkerPosition={setTempMarkerPosition}/>
     </>
   );
 };

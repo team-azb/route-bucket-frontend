@@ -2,6 +2,7 @@ export type Position = {
   latitude: number;
   longitude: number;
   evelation?: number;
+  distance_from_start?: number;
 };
 
 export type RouteInfo = {
@@ -19,5 +20,4 @@ export type Route = RouteInfo & RouteGeometry;
 
 export type Segment = {
   points: Position[];
-  distance: number;
 };
