@@ -147,6 +147,8 @@ const RouteEditor: FunctionComponent = () => {
           route={route}
           setRoute={setRoute}
           setChangeCenterFlag={setChangeCenterFlag}
+          tempMarkerInfo={tempMarkerInfo}
+          setTempMarkerInfo={setTempMarkerInfo}
         />
         <Polylines
           setZoomSize={setZoomSize}
