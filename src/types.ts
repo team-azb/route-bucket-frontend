@@ -21,3 +21,8 @@ export type Route = RouteInfo & RouteGeometry;
 export type Segment = {
   points: Position[];
 };
+
+export type TempMarkerInfo = {
+  position: L.LatLng | null;
+  index: number | null;
+};

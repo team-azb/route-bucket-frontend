@@ -10,31 +10,27 @@ import {
   TooltipProps,
 } from "recharts";
 import L from "leaflet";
-import { Segment } from "../../types";
+import { Segment, TempMarkerInfo } from "../../types";
 
 type ElevationGraphProp = {
-  tempMarkerPosition: L.LatLng | null;
-  setTempMarkerPosition: React.Dispatch<React.SetStateAction<L.LatLng | null>>;
+  tempMarkerInfo: TempMarkerInfo;
+  setTempMarkerInfo: React.Dispatch<React.SetStateAction<TempMarkerInfo>>;
   segments: Segment[];
 };
 
 type CustomTooltipProps = TooltipProps<number, string> & {
-  tempMarkerPosition: L.LatLng | null;
-  setTempMarkerPosition: React.Dispatch<React.SetStateAction<L.LatLng | null>>;
+  tempMarkerInfo: TempMarkerInfo;
+  setTempMarkerInfo: React.Dispatch<React.SetStateAction<TempMarkerInfo>>;
 };
 
 export default function ElevationGraph(props: ElevationGraphProp) {
-  const data = props.segments.map((segment) => segment.points).flat();
-
-  function onMouseOverHandler(_data: any, elem: any) {
-    props.setTempMarkerPosition(
-      new L.LatLng(elem.payload.latitude, elem.payload.longitude)
-    );
-  }
-
-  function onMouseLeaveHandler() {
-    props.setTempMarkerPosition(null);
-  }
+  const data = props.segments
+    .map((segment, idx) => {
+      return segment.points.map((pos) => {
+        return { ...pos, idx: idx };
+      });
+    })
+    .flat();
 
   function formatElevation(elevation: number) {
     return `${elevation}m`;
@@ -48,14 +44,17 @@ export default function ElevationGraph(props: ElevationGraphProp) {
     if (props.active && props.payload) {
       if (
         props.payload[0] &&
-        props.tempMarkerPosition?.lat !== props.payload[0].payload.latitude
+        props.tempMarkerInfo?.position?.lat !==
+          props.payload[0].payload.latitude
       ) {
-        props.setTempMarkerPosition(
-          new L.LatLng(
+        props.setTempMarkerInfo({
+          ...props.tempMarkerInfo,
+          index: props.payload[0].payload.idx,
+          position: new L.LatLng(
             props.payload[0].payload.latitude,
             props.payload[0].payload.longitude
-          )
-        );
+          ),
+        });
       }
       return (
         <div className="custom-tooltip">
@@ -101,8 +100,8 @@ export default function ElevationGraph(props: ElevationGraphProp) {
             active={false}
             content={
               <CustomTooltip
-                tempMarkerPosition={props.tempMarkerPosition}
-                setTempMarkerPosition={props.setTempMarkerPosition}
+                tempMarkerInfo={props.tempMarkerInfo}
+                setTempMarkerInfo={props.setTempMarkerInfo}
               />
             }
           />
@@ -115,8 +114,6 @@ export default function ElevationGraph(props: ElevationGraphProp) {
             // activeDot={<CustomDot/>}
             activeDot={{
               r: 8,
-              onMouseOver: onMouseOverHandler,
-              onMouseLeave: onMouseLeaveHandler,
               onChangeCapture: (event) => {
                 console.log(event);
               },

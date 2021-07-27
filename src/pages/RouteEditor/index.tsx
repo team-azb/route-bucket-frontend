@@ -1,7 +1,7 @@
-import { useState, useEffect, FunctionComponent } from "react";
+import { useState, useEffect, useRef, FunctionComponent } from "react";
 import { useParams, Link } from "react-router-dom";
 import { MapContainer, TileLayer, useMapEvent, Marker } from "react-leaflet";
-import { LeafletMouseEvent } from "leaflet";
+import L, { Marker as MarkerType, LeafletMouseEvent } from "leaflet";
 import {
   getRoute,
   patchAdd,
@@ -13,7 +13,8 @@ import Markers from "../../components/Markers";
 import Polylines from "../../components/Polylines";
 import EditableNameDisplay from "../../components/EditableNameDisplay";
 import ElevationGraph from "../../components/ElevationGraph";
-import { Route } from "../../types";
+import { Route, TempMarkerInfo } from "../../types";
+import { TempMarkerIcon } from "./tempMarkerIcon";
 import "leaflet/dist/leaflet.css";
 
 //ClickLayerコンポーネントのpropsの型
@@ -52,9 +53,12 @@ const RouteEditor: FunctionComponent = () => {
     elevation_gain: 0,
   });
   const [changeCenterFlag, setChangeCenterFlag] = useState<boolean>(false);
-  const [tempMarkerPosition, setTempMarkerPosition] = useState<L.LatLng | null>(
-    null
-  );
+  const markerRef = useRef<MarkerType>(null);
+  const [zoomSize, setZoomSize] = useState<number>(13);
+  const [tempMarkerInfo, setTempMarkerInfo] = useState<TempMarkerInfo>({
+    position: null,
+    index: null,
+  });
 
   //Mapのルート変更時にルートを取得してwaypointsを変更する
   useEffect(() => {
@@ -91,6 +95,34 @@ const RouteEditor: FunctionComponent = () => {
     }
   }
 
+  async function onClickMarker(latlng: L.LatLng, index: number) {
+    const res = await patchAdd(route.id, index, {
+      coord: {
+        latitude: latlng.lat,
+        longitude: latlng.lng,
+      },
+    });
+    if (res) {
+      setRoute({ ...route, ...res.data });
+    }
+  }
+
+  async function onDragMarker() {
+    const newPoint = markerRef.current?.getLatLng();
+    if (newPoint && tempMarkerInfo.index !== null) {
+      const res = await patchAdd(route.id, tempMarkerInfo.index + 1, {
+        coord: {
+          latitude: newPoint.lat,
+          longitude: newPoint.lng,
+        },
+      });
+      if (res) {
+        setRoute({ ...route, ...res.data });
+        setTempMarkerInfo({ index: null, position: null });
+      }
+    }
+  }
+
   return (
     <>
       <Link to="/">ルート一覧へ</Link>
@@ -116,9 +148,32 @@ const RouteEditor: FunctionComponent = () => {
           setRoute={setRoute}
           setChangeCenterFlag={setChangeCenterFlag}
         />
-        <Polylines route={route} setRoute={setRoute} />
+        <Polylines
+          setZoomSize={setZoomSize}
+          tempMarkerInfo={tempMarkerInfo}
+          setTempMarkerInfo={setTempMarkerInfo}
+          route={route}
+          setRoute={setRoute}
+        />
+        {tempMarkerInfo.position && (
+          <Marker
+            icon={TempMarkerIcon(zoomSize)}
+            ref={markerRef}
+            draggable={true}
+            position={tempMarkerInfo.position}
+            eventHandlers={{
+              click: async (event: L.LeafletMouseEvent) => {
+                L.DomEvent.stopPropagation(event); //clickLayerに対してクリックイベントを送らない
+                tempMarkerInfo.index &&
+                  onClickMarker(event.latlng, tempMarkerInfo.index + 1);
+              },
+              dragend: () => {
+                onDragMarker();
+              },
+            }}
+          />
+        )}
         <ClickLayer route={route} setRoute={setRoute} />
-        {tempMarkerPosition && <Marker position={tempMarkerPosition} />}
       </MapContainer>
       {/* Todo undoできない時はボタンをdisabledにする */}
       <button onClick={onClickUndoHandler}>undo</button>
@@ -127,8 +182,8 @@ const RouteEditor: FunctionComponent = () => {
       <button onClick={onClickClearHandler}>clear</button>
       <ElevationGraph
         segments={route.segments}
-        tempMarkerPosition={tempMarkerPosition}
-        setTempMarkerPosition={setTempMarkerPosition}
+        tempMarkerInfo={tempMarkerInfo}
+        setTempMarkerInfo={setTempMarkerInfo}
       />
     </>
   );
