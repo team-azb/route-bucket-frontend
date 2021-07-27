@@ -7,17 +7,23 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
+  TooltipProps,
 } from "recharts";
 import L from "leaflet";
 import { Segment } from "../../types";
 
 type ElevationGraphProp = {
+  tempMarkerPosition: L.LatLng | null;
   setTempMarkerPosition: React.Dispatch<React.SetStateAction<L.LatLng | null>>;
   segments: Segment[];
 };
 
+type CustomTooltipProps = TooltipProps<number, string> & {
+  tempMarkerPosition: L.LatLng | null;
+  setTempMarkerPosition: React.Dispatch<React.SetStateAction<L.LatLng | null>>;
+};
+
 export default function ElevationGraph(props: ElevationGraphProp) {
-  // const [tempMarkerPosition, setTempMarkerPosition] = useState<L.LatLng | null>(null);
   const data = props.segments.map((segment) => segment.points).flat();
 
   function onMouseOverHandler(_data: any, elem: any) {
@@ -28,6 +34,43 @@ export default function ElevationGraph(props: ElevationGraphProp) {
 
   function onMouseLeaveHandler() {
     props.setTempMarkerPosition(null);
+  }
+
+  function formatElevation(elevation: number) {
+    return `${elevation}m`;
+  }
+
+  function formatDistance(value: number) {
+    return `${String(Math.round((value / 1000) * 10) / 10)}km`;
+  }
+
+  function CustomTooltip(props: CustomTooltipProps) {
+    if (props.active && props.payload) {
+      if (
+        props.payload[0] &&
+        props.tempMarkerPosition?.lat !== props.payload[0].payload.latitude
+      ) {
+        props.setTempMarkerPosition(
+          new L.LatLng(
+            props.payload[0].payload.latitude,
+            props.payload[0].payload.longitude
+          )
+        );
+      }
+      return (
+        <div className="custom-tooltip">
+          <p className="label">distance: {`${formatDistance(props.label)}`}</p>
+          <p className="desc">
+            elevation:{" "}
+            {`${
+              props.payload[0].value && formatElevation(props.payload[0].value)
+            }`}
+          </p>
+        </div>
+      );
+    }
+
+    return null;
   }
 
   return (
@@ -47,11 +90,21 @@ export default function ElevationGraph(props: ElevationGraphProp) {
             type="number"
             domain={[0, "dataMax"]}
             dataKey="distance_from_start"
+            tickFormatter={formatDistance}
           />
-          <YAxis type="number" dataKey="elevation" />
-          <Tooltip 
+          <YAxis
+            type="number"
+            dataKey="elevation"
+            tickFormatter={formatElevation}
+          />
+          <Tooltip
             active={false}
-            // cursor={false}
+            content={
+              <CustomTooltip
+                tempMarkerPosition={props.tempMarkerPosition}
+                setTempMarkerPosition={props.setTempMarkerPosition}
+              />
+            }
           />
           <Legend />
           <Line
@@ -59,12 +112,14 @@ export default function ElevationGraph(props: ElevationGraphProp) {
             type="monotone"
             dataKey="elevation"
             stroke="#8884d8"
+            // activeDot={<CustomDot/>}
             activeDot={{
               r: 8,
               onMouseOver: onMouseOverHandler,
               onMouseLeave: onMouseLeaveHandler,
-              onChangeCapture: (event) => {console.log(event);
-              }
+              onChangeCapture: (event) => {
+                console.log(event);
+              },
             }}
           />
         </LineChart>

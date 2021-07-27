@@ -52,7 +52,9 @@ const RouteEditor: FunctionComponent = () => {
     elevation_gain: 0,
   });
   const [changeCenterFlag, setChangeCenterFlag] = useState<boolean>(false);
-  const [tempMarkerPosition, setTempMarkerPosition] = useState<L.LatLng | null>(null);
+  const [tempMarkerPosition, setTempMarkerPosition] = useState<L.LatLng | null>(
+    null
+  );
 
   //Mapのルート変更時にルートを取得してwaypointsを変更する
   useEffect(() => {
@@ -116,14 +118,18 @@ const RouteEditor: FunctionComponent = () => {
         />
         <Polylines route={route} setRoute={setRoute} />
         <ClickLayer route={route} setRoute={setRoute} />
-        {tempMarkerPosition && <Marker position={tempMarkerPosition}/>}
+        {tempMarkerPosition && <Marker position={tempMarkerPosition} />}
       </MapContainer>
       {/* Todo undoできない時はボタンをdisabledにする */}
       <button onClick={onClickUndoHandler}>undo</button>
       {/* Todo redoできない時はボタンをdisabledにする */}
       <button onClick={onClickRedoHandler}>redo</button>
       <button onClick={onClickClearHandler}>clear</button>
-      <ElevationGraph segments={route.segments} setTempMarkerPosition={setTempMarkerPosition}/>
+      <ElevationGraph
+        segments={route.segments}
+        tempMarkerPosition={tempMarkerPosition}
+        setTempMarkerPosition={setTempMarkerPosition}
+      />
     </>
   );
 };
