@@ -45,7 +45,9 @@ export default function Markers(props: MakersProps) {
       async function onClickMarker(idx: number) {
         const res = await patchDelete(props.route.id, idx);
         if (res) {
-          props.setRoute({ ...props.route, ...res.data });
+          props.setRoute((prevState) => {
+            return { ...prevState, ...res.data };
+          });
         }
       }
 

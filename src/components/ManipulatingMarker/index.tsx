@@ -10,7 +10,9 @@ type ManipulatingMarkerProps = {
   route: Route;
   setRoute: React.Dispatch<React.SetStateAction<Route>>;
   manipulatingMarkerInfo: ManipulatingMarkerInfo;
-  setManipulatingMarkerInfo: React.Dispatch<React.SetStateAction<ManipulatingMarkerInfo>>;
+  setManipulatingMarkerInfo: React.Dispatch<
+    React.SetStateAction<ManipulatingMarkerInfo>
+  >;
 };
 
 export default function ManipulatingMarker(props: ManipulatingMarkerProps) {
@@ -23,7 +25,9 @@ export default function ManipulatingMarker(props: ManipulatingMarkerProps) {
       },
     });
     if (res) {
-      props.setRoute({ ...props.route, ...res.data });
+      props.setRoute((prevState) => {
+        return { ...prevState, ...res.data };
+      });
     }
   }
 
@@ -41,7 +45,9 @@ export default function ManipulatingMarker(props: ManipulatingMarkerProps) {
         }
       );
       if (res) {
-        props.setRoute({ ...props.route, ...res.data });
+        props.setRoute((prevState) => {
+          return { ...prevState, ...res.data };
+        });
         props.setManipulatingMarkerInfo({ idx: null, position: null });
       }
     }
@@ -59,7 +65,10 @@ export default function ManipulatingMarker(props: ManipulatingMarkerProps) {
             click: async (event: L.LeafletMouseEvent) => {
               L.DomEvent.stopPropagation(event); //clickLayerに対してクリックイベントを送らない
               props.manipulatingMarkerInfo.idx &&
-                onClickMarker(event.latlng, props.manipulatingMarkerInfo.idx + 1);
+                onClickMarker(
+                  event.latlng,
+                  props.manipulatingMarkerInfo.idx + 1
+                );
             },
             dragend: () => {
               onDragMarker();

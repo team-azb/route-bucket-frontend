@@ -37,7 +37,9 @@ function ClickLayer(props: ClickLayerProps): null {
       },
     });
     if (res) {
-      props.setRoute({ ...props.route, ...res.data });
+      props.setRoute((prevState) => {
+        return { ...prevState, ...res.data };
+      });
     }
   });
   return null;
