@@ -10,7 +10,6 @@ const pathOptions: PathOptions = {
 
 //Polylineコンポーネントのpropsの型
 type PolylineProps = {
-  tempMarkerInfo: TempMarkerInfo;
   setTempMarkerInfo: React.Dispatch<React.SetStateAction<TempMarkerInfo>>;
   setZoomSize: React.Dispatch<React.SetStateAction<number>>;
   route: Route;
@@ -35,10 +34,12 @@ export default function Polylines(props: PolylineProps) {
         key={nanoid()}
         eventHandlers={{
           mouseover: (event) => {
-            props.setTempMarkerInfo({
-              ...props.tempMarkerInfo,
-              index: idx,
-              position: event.latlng,
+            props.setTempMarkerInfo((prevState) => {
+              return {
+                ...prevState,
+                index: idx,
+                position: event.latlng,
+              };
             });
           },
         }}

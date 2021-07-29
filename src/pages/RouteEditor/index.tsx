@@ -76,21 +76,27 @@ const RouteEditor: FunctionComponent = () => {
   async function onClickClearHandler(): Promise<void> {
     const res = await patchClear(routeId);
     if (res) {
-      setRoute({ ...route, ...res.data });
+      setRoute((prevState) => {
+        return { ...prevState, ...res.data };
+      });
     }
   }
 
   async function onClickUndoHandler(): Promise<void> {
     const res = await patchUndo(routeId);
     if (res) {
-      setRoute({ ...route, ...res.data });
+      setRoute((prevState) => {
+        return { ...prevState, ...res.data };
+      });
     }
   }
 
   async function onClickRedoHandler(): Promise<void> {
     const res = await patchRedo(routeId);
     if (res) {
-      setRoute({ ...route, ...res.data });
+      setRoute((prevState) => {
+        return { ...prevState, ...res.data };
+      });
     }
   }
 
@@ -118,12 +124,10 @@ const RouteEditor: FunctionComponent = () => {
           route={route}
           setRoute={setRoute}
           setChangeCenterFlag={setChangeCenterFlag}
-          tempMarkerInfo={tempMarkerInfo}
           setTempMarkerInfo={setTempMarkerInfo}
         />
         <Polylines
           setZoomSize={setZoomSize}
-          tempMarkerInfo={tempMarkerInfo}
           setTempMarkerInfo={setTempMarkerInfo}
           route={route}
           setRoute={setRoute}

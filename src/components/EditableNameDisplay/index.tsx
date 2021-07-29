@@ -10,13 +10,11 @@ type EditableNameDisplayProps = {
 type NameInputProps = {
   route: Route;
   setRoute: React.Dispatch<React.SetStateAction<Route>>;
-  isEditable: boolean;
   setIsEditable: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 type NameDisplayProps = {
   route: Route;
-  isEditable: boolean;
   setIsEditable: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
@@ -24,17 +22,23 @@ function NameInput(props: NameInputProps) {
   const [nameInput, setNameInput] = useState<string>(props.route.name);
 
   async function onSubmitName() {
-    props.setIsEditable(!props.isEditable);
+    props.setIsEditable((prevState) => {
+      return !prevState;
+    });
     const res = await patchRename(props.route.id, {
       name: nameInput,
     });
     if (res) {
-      props.setRoute({ ...props.route, ...res.data });
+      props.setRoute((prevState) => {
+        return { ...prevState, ...res.data };
+      });
     }
   }
 
   function onQuitEditing() {
-    props.setIsEditable(!props.isEditable);
+    props.setIsEditable((prevState) => {
+      return !prevState;
+    });
   }
 
   return (
@@ -75,7 +79,9 @@ function NameDisplay(props: NameDisplayProps) {
       <p style={{ display: "inline" }}>ルート名: {props.route.name}</p>
       <input
         onClick={() => {
-          props.setIsEditable(!props.isEditable);
+          props.setIsEditable((prevState) => {
+            return !prevState;
+          });
         }}
         type="button"
         value="編集"
@@ -93,15 +99,10 @@ export default function EditableNameDisplay(props: EditableNameDisplayProps) {
         <NameInput
           route={props.route}
           setRoute={props.setRoute}
-          isEditable={isEditable}
           setIsEditable={setIsEditable}
         />
       ) : (
-        <NameDisplay
-          route={props.route}
-          isEditable={isEditable}
-          setIsEditable={setIsEditable}
-        />
+        <NameDisplay route={props.route} setIsEditable={setIsEditable} />
       )}
     </>
   );

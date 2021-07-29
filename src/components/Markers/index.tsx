@@ -10,7 +10,6 @@ type MakersProps = {
   changeCenterFlag: boolean;
   route: Route;
   setRoute: React.Dispatch<React.SetStateAction<Route>>;
-  tempMarkerInfo: TempMarkerInfo;
   setTempMarkerInfo: React.Dispatch<React.SetStateAction<TempMarkerInfo>>;
   setChangeCenterFlag: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -58,11 +57,15 @@ export default function Markers(props: MakersProps) {
             },
           });
           if (res) {
-            props.setRoute({ ...props.route, ...res.data });
-            props.setTempMarkerInfo({
-              ...props.tempMarkerInfo,
-              position: null,
-              index: null,
+            props.setRoute((prevState) => {
+              return { ...prevState, ...res.data };
+            });
+            props.setTempMarkerInfo((prevState) => {
+              return {
+                ...prevState,
+                position: null,
+                index: null,
+              };
             });
           }
         }
