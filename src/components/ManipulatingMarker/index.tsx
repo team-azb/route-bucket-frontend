@@ -10,15 +10,13 @@ type ManipulatingMarkerProps = {
   route: Route;
   setRoute: React.Dispatch<React.SetStateAction<Route>>;
   manipulatingMarkerInfo: ManipulatingMarkerInfo;
-  setManipulatingMarkerInfo: React.Dispatch<
-    React.SetStateAction<ManipulatingMarkerInfo>
-  >;
+  setManipulatingMarkerInfo: React.Dispatch<React.SetStateAction<ManipulatingMarkerInfo>>;
 };
 
 export default function ManipulatingMarker(props: ManipulatingMarkerProps) {
   const markerRef = useRef<MarkerType>(null);
-  async function onClickMarker(latlng: L.LatLng, index: number) {
-    const res = await patchAdd(props.route.id, index, {
+  async function onClickMarker(latlng: L.LatLng, idx: number) {
+    const res = await patchAdd(props.route.id, idx, {
       coord: {
         latitude: latlng.lat,
         longitude: latlng.lng,
@@ -31,10 +29,10 @@ export default function ManipulatingMarker(props: ManipulatingMarkerProps) {
 
   async function onDragMarker() {
     const newPoint = markerRef.current?.getLatLng();
-    if (newPoint && props.manipulatingMarkerInfo.index !== null) {
+    if (newPoint && props.manipulatingMarkerInfo.idx !== null) {
       const res = await patchAdd(
         props.route.id,
-        props.manipulatingMarkerInfo.index + 1,
+        props.manipulatingMarkerInfo.idx + 1,
         {
           coord: {
             latitude: newPoint.lat,
@@ -44,7 +42,7 @@ export default function ManipulatingMarker(props: ManipulatingMarkerProps) {
       );
       if (res) {
         props.setRoute({ ...props.route, ...res.data });
-        props.setManipulatingMarkerInfo({ index: null, position: null });
+        props.setManipulatingMarkerInfo({ idx: null, position: null });
       }
     }
   }
@@ -60,11 +58,8 @@ export default function ManipulatingMarker(props: ManipulatingMarkerProps) {
           eventHandlers={{
             click: async (event: L.LeafletMouseEvent) => {
               L.DomEvent.stopPropagation(event); //clickLayerに対してクリックイベントを送らない
-              props.manipulatingMarkerInfo.index &&
-                onClickMarker(
-                  event.latlng,
-                  props.manipulatingMarkerInfo.index + 1
-                );
+              props.manipulatingMarkerInfo.idx &&
+                onClickMarker(event.latlng, props.manipulatingMarkerInfo.idx + 1);
             },
             dragend: () => {
               onDragMarker();

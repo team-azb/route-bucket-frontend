@@ -24,5 +24,5 @@ export type Segment = {
 
 export type ManipulatingMarkerInfo = {
   position: L.LatLng | null;
-  index: number | null;
+  idx: number | null;
 };

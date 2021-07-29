@@ -57,7 +57,7 @@ const RouteEditor: FunctionComponent = () => {
   const [manipulatingMarkerInfo, setManipulatingMarkerInfo] =
     useState<ManipulatingMarkerInfo>({
       position: null,
-      index: null,
+      idx: null,
     });
 
   //Mapのルート変更時にルートを取得してwaypointsを変更する
