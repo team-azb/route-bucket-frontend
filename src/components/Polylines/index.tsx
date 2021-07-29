@@ -39,7 +39,7 @@ export default function Polylines(props: PolylineProps) {
             props.setManipulatingMarkerInfo((prevState) => {
               return {
                 ...prevState,
-                index: idx,
+                idx: idx,
                 position: event.latlng,
               };
             });

@@ -64,13 +64,6 @@ export default function Markers(props: MakersProps) {
             props.setRoute((prevState) => {
               return { ...prevState, ...res.data };
             });
-            props.setManipulatingMarkerInfo((prevState) => {
-              return {
-                ...prevState,
-                position: null,
-                index: null,
-              };
-            });
           }
         }
       }

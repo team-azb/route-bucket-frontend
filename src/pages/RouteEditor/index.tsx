@@ -62,6 +62,10 @@ const RouteEditor: FunctionComponent = () => {
       idx: null,
     });
 
+  useEffect(() => {
+    setManipulatingMarkerInfo({ idx: null, position: null });
+  }, [route]);
+
   //Mapのルート変更時にルートを取得してwaypointsを変更する
   useEffect(() => {
     let unmounted = false;

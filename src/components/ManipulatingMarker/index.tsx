@@ -48,7 +48,6 @@ export default function ManipulatingMarker(props: ManipulatingMarkerProps) {
         props.setRoute((prevState) => {
           return { ...prevState, ...res.data };
         });
-        props.setManipulatingMarkerInfo({ idx: null, position: null });
       }
     }
   }

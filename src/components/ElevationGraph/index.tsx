@@ -57,7 +57,7 @@ export default function ElevationGraph(props: ElevationGraphProp) {
         props.setManipulatingMarkerInfo((prevState) => {
           return {
             ...prevState,
-            index: data.idx,
+            idx: data.idx,
             position: new L.LatLng(data.latitude, data.longitude),
           };
         });
