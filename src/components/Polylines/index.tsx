@@ -1,7 +1,7 @@
 import { Polyline, useMapEvent } from "react-leaflet";
 import { PathOptions } from "leaflet";
 import { nanoid } from "nanoid";
-import { Route, TempMarkerInfo } from "../../types";
+import { Route, ManipulatingMarkerInfo } from "../../types";
 
 const pathOptions: PathOptions = {
   color: "#0000cd",
@@ -10,7 +10,9 @@ const pathOptions: PathOptions = {
 
 //Polylineコンポーネントのpropsの型
 type PolylineProps = {
-  setTempMarkerInfo: React.Dispatch<React.SetStateAction<TempMarkerInfo>>;
+  setManipulatingMarkerInfo: React.Dispatch<
+    React.SetStateAction<ManipulatingMarkerInfo>
+  >;
   setZoomSize: React.Dispatch<React.SetStateAction<number>>;
   route: Route;
   setRoute: React.Dispatch<React.SetStateAction<Route>>;
@@ -34,7 +36,7 @@ export default function Polylines(props: PolylineProps) {
         key={nanoid()}
         eventHandlers={{
           mouseover: (event) => {
-            props.setTempMarkerInfo((prevState) => {
+            props.setManipulatingMarkerInfo((prevState) => {
               return {
                 ...prevState,
                 index: idx,

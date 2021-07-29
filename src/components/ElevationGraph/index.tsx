@@ -10,17 +10,21 @@ import {
   TooltipProps,
 } from "recharts";
 import L from "leaflet";
-import { Segment, TempMarkerInfo } from "../../types";
+import { Segment, ManipulatingMarkerInfo } from "../../types";
 
 type ElevationGraphProp = {
-  tempMarkerInfo: TempMarkerInfo;
-  setTempMarkerInfo: React.Dispatch<React.SetStateAction<TempMarkerInfo>>;
+  manipulatingMarkerInfo: ManipulatingMarkerInfo;
+  setManipulatingMarkerInfo: React.Dispatch<
+    React.SetStateAction<ManipulatingMarkerInfo>
+  >;
   segments: Segment[];
 };
 
 type CustomTooltipProps = TooltipProps<number, string> & {
-  tempMarkerInfo: TempMarkerInfo;
-  setTempMarkerInfo: React.Dispatch<React.SetStateAction<TempMarkerInfo>>;
+  manipulatingMarkerInfo: ManipulatingMarkerInfo;
+  setManipulatingMarkerInfo: React.Dispatch<
+    React.SetStateAction<ManipulatingMarkerInfo>
+  >;
 };
 
 export default function ElevationGraph(props: ElevationGraphProp) {
@@ -44,13 +48,13 @@ export default function ElevationGraph(props: ElevationGraphProp) {
     if (props.active && props.payload) {
       if (
         props.payload &&
-        (props.tempMarkerInfo?.position?.lat !==
+        (props.manipulatingMarkerInfo?.position?.lat !==
           props.payload[0].payload.latitude ||
-          props.tempMarkerInfo?.position?.lng !==
+          props.manipulatingMarkerInfo?.position?.lng !==
             props.payload[0].payload.longitude)
       ) {
         const data = props.payload[0].payload;
-        props.setTempMarkerInfo((prevState) => {
+        props.setManipulatingMarkerInfo((prevState) => {
           return {
             ...prevState,
             index: data.idx,
@@ -102,8 +106,8 @@ export default function ElevationGraph(props: ElevationGraphProp) {
             active={false}
             content={
               <CustomTooltip
-                tempMarkerInfo={props.tempMarkerInfo}
-                setTempMarkerInfo={props.setTempMarkerInfo}
+                manipulatingMarkerInfo={props.manipulatingMarkerInfo}
+                setManipulatingMarkerInfo={props.setManipulatingMarkerInfo}
               />
             }
           />

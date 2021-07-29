@@ -14,7 +14,7 @@ import Polylines from "../../components/Polylines";
 import EditableNameDisplay from "../../components/EditableNameDisplay";
 import ElevationGraph from "../../components/ElevationGraph";
 import ManipulatingMarker from "../../components/ManipulatingMarker";
-import { Route, TempMarkerInfo } from "../../types";
+import { Route, ManipulatingMarkerInfo } from "../../types";
 import "leaflet/dist/leaflet.css";
 
 //ClickLayerコンポーネントのpropsの型
@@ -54,10 +54,11 @@ const RouteEditor: FunctionComponent = () => {
   });
   const [changeCenterFlag, setChangeCenterFlag] = useState<boolean>(false);
   const [zoomSize, setZoomSize] = useState<number>(13);
-  const [tempMarkerInfo, setTempMarkerInfo] = useState<TempMarkerInfo>({
-    position: null,
-    index: null,
-  });
+  const [manipulatingMarkerInfo, setManipulatingMarkerInfo] =
+    useState<ManipulatingMarkerInfo>({
+      position: null,
+      index: null,
+    });
 
   //Mapのルート変更時にルートを取得してwaypointsを変更する
   useEffect(() => {
@@ -124,11 +125,11 @@ const RouteEditor: FunctionComponent = () => {
           route={route}
           setRoute={setRoute}
           setChangeCenterFlag={setChangeCenterFlag}
-          setTempMarkerInfo={setTempMarkerInfo}
+          setManipulatingMarkerInfo={setManipulatingMarkerInfo}
         />
         <Polylines
           setZoomSize={setZoomSize}
-          setTempMarkerInfo={setTempMarkerInfo}
+          setManipulatingMarkerInfo={setManipulatingMarkerInfo}
           route={route}
           setRoute={setRoute}
         />
@@ -136,8 +137,8 @@ const RouteEditor: FunctionComponent = () => {
           zoomSize={zoomSize}
           route={route}
           setRoute={setRoute}
-          tempMarkerInfo={tempMarkerInfo}
-          setTempMarkerInfo={setTempMarkerInfo}
+          manipulatingMarkerInfo={manipulatingMarkerInfo}
+          setManipulatingMarkerInfo={setManipulatingMarkerInfo}
         />
         <ClickLayer route={route} setRoute={setRoute} />
       </MapContainer>
@@ -148,8 +149,8 @@ const RouteEditor: FunctionComponent = () => {
       <button onClick={onClickClearHandler}>clear</button>
       <ElevationGraph
         segments={route.segments}
-        tempMarkerInfo={tempMarkerInfo}
-        setTempMarkerInfo={setTempMarkerInfo}
+        manipulatingMarkerInfo={manipulatingMarkerInfo}
+        setManipulatingMarkerInfo={setManipulatingMarkerInfo}
       />
     </>
   );

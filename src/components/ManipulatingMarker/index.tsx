@@ -1,16 +1,18 @@
 import { useRef } from "react";
-import { TempMarkerIcon } from "./tempMarkerIcon";
+import { ManipulatingMarkerIcon } from "./manipulatingMarkerIcon";
 import { Marker } from "react-leaflet";
 import L, { Marker as MarkerType } from "leaflet";
-import { Route, TempMarkerInfo } from "../../types";
+import { Route, ManipulatingMarkerInfo } from "../../types";
 import { patchAdd } from "../../api/routes";
 
 type ManipulatingMarkerProps = {
   zoomSize: number;
   route: Route;
   setRoute: React.Dispatch<React.SetStateAction<Route>>;
-  tempMarkerInfo: TempMarkerInfo;
-  setTempMarkerInfo: React.Dispatch<React.SetStateAction<TempMarkerInfo>>;
+  manipulatingMarkerInfo: ManipulatingMarkerInfo;
+  setManipulatingMarkerInfo: React.Dispatch<
+    React.SetStateAction<ManipulatingMarkerInfo>
+  >;
 };
 
 export default function ManipulatingMarker(props: ManipulatingMarkerProps) {
@@ -29,10 +31,10 @@ export default function ManipulatingMarker(props: ManipulatingMarkerProps) {
 
   async function onDragMarker() {
     const newPoint = markerRef.current?.getLatLng();
-    if (newPoint && props.tempMarkerInfo.index !== null) {
+    if (newPoint && props.manipulatingMarkerInfo.index !== null) {
       const res = await patchAdd(
         props.route.id,
-        props.tempMarkerInfo.index + 1,
+        props.manipulatingMarkerInfo.index + 1,
         {
           coord: {
             latitude: newPoint.lat,
@@ -42,24 +44,27 @@ export default function ManipulatingMarker(props: ManipulatingMarkerProps) {
       );
       if (res) {
         props.setRoute({ ...props.route, ...res.data });
-        props.setTempMarkerInfo({ index: null, position: null });
+        props.setManipulatingMarkerInfo({ index: null, position: null });
       }
     }
   }
 
   return (
     <>
-      {props.tempMarkerInfo.position && (
+      {props.manipulatingMarkerInfo.position && (
         <Marker
-          icon={TempMarkerIcon(props.zoomSize)}
+          icon={ManipulatingMarkerIcon(props.zoomSize)}
           ref={markerRef}
           draggable={true}
-          position={props.tempMarkerInfo.position}
+          position={props.manipulatingMarkerInfo.position}
           eventHandlers={{
             click: async (event: L.LeafletMouseEvent) => {
               L.DomEvent.stopPropagation(event); //clickLayerに対してクリックイベントを送らない
-              props.tempMarkerInfo.index &&
-                onClickMarker(event.latlng, props.tempMarkerInfo.index + 1);
+              props.manipulatingMarkerInfo.index &&
+                onClickMarker(
+                  event.latlng,
+                  props.manipulatingMarkerInfo.index + 1
+                );
             },
             dragend: () => {
               onDragMarker();
