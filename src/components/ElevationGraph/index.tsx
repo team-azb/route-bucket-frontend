@@ -43,17 +43,19 @@ export default function ElevationGraph(props: ElevationGraphProp) {
   function CustomTooltip(props: CustomTooltipProps) {
     if (props.active && props.payload) {
       if (
-        props.payload[0] &&
-        props.tempMarkerInfo?.position?.lat !==
-          props.payload[0].payload.latitude
+        props.payload &&
+        (props.tempMarkerInfo?.position?.lat !==
+          props.payload[0].payload.latitude ||
+          props.tempMarkerInfo?.position?.lng !==
+            props.payload[0].payload.longitude)
       ) {
-        props.setTempMarkerInfo({
-          ...props.tempMarkerInfo,
-          index: props.payload[0].payload.idx,
-          position: new L.LatLng(
-            props.payload[0].payload.latitude,
-            props.payload[0].payload.longitude
-          ),
+        const data = props.payload[0].payload;
+        props.setTempMarkerInfo((prevState) => {
+          return {
+            ...prevState,
+            index: data.idx,
+            position: new L.LatLng(data.latitude, data.longitude),
+          };
         });
       }
       return (
