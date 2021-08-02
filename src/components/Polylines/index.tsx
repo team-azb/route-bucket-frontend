@@ -23,30 +23,26 @@ export default function Polylines(props: PolylineProps) {
     props.setZoomSize(event.target._zoom);
   });
 
-  let polylines: JSX.Element[] = new Array(props.route.segments.length);
-  for (let idx = 0; idx < props.route.segments.length; idx++) {
-    polylines[idx] = (
-      //Todo: 線の太さを上げて、線をクリックしやすくする
-      <Polyline
-        pathOptions={pathOptions}
-        positions={props.route.segments[idx]["points"].map((point) => [
-          point.latitude,
-          point.longitude,
-        ])}
-        key={nanoid()}
-        eventHandlers={{
-          mouseover: (event) => {
-            props.setManipulatingMarkerInfo((prevState) => {
-              return {
-                ...prevState,
-                idx: idx,
-                position: event.latlng,
-              };
-            });
-          },
-        }}
-      />
-    );
-  }
+  let polylines: JSX.Element[] = props.route.segments.map((segment, idx) => {
+    return(<Polyline
+      pathOptions={pathOptions}
+      positions={segment["points"].map((point) => [
+        point.latitude,
+        point.longitude,
+      ])}
+      key={nanoid()}
+      eventHandlers={{
+        mouseover: (event) => {
+          props.setManipulatingMarkerInfo((prevState) => {
+            return {
+              ...prevState,
+              idx: idx,
+              position: event.latlng,
+            };
+          });
+        },
+      }}
+    />)
+  })
   return <>{polylines}</>;
 }
