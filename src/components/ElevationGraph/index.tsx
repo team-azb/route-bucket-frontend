@@ -21,7 +21,7 @@ type ElevationGraphProp = {
   segments: Segment[];
 };
 
-type CustomTooltipProps = TooltipProps<number, string> & {
+type ElevationGraphTooltipContentProps = TooltipProps<number, string> & {
   manipulatingMarkerInfo: ManipulatingMarkerInfo;
   setManipulatingMarkerInfo: React.Dispatch<
     React.SetStateAction<ManipulatingMarkerInfo>
@@ -40,6 +40,42 @@ function formatDistance(value: number) {
   return `${meters2kilometers(value).toFixed(2)}km`;
 }
 
+function ElevationGraphTooltipContent(
+  props: ElevationGraphTooltipContentProps
+) {
+  if (props.active && props.payload) {
+    if (
+      props.payload &&
+      (props.manipulatingMarkerInfo?.position?.lat !==
+        props.payload[0].payload.latitude ||
+        props.manipulatingMarkerInfo?.position?.lng !==
+          props.payload[0].payload.longitude)
+    ) {
+      const data = props.payload[0].payload;
+      props.setManipulatingMarkerInfo((prevState) => {
+        return {
+          ...prevState,
+          idx: data.idx,
+          position: new L.LatLng(data.latitude, data.longitude),
+        };
+      });
+    }
+    return (
+      <div className="ElevationGraph-tooltip">
+        <p className="label">distance: {`${formatDistance(props.label)}`}</p>
+        <p className="desc">
+          elevation:{" "}
+          {`${
+            props.payload[0].value && formatElevation(props.payload[0].value)
+          }`}
+        </p>
+      </div>
+    );
+  }
+
+  return null;
+}
+
 export default function ElevationGraph(props: ElevationGraphProp) {
   const coords = useMemo<any[]>(() => {
     return props.segments
@@ -50,40 +86,6 @@ export default function ElevationGraph(props: ElevationGraphProp) {
       })
       .flat();
   }, [props.segments]);
-
-  function CustomTooltip(props: CustomTooltipProps) {
-    if (props.active && props.payload) {
-      if (
-        props.payload &&
-        (props.manipulatingMarkerInfo?.position?.lat !==
-          props.payload[0].payload.latitude ||
-          props.manipulatingMarkerInfo?.position?.lng !==
-            props.payload[0].payload.longitude)
-      ) {
-        const data = props.payload[0].payload;
-        props.setManipulatingMarkerInfo((prevState) => {
-          return {
-            ...prevState,
-            idx: data.idx,
-            position: new L.LatLng(data.latitude, data.longitude),
-          };
-        });
-      }
-      return (
-        <div className="custom-tooltip">
-          <p className="label">distance: {`${formatDistance(props.label)}`}</p>
-          <p className="desc">
-            elevation:{" "}
-            {`${
-              props.payload[0].value && formatElevation(props.payload[0].value)
-            }`}
-          </p>
-        </div>
-      );
-    }
-
-    return null;
-  }
 
   return (
     <div style={{ width: "100%", height: 300 }}>
@@ -112,7 +114,7 @@ export default function ElevationGraph(props: ElevationGraphProp) {
           <Tooltip
             active={false}
             content={
-              <CustomTooltip
+              <ElevationGraphTooltipContent
                 manipulatingMarkerInfo={props.manipulatingMarkerInfo}
                 setManipulatingMarkerInfo={props.setManipulatingMarkerInfo}
               />
@@ -124,7 +126,7 @@ export default function ElevationGraph(props: ElevationGraphProp) {
             type="monotone"
             dataKey="elevation"
             stroke="#8884d8"
-            // activeDot={<CustomDot/>}
+            // activeDot={<ElevationGraphDot/>}
             activeDot={{
               r: 8,
               onChangeCapture: (event) => {
