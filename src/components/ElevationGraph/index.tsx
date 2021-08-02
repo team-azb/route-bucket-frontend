@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import {
   LineChart,
   Line,
@@ -28,13 +29,15 @@ type CustomTooltipProps = TooltipProps<number, string> & {
 };
 
 export default function ElevationGraph(props: ElevationGraphProp) {
-  const data = props.segments
-    .map((segment, idx) => {
-      return segment.points.map((pos) => {
-        return { ...pos, idx: idx };
-      });
-    })
-    .flat();
+  const coords = useMemo<any[]>(() => {
+    return props.segments
+      .map((segment, idx) => {
+        return segment.points.map((pos) => {
+          return { ...pos, idx: idx };
+        });
+      })
+      .flat();
+  }, [props.segments]);
 
   function formatElevation(elevation: number) {
     return `${elevation}m`;
@@ -82,7 +85,7 @@ export default function ElevationGraph(props: ElevationGraphProp) {
     <div style={{ width: "100%", height: 300 }}>
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
-          data={data}
+          data={coords}
           margin={{
             top: 5,
             right: 30,
