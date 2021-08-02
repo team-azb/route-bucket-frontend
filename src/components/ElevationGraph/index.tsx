@@ -28,6 +28,18 @@ type CustomTooltipProps = TooltipProps<number, string> & {
   >;
 };
 
+function meters2kilometers(meters: number) {
+  return meters / 1000;
+}
+
+function formatElevation(elevation: number) {
+  return `${elevation}m`;
+}
+
+function formatDistance(value: number) {
+  return `${meters2kilometers(value).toFixed(2)}km`;
+}
+
 export default function ElevationGraph(props: ElevationGraphProp) {
   const coords = useMemo<any[]>(() => {
     return props.segments
@@ -38,14 +50,6 @@ export default function ElevationGraph(props: ElevationGraphProp) {
       })
       .flat();
   }, [props.segments]);
-
-  function formatElevation(elevation: number) {
-    return `${elevation}m`;
-  }
-
-  function formatDistance(value: number) {
-    return `${String(Math.round((value / 1000) * 10) / 10)}km`;
-  }
 
   function CustomTooltip(props: CustomTooltipProps) {
     if (props.active && props.payload) {
