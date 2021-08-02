@@ -14,6 +14,24 @@ type MakersProps = {
   setChangeCenterFlag: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+/**
+ * マーカーで利用する適切なiconを返す関数
+ * @param idx マーカーのindex
+ * @param firstIdx スタートのマーカーのindex
+ * @param lastIdx ゴールのマーカーのindex
+ * @returns マーカーで利用するicon
+ */
+function determineMarkerIcon(idx: number, firstIdx: number, lastIdx: number) {
+  switch (idx) {
+    case firstIdx:
+      return StartMarkerIcon;
+    case lastIdx:
+      return GoalMarkerIcon;
+    default:
+      return MarkerIcon;
+  }
+}
+
 export default function Markers(props: MakersProps) {
   const map = useMap();
   const markerRefs = useRef<Array<RefObject<MarkerType>>>(
@@ -33,12 +51,11 @@ export default function Markers(props: MakersProps) {
   }, [props.changeCenterFlag]);
   const markers = props.route.waypoints.map(
     (pos: Position, idx: number): JSX.Element => {
-      const markerIcon =
-        idx === 0
-          ? StartMarkerIcon
-          : idx === props.route.waypoints.length - 1
-          ? GoalMarkerIcon
-          : MarkerIcon;
+      const markerIcon = determineMarkerIcon(
+        idx,
+        0,
+        props.route.waypoints.length - 1
+      );
       markerRefs.current[idx] = createRef<MarkerType>();
       async function onClickMarker(idx: number) {
         const res = await patchDelete(props.route.id, idx);

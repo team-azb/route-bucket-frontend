@@ -1,7 +1,7 @@
 import L from "leaflet";
 
 /**
- * 
+ *
  * @param size アイコンの大きさ
  * @returns L.Iconインスタンス
  */
