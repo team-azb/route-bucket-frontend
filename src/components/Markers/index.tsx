@@ -3,16 +3,14 @@ import { Marker, useMap } from "react-leaflet";
 import { Marker as MarkerType } from "leaflet";
 import { nanoid } from "nanoid";
 import { patchDelete, patchMove } from "../../api/routes";
-import { Position, Route, ManipulatingMarkerInfo } from "../../types";
+import { Position, Route, FocusedMarkerInfo } from "../../types";
 import { MarkerIcon, GoalMarkerIcon, StartMarkerIcon } from "./markerIcon";
 
 type MakersProps = {
   changeCenterFlag: boolean;
   route: Route;
   setRoute: React.Dispatch<React.SetStateAction<Route>>;
-  setManipulatingMarkerInfo: React.Dispatch<
-    React.SetStateAction<ManipulatingMarkerInfo>
-  >;
+  setFocusedMarkerInfo: React.Dispatch<React.SetStateAction<FocusedMarkerInfo>>;
   setChangeCenterFlag: React.Dispatch<React.SetStateAction<boolean>>;
 };
 

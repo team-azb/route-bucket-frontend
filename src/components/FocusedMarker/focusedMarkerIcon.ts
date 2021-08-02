@@ -1,6 +1,6 @@
 import L from "leaflet";
 
-export const ManipulatingMarkerIcon = (zoomSize: number) => {
+export const FocusedMarkerIcon = (zoomSize: number) => {
   return new L.Icon({
     iconUrl: "icons/circle_black_24dp.svg",
     iconRetinaUrl: "icons/circle_black_24dp.svg",

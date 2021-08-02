@@ -22,7 +22,7 @@ export type Segment = {
   points: Position[];
 };
 
-export type ManipulatingMarkerInfo = {
+export type FocusedMarkerInfo = {
   position: L.LatLng | null;
   idx: number | null;
 };

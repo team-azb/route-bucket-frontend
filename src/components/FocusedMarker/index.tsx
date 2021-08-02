@@ -1,21 +1,19 @@
 import { useRef } from "react";
-import { ManipulatingMarkerIcon } from "./manipulatingMarkerIcon";
+import { FocusedMarkerIcon } from "./focusedMarkerIcon";
 import { Marker } from "react-leaflet";
 import L, { Marker as MarkerType } from "leaflet";
-import { Route, ManipulatingMarkerInfo } from "../../types";
+import { Route, FocusedMarkerInfo } from "../../types";
 import { patchAdd } from "../../api/routes";
 
-type ManipulatingMarkerProps = {
+type FocusedMarkerProps = {
   zoomSize: number;
   route: Route;
   setRoute: React.Dispatch<React.SetStateAction<Route>>;
-  manipulatingMarkerInfo: ManipulatingMarkerInfo;
-  setManipulatingMarkerInfo: React.Dispatch<
-    React.SetStateAction<ManipulatingMarkerInfo>
-  >;
+  FocusedMarkerInfo: FocusedMarkerInfo;
+  setFocusedMarkerInfo: React.Dispatch<React.SetStateAction<FocusedMarkerInfo>>;
 };
 
-export default function ManipulatingMarker(props: ManipulatingMarkerProps) {
+export default function FocusedMarker(props: FocusedMarkerProps) {
   const markerRef = useRef<MarkerType>(null);
   async function onClickMarker(latlng: L.LatLng, idx: number) {
     const res = await patchAdd(props.route.id, idx, {
@@ -33,10 +31,10 @@ export default function ManipulatingMarker(props: ManipulatingMarkerProps) {
 
   async function onDragMarker() {
     const newPoint = markerRef.current?.getLatLng();
-    if (newPoint && props.manipulatingMarkerInfo.idx !== null) {
+    if (newPoint && props.FocusedMarkerInfo.idx !== null) {
       const res = await patchAdd(
         props.route.id,
-        props.manipulatingMarkerInfo.idx + 1,
+        props.FocusedMarkerInfo.idx + 1,
         {
           coord: {
             latitude: newPoint.lat,
@@ -54,20 +52,17 @@ export default function ManipulatingMarker(props: ManipulatingMarkerProps) {
 
   return (
     <>
-      {props.manipulatingMarkerInfo.position && (
+      {props.FocusedMarkerInfo.position && (
         <Marker
-          icon={ManipulatingMarkerIcon(props.zoomSize)}
+          icon={FocusedMarkerIcon(props.zoomSize)}
           ref={markerRef}
           draggable={true}
-          position={props.manipulatingMarkerInfo.position}
+          position={props.FocusedMarkerInfo.position}
           eventHandlers={{
             click: async (event: L.LeafletMouseEvent) => {
               L.DomEvent.stopPropagation(event); //clickLayerに対してクリックイベントを送らない
-              props.manipulatingMarkerInfo.idx &&
-                onClickMarker(
-                  event.latlng,
-                  props.manipulatingMarkerInfo.idx + 1
-                );
+              props.FocusedMarkerInfo.idx &&
+                onClickMarker(event.latlng, props.FocusedMarkerInfo.idx + 1);
             },
             dragend: () => {
               onDragMarker();

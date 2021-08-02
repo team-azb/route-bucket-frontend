@@ -1,7 +1,7 @@
 import { Polyline, useMapEvent } from "react-leaflet";
 import { PathOptions } from "leaflet";
 import { nanoid } from "nanoid";
-import { Route, ManipulatingMarkerInfo } from "../../types";
+import { Route, FocusedMarkerInfo } from "../../types";
 
 const pathOptions: PathOptions = {
   color: "#0000cd",
@@ -10,9 +10,7 @@ const pathOptions: PathOptions = {
 
 //Polylineコンポーネントのpropsの型
 type PolylineProps = {
-  setManipulatingMarkerInfo: React.Dispatch<
-    React.SetStateAction<ManipulatingMarkerInfo>
-  >;
+  setFocusedMarkerInfo: React.Dispatch<React.SetStateAction<FocusedMarkerInfo>>;
   setZoomSize: React.Dispatch<React.SetStateAction<number>>;
   route: Route;
   setRoute: React.Dispatch<React.SetStateAction<Route>>;
@@ -24,25 +22,27 @@ export default function Polylines(props: PolylineProps) {
   });
 
   let polylines: JSX.Element[] = props.route.segments.map((segment, idx) => {
-    return(<Polyline
-      pathOptions={pathOptions}
-      positions={segment["points"].map((point) => [
-        point.latitude,
-        point.longitude,
-      ])}
-      key={nanoid()}
-      eventHandlers={{
-        mouseover: (event) => {
-          props.setManipulatingMarkerInfo((prevState) => {
-            return {
-              ...prevState,
-              idx: idx,
-              position: event.latlng,
-            };
-          });
-        },
-      }}
-    />)
-  })
+    return (
+      <Polyline
+        pathOptions={pathOptions}
+        positions={segment["points"].map((point) => [
+          point.latitude,
+          point.longitude,
+        ])}
+        key={nanoid()}
+        eventHandlers={{
+          mouseover: (event) => {
+            props.setFocusedMarkerInfo((prevState) => {
+              return {
+                ...prevState,
+                idx: idx,
+                position: event.latlng,
+              };
+            });
+          },
+        }}
+      />
+    );
+  });
   return <>{polylines}</>;
 }

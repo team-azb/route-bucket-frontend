@@ -11,21 +11,17 @@ import {
   TooltipProps,
 } from "recharts";
 import L from "leaflet";
-import { Segment, ManipulatingMarkerInfo } from "../../types";
+import { Segment, FocusedMarkerInfo } from "../../types";
 
 type ElevationGraphProp = {
-  manipulatingMarkerInfo: ManipulatingMarkerInfo;
-  setManipulatingMarkerInfo: React.Dispatch<
-    React.SetStateAction<ManipulatingMarkerInfo>
-  >;
+  FocusedMarkerInfo: FocusedMarkerInfo;
+  setFocusedMarkerInfo: React.Dispatch<React.SetStateAction<FocusedMarkerInfo>>;
   segments: Segment[];
 };
 
 type ElevationGraphTooltipContentProps = TooltipProps<number, string> & {
-  manipulatingMarkerInfo: ManipulatingMarkerInfo;
-  setManipulatingMarkerInfo: React.Dispatch<
-    React.SetStateAction<ManipulatingMarkerInfo>
-  >;
+  FocusedMarkerInfo: FocusedMarkerInfo;
+  setFocusedMarkerInfo: React.Dispatch<React.SetStateAction<FocusedMarkerInfo>>;
 };
 
 function meters2kilometers(meters: number) {
@@ -46,13 +42,13 @@ function ElevationGraphTooltipContent(
   if (props.active && props.payload) {
     if (
       props.payload &&
-      (props.manipulatingMarkerInfo?.position?.lat !==
+      (props.FocusedMarkerInfo?.position?.lat !==
         props.payload[0].payload.latitude ||
-        props.manipulatingMarkerInfo?.position?.lng !==
+        props.FocusedMarkerInfo?.position?.lng !==
           props.payload[0].payload.longitude)
     ) {
       const data = props.payload[0].payload;
-      props.setManipulatingMarkerInfo((prevState) => {
+      props.setFocusedMarkerInfo((prevState) => {
         return {
           ...prevState,
           idx: data.idx,
@@ -115,8 +111,8 @@ export default function ElevationGraph(props: ElevationGraphProp) {
             active={false}
             content={
               <ElevationGraphTooltipContent
-                manipulatingMarkerInfo={props.manipulatingMarkerInfo}
-                setManipulatingMarkerInfo={props.setManipulatingMarkerInfo}
+                FocusedMarkerInfo={props.FocusedMarkerInfo}
+                setFocusedMarkerInfo={props.setFocusedMarkerInfo}
               />
             }
           />

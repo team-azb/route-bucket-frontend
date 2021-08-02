@@ -13,8 +13,8 @@ import Markers from "../../components/Markers";
 import Polylines from "../../components/Polylines";
 import EditableNameDisplay from "../../components/EditableNameDisplay";
 import ElevationGraph from "../../components/ElevationGraph";
-import ManipulatingMarker from "../../components/ManipulatingMarker";
-import { Route, ManipulatingMarkerInfo } from "../../types";
+import FocusedMarker from "../../components/FocusedMarker";
+import { Route, FocusedMarkerInfo } from "../../types";
 import "leaflet/dist/leaflet.css";
 
 //ClickLayerコンポーネントのpropsの型
@@ -56,14 +56,15 @@ const RouteEditor: FunctionComponent = () => {
   });
   const [changeCenterFlag, setChangeCenterFlag] = useState<boolean>(false);
   const [zoomSize, setZoomSize] = useState<number>(13);
-  const [manipulatingMarkerInfo, setManipulatingMarkerInfo] =
-    useState<ManipulatingMarkerInfo>({
+  const [FocusedMarkerInfo, setFocusedMarkerInfo] = useState<FocusedMarkerInfo>(
+    {
       position: null,
       idx: null,
-    });
+    }
+  );
 
   useEffect(() => {
-    setManipulatingMarkerInfo({ idx: null, position: null });
+    setFocusedMarkerInfo({ idx: null, position: null });
   }, [route]);
 
   //Mapのルート変更時にルートを取得してwaypointsを変更する
@@ -131,20 +132,20 @@ const RouteEditor: FunctionComponent = () => {
           route={route}
           setRoute={setRoute}
           setChangeCenterFlag={setChangeCenterFlag}
-          setManipulatingMarkerInfo={setManipulatingMarkerInfo}
+          setFocusedMarkerInfo={setFocusedMarkerInfo}
         />
         <Polylines
           setZoomSize={setZoomSize}
-          setManipulatingMarkerInfo={setManipulatingMarkerInfo}
+          setFocusedMarkerInfo={setFocusedMarkerInfo}
           route={route}
           setRoute={setRoute}
         />
-        <ManipulatingMarker
+        <FocusedMarker
           zoomSize={zoomSize}
           route={route}
           setRoute={setRoute}
-          manipulatingMarkerInfo={manipulatingMarkerInfo}
-          setManipulatingMarkerInfo={setManipulatingMarkerInfo}
+          FocusedMarkerInfo={FocusedMarkerInfo}
+          setFocusedMarkerInfo={setFocusedMarkerInfo}
         />
         <ClickLayer route={route} setRoute={setRoute} />
       </MapContainer>
@@ -155,8 +156,8 @@ const RouteEditor: FunctionComponent = () => {
       <button onClick={onClickClearHandler}>clear</button>
       <ElevationGraph
         segments={route.segments}
-        manipulatingMarkerInfo={manipulatingMarkerInfo}
-        setManipulatingMarkerInfo={setManipulatingMarkerInfo}
+        FocusedMarkerInfo={FocusedMarkerInfo}
+        setFocusedMarkerInfo={setFocusedMarkerInfo}
       />
     </>
   );
