@@ -72,22 +72,29 @@ function ElevationGraphTooltipContent(
   return null;
 }
 
+function segments2data(segments: Segment[]) {
+  return segments
+    .map((segment, idx) => {
+      return segment.points.map((pos) => {
+        return { ...pos, idx: idx };
+      });
+    })
+    .flat();
+}
+
 export default function ElevationGraph(props: ElevationGraphProp) {
-  const coords = useMemo<any[]>(() => {
-    return props.segments
-      .map((segment, idx) => {
-        return segment.points.map((pos) => {
-          return { ...pos, idx: idx };
-        });
-      })
-      .flat();
+  /**
+   * rechartsにdataとして渡す配列
+   */
+  const pointsData = useMemo<any[]>(() => {
+    return segments2data(props.segments);
   }, [props.segments]);
 
   return (
     <div style={{ width: "100%", height: 300 }}>
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
-          data={coords}
+          data={pointsData}
           margin={{
             top: 5,
             right: 30,
