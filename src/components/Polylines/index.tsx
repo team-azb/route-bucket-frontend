@@ -13,7 +13,6 @@ type PolylineProps = {
   setFocusedMarkerInfo: React.Dispatch<React.SetStateAction<FocusedMarkerInfo>>;
   setZoomSize: React.Dispatch<React.SetStateAction<number>>;
   route: Route;
-  setRoute: React.Dispatch<React.SetStateAction<Route>>;
 };
 
 /**

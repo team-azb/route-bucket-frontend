@@ -1,15 +1,18 @@
 import { useState } from "react";
-import { patchRename } from "../../api/routes";
 import { Route } from "../../types";
+import {
+  routeReducerAction,
+  routeAsyncAction,
+} from "../../reducers/routeReducer";
 
 type EditableNameDisplayProps = {
   route: Route;
-  setRoute: React.Dispatch<React.SetStateAction<Route>>;
+  dispatchRoute: React.Dispatch<routeReducerAction | routeAsyncAction>;
 };
 
 type NameInputProps = {
   route: Route;
-  setRoute: React.Dispatch<React.SetStateAction<Route>>;
+  dispatchRoute: React.Dispatch<routeReducerAction | routeAsyncAction>;
   setIsEditable: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
@@ -21,18 +24,11 @@ type NameDisplayProps = {
 function NameInput(props: NameInputProps) {
   const [nameInput, setNameInput] = useState<string>(props.route.name);
 
-  async function onSubmitName() {
+  function onSubmitName() {
     props.setIsEditable((prevState) => {
       return !prevState;
     });
-    const res = await patchRename(props.route.id, {
-      name: nameInput,
-    });
-    if (res) {
-      props.setRoute((prevState) => {
-        return { ...prevState, ...res.data };
-      });
-    }
+    props.dispatchRoute({ type: "RENAME", name: nameInput });
   }
 
   function onQuitEditing() {
@@ -98,7 +94,7 @@ export default function EditableNameDisplay(props: EditableNameDisplayProps) {
       {isEditable ? (
         <NameInput
           route={props.route}
-          setRoute={props.setRoute}
+          dispatchRoute={props.dispatchRoute}
           setIsEditable={setIsEditable}
         />
       ) : (

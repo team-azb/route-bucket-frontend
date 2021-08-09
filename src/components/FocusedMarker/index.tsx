@@ -3,50 +3,43 @@ import { FocusedMarkerIcon } from "./focusedMarkerIcon";
 import { Marker } from "react-leaflet";
 import L, { Marker as MarkerType } from "leaflet";
 import { Route, FocusedMarkerInfo } from "../../types";
-import { patchAdd } from "../../api/routes";
+import {
+  routeAsyncAction,
+  routeReducerAction,
+} from "../../reducers/routeReducer";
 
 type FocusedMarkerProps = {
   zoomSize: number;
   route: Route;
-  setRoute: React.Dispatch<React.SetStateAction<Route>>;
   FocusedMarkerInfo: FocusedMarkerInfo;
   setFocusedMarkerInfo: React.Dispatch<React.SetStateAction<FocusedMarkerInfo>>;
+  dispatchRoute: React.Dispatch<routeReducerAction | routeAsyncAction>;
 };
 
 export default function FocusedMarker(props: FocusedMarkerProps) {
   const markerRef = useRef<MarkerType>(null);
-  async function onClickMarker(latlng: L.LatLng, idx: number) {
-    const res = await patchAdd(props.route.id, idx, {
+  function onClickMarker(latlng: L.LatLng, idx: number) {
+    props.dispatchRoute({
+      type: "INSERT",
+      targetIdx: idx,
       coord: {
         latitude: latlng.lat,
         longitude: latlng.lng,
       },
     });
-    if (res) {
-      props.setRoute((prevState) => {
-        return { ...prevState, ...res.data };
-      });
-    }
   }
 
   async function onDragMarker() {
     const newPoint = markerRef.current?.getLatLng();
     if (newPoint && props.FocusedMarkerInfo.idx !== null) {
-      const res = await patchAdd(
-        props.route.id,
-        props.FocusedMarkerInfo.idx + 1,
-        {
-          coord: {
-            latitude: newPoint.lat,
-            longitude: newPoint.lng,
-          },
-        }
-      );
-      if (res) {
-        props.setRoute((prevState) => {
-          return { ...prevState, ...res.data };
-        });
-      }
+      props.dispatchRoute({
+        type: "INSERT",
+        targetIdx: props.FocusedMarkerInfo.idx + 1,
+        coord: {
+          latitude: newPoint.lat,
+          longitude: newPoint.lng,
+        },
+      });
     }
   }
 
