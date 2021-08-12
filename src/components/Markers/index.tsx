@@ -32,6 +32,72 @@ function determineMarkerIcon(idx: number, firstIdx: number, lastIdx: number) {
   }
 }
 
+/**
+ * map内でマーカーのJSX Elementを生成するための関数
+ * @param pos マーカーのPosition
+ * @param idx マーカーの順番
+ * @param markerRefs マーカーのrefオブジェクト
+ * @param props Markersのprops
+ * @returns マーカーのJSX Element
+ */
+function markerGenerator(
+  pos: Position,
+  idx: number,
+  markerRef: RefObject<MarkerType<any>>,
+  props: MakersProps
+) {
+  const markerIcon = determineMarkerIcon(
+    idx,
+    0,
+    props.route.waypoints.length - 1
+  );
+  markerRef = createRef<MarkerType>();
+  async function onClickMarker(idx: number) {
+    const res = await patchDelete(props.route.id, idx);
+    if (res) {
+      props.setRoute((prevState) => {
+        return { ...prevState, ...res.data };
+      });
+    }
+  }
+
+  async function onDragMarker(idx: number) {
+    const newPoint = markerRef.current?.getLatLng();
+    if (newPoint) {
+      const res = await patchMove(props.route.id, idx, {
+        coord: {
+          latitude: newPoint.lat,
+          longitude: newPoint.lng,
+        },
+      });
+      if (res) {
+        props.setRoute((prevState) => {
+          return { ...prevState, ...res.data };
+        });
+      }
+    }
+  }
+
+  return (
+    <Marker
+      icon={markerIcon}
+      zIndexOffset={idx === 0 ? props.route.waypoints.length * 100 : idx * 100}
+      ref={markerRef}
+      draggable={true}
+      position={[pos.latitude, pos.longitude]}
+      key={nanoid()}
+      eventHandlers={{
+        click: () => {
+          onClickMarker(idx);
+        },
+        dragend: () => {
+          onDragMarker(idx);
+        },
+      }} //todo: ここの関数を一つにまとめたい
+    ></Marker>
+  );
+}
+
 export default function Markers(props: MakersProps) {
   const map = useMap();
   const markerRefs = useRef<Array<RefObject<MarkerType>>>(
@@ -49,61 +115,8 @@ export default function Markers(props: MakersProps) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.changeCenterFlag]);
-  const markers = props.route.waypoints.map(
-    (pos: Position, idx: number): JSX.Element => {
-      const markerIcon = determineMarkerIcon(
-        idx,
-        0,
-        props.route.waypoints.length - 1
-      );
-      markerRefs.current[idx] = createRef<MarkerType>();
-      async function onClickMarker(idx: number) {
-        const res = await patchDelete(props.route.id, idx);
-        if (res) {
-          props.setRoute((prevState) => {
-            return { ...prevState, ...res.data };
-          });
-        }
-      }
-
-      async function onDragMarker(idx: number) {
-        const newPoint = markerRefs.current[idx].current?.getLatLng();
-        if (newPoint) {
-          const res = await patchMove(props.route.id, idx, {
-            coord: {
-              latitude: newPoint.lat,
-              longitude: newPoint.lng,
-            },
-          });
-          if (res) {
-            props.setRoute((prevState) => {
-              return { ...prevState, ...res.data };
-            });
-          }
-        }
-      }
-
-      return (
-        <Marker
-          icon={markerIcon}
-          zIndexOffset={
-            idx === 0 ? props.route.waypoints.length * 100 : idx * 100
-          }
-          ref={markerRefs.current[idx]}
-          draggable={true}
-          position={[pos.latitude, pos.longitude]}
-          key={nanoid()}
-          eventHandlers={{
-            click: () => {
-              onClickMarker(idx);
-            },
-            dragend: () => {
-              onDragMarker(idx);
-            },
-          }} //todo: ここの関数を一つにまとめたい
-        ></Marker>
-      );
-    }
-  );
+  const markers = props.route.waypoints.map((pos: Position, idx: number) => {
+    return markerGenerator(pos, idx, markerRefs.current[idx], props);
+  });
   return <>{markers}</>;
 }
