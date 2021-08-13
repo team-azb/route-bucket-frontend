@@ -9,6 +9,7 @@ import Polylines from "../../components/Polylines";
 import EditableNameDisplay from "../../components/EditableNameDisplay";
 import ElevationGraph from "../../components/ElevationGraph";
 import FocusedMarker from "../../components/FocusedMarker";
+import CurrentLacationMarker from "../../components/CurrentLocationMarker";
 import { FocusedMarkerInfo } from "../../types";
 import {
   routeReducer,
@@ -156,6 +157,7 @@ const RouteEditor: FunctionComponent = () => {
           FocusedMarkerInfo={FocusedMarkerInfo}
           setFocusedMarkerInfo={setFocusedMarkerInfo}
         />
+        <CurrentLacationMarker zoomSize={zoomSize} />
         <ClickLayer dispatchRoute={dispatchRoute} />
       </MapContainer>
       {/* TODO undoできない時はボタンをdisabledにする */}
