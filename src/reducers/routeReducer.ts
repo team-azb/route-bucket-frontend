@@ -53,7 +53,11 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
         (await patchAdd(route.id, route.waypoints.length, {
           coord: action.coord,
         }));
-      res && dispatch({ type: "UPDATE_ROUTE_GEOMETRY", newGeometry: res.data });
+      res &&
+        dispatch({
+          type: "UPDATE_ROUTE_GEOMETRY",
+          newGeometry: res.data,
+        });
     };
   },
   INSERT: ({ dispatch, getState }) => {
@@ -65,7 +69,11 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
         (await patchAdd(route.id, action.targetIdx, {
           coord: action.coord,
         }));
-      res && dispatch({ type: "UPDATE_ROUTE_GEOMETRY", newGeometry: res.data });
+      res &&
+        dispatch({
+          type: "UPDATE_ROUTE_GEOMETRY",
+          newGeometry: res.data,
+        });
     };
   },
   GET: ({ dispatch }) => {
@@ -78,21 +86,33 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
     return async (action) => {
       const route = getState();
       const res = await patchClear(route.id);
-      res && dispatch({ type: "UPDATE_ROUTE_GEOMETRY", newGeometry: res.data });
+      res &&
+        dispatch({
+          type: "UPDATE_ROUTE_GEOMETRY",
+          newGeometry: res.data,
+        });
     };
   },
   UNDO: ({ dispatch, getState }) => {
     return async (action) => {
       const route = getState();
       const res = await patchUndo(route.id);
-      res && dispatch({ type: "UPDATE_ROUTE_GEOMETRY", newGeometry: res.data });
+      res &&
+        dispatch({
+          type: "UPDATE_ROUTE_GEOMETRY",
+          newGeometry: res.data,
+        });
     };
   },
   REDO: ({ dispatch, getState }) => {
     return async (action) => {
       const route = getState();
       const res = await patchRedo(route.id);
-      res && dispatch({ type: "UPDATE_ROUTE_GEOMETRY", newGeometry: res.data });
+      res &&
+        dispatch({
+          type: "UPDATE_ROUTE_GEOMETRY",
+          newGeometry: res.data,
+        });
     };
   },
   RENAME: ({ dispatch, getState }) => {
@@ -112,7 +132,11 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
         (await patchMove(route.id, action.targetIdx, {
           coord: action.coord,
         }));
-      res && dispatch({ type: "UPDATE_ROUTE_GEOMETRY", newGeometry: res.data });
+      res &&
+        dispatch({
+          type: "UPDATE_ROUTE_GEOMETRY",
+          newGeometry: res.data,
+        });
     };
   },
   DELETE: ({ dispatch, getState }) => {
@@ -121,7 +145,11 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
       const res =
         action.targetIdx !== undefined &&
         (await patchDelete(route.id, action.targetIdx));
-      res && dispatch({ type: "UPDATE_ROUTE_GEOMETRY", newGeometry: res.data });
+      res &&
+        dispatch({
+          type: "UPDATE_ROUTE_GEOMETRY",
+          newGeometry: res.data,
+        });
     };
   },
 };
