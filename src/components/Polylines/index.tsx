@@ -37,6 +37,7 @@ export default function Polylines(props: PolylineProps) {
                 ...prevState,
                 idx: idx,
                 position: event.latlng,
+                shouldDisplayed: true,
               };
             });
           },

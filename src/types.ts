@@ -23,6 +23,7 @@ export type Segment = {
 };
 
 export type FocusedMarkerInfo = {
-  position: L.LatLng | null;
-  idx: number | null;
+  position: L.LatLng;
+  idx: number;
+  shouldDisplayed: boolean;
 };

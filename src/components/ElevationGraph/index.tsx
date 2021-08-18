@@ -42,9 +42,9 @@ function ElevationGraphTooltipContent(
   if (props.active && props.payload) {
     if (
       props.payload &&
-      (props.FocusedMarkerInfo?.position?.lat !==
+      (props.FocusedMarkerInfo.position.lat !==
         props.payload[0].payload.latitude ||
-        props.FocusedMarkerInfo?.position?.lng !==
+        props.FocusedMarkerInfo.position.lng !==
           props.payload[0].payload.longitude)
     ) {
       const data = props.payload[0].payload;
@@ -53,6 +53,7 @@ function ElevationGraphTooltipContent(
           ...prevState,
           idx: data.idx,
           position: new L.LatLng(data.latitude, data.longitude),
+          shouldDisplayed: true,
         };
       });
     }

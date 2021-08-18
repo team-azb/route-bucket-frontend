@@ -1,7 +1,7 @@
 import { useState, useEffect, FunctionComponent } from "react";
 import { useParams, Link } from "react-router-dom";
 import { MapContainer, TileLayer, useMapEvent } from "react-leaflet";
-import { LeafletMouseEvent } from "leaflet";
+import { LatLng, LeafletMouseEvent } from "leaflet";
 import {
   getRoute,
   patchAdd,
@@ -27,6 +27,12 @@ type ClickLayerProps = {
 interface RouteEditorParams {
   routeId: string;
 }
+
+const focusedMarkerInfoInitValue: FocusedMarkerInfo = {
+  shouldDisplayed: false,
+  idx: 0,
+  position: new LatLng(0, 0),
+};
 
 function ClickLayer(props: ClickLayerProps): null {
   useMapEvent("click", async (e: LeafletMouseEvent) => {
@@ -57,14 +63,11 @@ const RouteEditor: FunctionComponent = () => {
   const [changeCenterFlag, setChangeCenterFlag] = useState<boolean>(false);
   const [zoomSize, setZoomSize] = useState<number>(13);
   const [FocusedMarkerInfo, setFocusedMarkerInfo] = useState<FocusedMarkerInfo>(
-    {
-      position: null,
-      idx: null,
-    }
+    focusedMarkerInfoInitValue
   );
 
   useEffect(() => {
-    setFocusedMarkerInfo({ idx: null, position: null });
+    setFocusedMarkerInfo(focusedMarkerInfoInitValue);
   }, [route]);
 
   //Mapのルート変更時にルートを取得してwaypointsを変更する

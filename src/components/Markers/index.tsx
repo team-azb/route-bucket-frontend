@@ -21,7 +21,7 @@ type MakersProps = {
  * @param lastIdx ゴールのマーカーのindex
  * @returns マーカーで利用するicon
  */
-function determineMarkerIcon(idx: number, firstIdx: number, lastIdx: number) {
+function getMarkerIcon(idx: number, firstIdx: number, lastIdx: number) {
   switch (idx) {
     case firstIdx:
       return StartMarkerIcon;
@@ -46,11 +46,7 @@ function markerGenerator(
   markerRef: RefObject<MarkerType<any>>,
   props: MakersProps
 ) {
-  const markerIcon = determineMarkerIcon(
-    idx,
-    0,
-    props.route.waypoints.length - 1
-  );
+  const markerIcon = getMarkerIcon(idx, 0, props.route.waypoints.length - 1);
   markerRef = createRef<MarkerType>();
   async function onClickMarker(idx: number) {
     const res = await patchDelete(props.route.id, idx);

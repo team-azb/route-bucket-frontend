@@ -52,7 +52,7 @@ export default function FocusedMarker(props: FocusedMarkerProps) {
 
   return (
     <>
-      {props.FocusedMarkerInfo.position && (
+      {props.FocusedMarkerInfo.shouldDisplayed && (
         <Marker
           icon={FocusedMarkerIcon(props.zoomSize)}
           ref={markerRef}
