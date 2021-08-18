@@ -29,7 +29,7 @@ interface RouteEditorParams {
 }
 
 const focusedMarkerInfoInitValue: FocusedMarkerInfo = {
-  shouldDisplayed: false,
+  isDisplayed: false,
   idx: 0,
   position: new LatLng(0, 0),
 };

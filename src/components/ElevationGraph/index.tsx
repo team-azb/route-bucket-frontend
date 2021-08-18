@@ -53,7 +53,7 @@ function ElevationGraphTooltipContent(
           ...prevState,
           idx: data.idx,
           position: new L.LatLng(data.latitude, data.longitude),
-          shouldDisplayed: true,
+          isDisplayed: true,
         };
       });
     }

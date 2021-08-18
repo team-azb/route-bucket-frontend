@@ -43,7 +43,7 @@ function polylineGenerator(
               ...prevState,
               idx: idx,
               position: event.latlng,
-              shouldDisplayed: true,
+              isDisplayed: true,
             };
           });
         },
