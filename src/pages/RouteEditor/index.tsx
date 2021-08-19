@@ -6,8 +6,6 @@ import "leaflet.locatecontrol";
 import { useReducerAsync } from "use-reducer-async";
 import Markers from "../../components/Markers";
 import Polylines from "../../components/Polylines";
-import EditableNameDisplay from "../../components/EditableNameDisplay";
-import ElevationGraph from "../../components/ElevationGraph";
 import FocusedMarker from "../../components/FocusedMarker";
 import RouteEditController from "../../components/RouteEditController";
 import { FocusedMarkerInfo } from "../../types";
@@ -88,7 +86,7 @@ const RouteEditor: FunctionComponent = () => {
   );
   const [changeCenterFlag, setChangeCenterFlag] = useState<boolean>(false);
   const [zoomSize, setZoomSize] = useState<number>(13);
-  const [FocusedMarkerInfo, setFocusedMarkerInfo] = useState<FocusedMarkerInfo>(
+  const [focusedMarkerInfo, setFocusedMarkerInfo] = useState<FocusedMarkerInfo>(
     focusedMarkerInfoInitValue
   );
 
@@ -110,11 +108,6 @@ const RouteEditor: FunctionComponent = () => {
     <>
       <Link to="/">ルート一覧へ</Link>
       <hr />
-      <p>ルートid: {routeId}</p>
-
-      <EditableNameDisplay route={route} dispatchRoute={dispatchRoute} />
-
-      <p>獲得標高: {route.elevation_gain}m</p>
       <div className="route-editor-container">
         <MapContainer
           // style={{  }}
@@ -145,21 +138,19 @@ const RouteEditor: FunctionComponent = () => {
             zoomSize={zoomSize}
             route={route}
             dispatchRoute={dispatchRoute}
-            FocusedMarkerInfo={FocusedMarkerInfo}
+            focusedMarkerInfo={focusedMarkerInfo}
             setFocusedMarkerInfo={setFocusedMarkerInfo}
           />
           <ClickLayer dispatchRoute={dispatchRoute} />
           <RouteEditController
             routeId={routeId}
+            route={route}
             dispatchRoute={dispatchRoute}
+            focusedMarkerInfo={focusedMarkerInfo}
+            setFocusedMarkerInfo={setFocusedMarkerInfo}
           />
         </MapContainer>
       </div>
-      <ElevationGraph
-        segments={route.segments}
-        FocusedMarkerInfo={FocusedMarkerInfo}
-        setFocusedMarkerInfo={setFocusedMarkerInfo}
-      />
     </>
   );
 };

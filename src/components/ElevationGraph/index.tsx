@@ -14,7 +14,7 @@ import L from "leaflet";
 import { Segment, FocusedMarkerInfo } from "../../types";
 
 type ElevationGraphProp = {
-  FocusedMarkerInfo: FocusedMarkerInfo;
+  focusedMarkerInfo: FocusedMarkerInfo;
   setFocusedMarkerInfo: React.Dispatch<React.SetStateAction<FocusedMarkerInfo>>;
   segments: Segment[];
 };
@@ -112,6 +112,7 @@ export default function ElevationGraph(props: ElevationGraphProp) {
             tickFormatter={formatDistance}
           />
           <YAxis
+            width={40}
             type="number"
             dataKey="elevation"
             tickFormatter={formatElevation}
@@ -120,7 +121,7 @@ export default function ElevationGraph(props: ElevationGraphProp) {
             active={false}
             content={
               <ElevationGraphTooltipContent
-                FocusedMarkerInfo={props.FocusedMarkerInfo}
+                FocusedMarkerInfo={props.focusedMarkerInfo}
                 setFocusedMarkerInfo={props.setFocusedMarkerInfo}
               />
             }

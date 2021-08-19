@@ -4,25 +4,28 @@ import {
   routeReducerAction,
   routeAsyncAction,
 } from "../../reducers/routeReducer";
+import EditableNameDisplay from "../EditableNameDisplay";
+import ElevationGraph from "../ElevationGraph";
 import { config } from "../../config";
+import { Route, FocusedMarkerInfo } from "../../types";
+import "./index.css";
 
 type RouteEditControllerProps = {
   routeId: string;
+  route: Route;
   dispatchRoute: React.Dispatch<routeReducerAction | routeAsyncAction>;
-};
-
-const POSITION_CLASSES = {
-  bottomleft: "leaflet-bottom leaflet-left",
-  bottomright: "leaflet-bottom leaflet-right",
-  topleft: "leaflet-top leaflet-left",
-  topright: "leaflet-top leaflet-right",
+  focusedMarkerInfo: FocusedMarkerInfo;
+  setFocusedMarkerInfo: React.Dispatch<React.SetStateAction<FocusedMarkerInfo>>;
 };
 
 export default function RouteEditController(props: RouteEditControllerProps) {
   const divRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    divRef.current && L.DomEvent.disableClickPropagation(divRef.current);
+    if (divRef.current) {
+      L.DomEvent.disableClickPropagation(divRef.current);
+      L.DomEvent.disableScrollPropagation(divRef.current);
+    }
   });
 
   const onClickClearHandler = () => {
@@ -40,15 +43,30 @@ export default function RouteEditController(props: RouteEditControllerProps) {
   function onClickExportHandler() {
     window.open(`${config.BACKEND_ORIGIN}/routes/${props.routeId}/gpx/`);
   }
-  const positionClass =
-    POSITION_CLASSES["bottomleft"] || POSITION_CLASSES.topright;
+
   return (
-    <div className={positionClass}>
-      <div ref={divRef} className="leaflet-control leaflet-bar">
-        <button onClick={onClickUndoHandler}>undo</button>
-        <button onClick={onClickRedoHandler}>redo</button>
-        <button onClick={onClickClearHandler}>clear</button>
-        <button onClick={onClickExportHandler}>export as gpx</button>
+    <div className={"leaflet-bottom leaflet-left"}>
+      <div
+        ref={divRef}
+        className="leaflet-control leaflet-bar route-edit-controller-container"
+      >
+        <div className="route-info-edit-container">
+          <p>ルートid: {props.routeId}</p>
+          <EditableNameDisplay
+            route={props.route}
+            dispatchRoute={props.dispatchRoute}
+          />
+          <p>獲得標高: {props.route.elevation_gain}m</p>
+          <button onClick={onClickUndoHandler}>undo</button>
+          <button onClick={onClickRedoHandler}>redo</button>
+          <button onClick={onClickClearHandler}>clear</button>
+          <button onClick={onClickExportHandler}>export as gpx</button>
+        </div>
+        <ElevationGraph
+          segments={props.route.segments}
+          focusedMarkerInfo={props.focusedMarkerInfo}
+          setFocusedMarkerInfo={props.setFocusedMarkerInfo}
+        />
       </div>
     </div>
   );
