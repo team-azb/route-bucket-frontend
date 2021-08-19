@@ -35,7 +35,7 @@ const focusedMarkerInfoInitValue: FocusedMarkerInfo = {
 
 //現在地表示に関するオプション
 const locateOption: L.Control.LocateOptions = {
-  position: "topright",
+  position: "topleft",
   strings: {
     title: "現在地を表示",
     popup: "現在地",
