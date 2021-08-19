@@ -1,7 +1,7 @@
 export type Position = {
   latitude: number;
   longitude: number;
-  evelation?: number;
+  elevation?: number;
   distance_from_start?: number;
 };
 

@@ -70,7 +70,7 @@ function ElevationGraphTooltipContent(
     );
   }
 
-  return null;
+  return <></>;
 }
 
 function segments2data(segments: Segment[]) {
@@ -80,7 +80,8 @@ function segments2data(segments: Segment[]) {
         return { ...pos, idx: idx };
       });
     })
-    .flat();
+    .flat()
+    .filter((pos) => pos.elevation);
 }
 
 export default function ElevationGraph(props: ElevationGraphProp) {
