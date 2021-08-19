@@ -16,6 +16,7 @@ import {
   routeReducerAction,
   routeAsyncAction,
 } from "../../reducers/routeReducer";
+import { config } from "../../config";
 
 //ClickLayerコンポーネントのpropsの型
 type ClickLayerProps = {
@@ -109,6 +110,10 @@ const RouteEditor: FunctionComponent = () => {
     dispatchRoute({ type: "REDO", id: routeId });
   }
 
+  function onClickExportHandler() {
+    window.open(`${config.BACKEND_ORIGIN}/routes/${routeId}/gpx/`);
+  }
+
   return (
     <>
       <Link to="/">ルート一覧へ</Link>
@@ -155,6 +160,7 @@ const RouteEditor: FunctionComponent = () => {
       {/* TODO redoできない時はボタンをdisabledにする */}
       <button onClick={onClickRedoHandler}>redo</button>
       <button onClick={onClickClearHandler}>clear</button>
+      <button onClick={onClickExportHandler}>export as gpx</button>
       <ElevationGraph
         segments={route.segments}
         FocusedMarkerInfo={FocusedMarkerInfo}
