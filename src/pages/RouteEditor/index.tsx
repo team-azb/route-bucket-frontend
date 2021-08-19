@@ -97,7 +97,7 @@ const RouteEditor: FunctionComponent = () => {
 
   //Mapのルート変更時にルートを取得してwaypointsを変更する
   useEffect(() => {
-    dispatchRoute({ type: "GET", id: routeId });
+    dispatchRoute({ type: "GET", id: routeId, setChangeCenterFlag: setChangeCenterFlag });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [routeId]);
 
