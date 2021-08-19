@@ -1,23 +1,29 @@
 export type Position = {
-    latitude: number,
-    longitude: number,
-    evelation?: number,
-}
+  latitude: number;
+  longitude: number;
+  evelation?: number;
+  distance_from_start?: number;
+};
 
 export type RouteInfo = {
-    id: string,
-    name: string,
-}
+  id: string;
+  name: string;
+};
 
 export type RouteGeometry = {
-    waypoints: Position[],
-    segments: Segment[],
-    elevation_gain: number
-}
+  waypoints: Position[];
+  segments: Segment[];
+  elevation_gain?: number;
+};
 
-export type Route = RouteInfo & RouteGeometry
+export type Route = RouteInfo & RouteGeometry;
 
 export type Segment = {
-    points: Position[],
-    distance: number
-}
+  points: Position[];
+};
+
+export type FocusedMarkerInfo = {
+  position: L.LatLng;
+  idx: number;
+  isDisplayed: boolean;
+};

@@ -1,45 +1,65 @@
-import { Polyline } from "react-leaflet";
-import L from "leaflet";
+import { Polyline, useMapEvent } from "react-leaflet";
+import { PathOptions } from "leaflet";
 import { nanoid } from "nanoid";
-import { patchAdd } from "../../api/routes";
-import { Route } from "../../types";
+import { Route, FocusedMarkerInfo, Segment } from "../../types";
 
-const blueOptions: { color: string } = { color: "#0000cd" };
+const pathOptions: PathOptions = {
+  color: "#0000cd",
+  weight: 5,
+};
 
 //Polylineコンポーネントのpropsの型
 type PolylineProps = {
+  setFocusedMarkerInfo: React.Dispatch<React.SetStateAction<FocusedMarkerInfo>>;
+  setZoomSize: React.Dispatch<React.SetStateAction<number>>;
   route: Route;
   setRoute: React.Dispatch<React.SetStateAction<Route>>;
 };
 
+/**
+ * map内でポリーラインのJSX Elementを生成するための関数
+ * @param segment ポリーラインで表示する区間のsegment
+ * @param idx 区間の順番
+ * @param props PolylineProps
+ * @returns ポリーラインのJSX Element
+ */
+function polylineGenerator(
+  segment: Segment,
+  idx: number,
+  props: PolylineProps
+) {
+  return (
+    <Polyline
+      pathOptions={pathOptions}
+      positions={segment["points"].map((point) => [
+        point.latitude,
+        point.longitude,
+      ])}
+      key={nanoid()}
+      eventHandlers={{
+        mouseover: (event) => {
+          props.setFocusedMarkerInfo((prevState) => {
+            return {
+              ...prevState,
+              idx: idx,
+              position: event.latlng,
+              isDisplayed: true,
+            };
+          });
+        },
+      }}
+    />
+  );
+}
+
 export default function Polylines(props: PolylineProps) {
-  let polylines: JSX.Element[] = new Array(props.route.segments.length);
-  for (let idx = 0; idx < props.route.segments.length; idx++) {
-    polylines[idx] = (
-      //Todo: 線の太さを上げて、線をクリックしやすくする
-      <Polyline
-        pathOptions={blueOptions}
-        positions={props.route.segments[idx]["points"].map((point) => [
-          point.latitude,
-          point.longitude,
-        ])}
-        key={nanoid()}
-        eventHandlers={{
-          click: async (event: L.LeafletMouseEvent) => {
-            L.DomEvent.stopPropagation(event); //clickLayerに対してクリックイベントを送らない
-            const res = await patchAdd(props.route.id, idx + 1, {
-              coord: {
-                latitude: event.latlng.lat,
-                longitude: event.latlng.lng,
-              },
-            });
-            if (res) {
-              props.setRoute({ ...props.route, ...res.data });
-            }
-          },
-        }}
-      />
-    );
-  }
+  useMapEvent("zoomend", (event) => {
+    props.setZoomSize(event.target._zoom);
+  });
+
+  let polylines = props.route.segments.map((segment, idx) => {
+    return polylineGenerator(segment, idx, props);
+  });
+
   return <>{polylines}</>;
 }

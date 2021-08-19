@@ -12,12 +12,14 @@
     "@types/react-dom": "^17.0.2",
     "axios": "^0.21.1",
     "leaflet": "^1.7.1",
+    "lodash": "^4.17.21",
     "nanoid": "^3.1.22",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-leaflet": "^3.1.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "recharts": "^2.0.10",
     "typescript": "^4.2.3",
     "web-vitals": "^1.1.1"
   },
@@ -26,7 +28,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "format": "prettier --write 'src/**/*.tsx'"
+    "format": "prettier --write 'src/**/*.tsx' 'src/**/*.ts'"
   },
   "proxy": "http://localhost:8080",
   "eslintConfig": {
@@ -49,7 +51,9 @@
   },
   "devDependencies": {
     "@types/leaflet": "^1.7.0",
+    "@types/lodash": "^4.14.171",
     "@types/react-router-dom": "^5.1.7",
+    "@types/recharts": "^2.0.0",
     "prettier": "^2.3.2"
   }
 }

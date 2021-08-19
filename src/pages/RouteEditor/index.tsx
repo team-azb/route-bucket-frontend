@@ -1,7 +1,7 @@
 import { useState, useEffect, FunctionComponent } from "react";
 import { useParams, Link } from "react-router-dom";
 import { MapContainer, TileLayer, useMapEvent } from "react-leaflet";
-import { LeafletMouseEvent } from "leaflet";
+import { LatLng, LeafletMouseEvent } from "leaflet";
 import {
   getRoute,
   patchAdd,
@@ -12,7 +12,9 @@ import {
 import Markers from "../../components/Markers";
 import Polylines from "../../components/Polylines";
 import EditableNameDisplay from "../../components/EditableNameDisplay";
-import { Route } from "../../types";
+import ElevationGraph from "../../components/ElevationGraph";
+import FocusedMarker from "../../components/FocusedMarker";
+import { Route, FocusedMarkerInfo } from "../../types";
 import "leaflet/dist/leaflet.css";
 
 //ClickLayerコンポーネントのpropsの型
@@ -26,6 +28,12 @@ interface RouteEditorParams {
   routeId: string;
 }
 
+const focusedMarkerInfoInitValue: FocusedMarkerInfo = {
+  isDisplayed: false,
+  idx: 0,
+  position: new LatLng(0, 0),
+};
+
 function ClickLayer(props: ClickLayerProps): null {
   useMapEvent("click", async (e: LeafletMouseEvent) => {
     const res = await patchAdd(props.route.id, props.route.waypoints.length, {
@@ -35,7 +43,9 @@ function ClickLayer(props: ClickLayerProps): null {
       },
     });
     if (res) {
-      props.setRoute({ ...props.route, ...res.data });
+      props.setRoute((prevState) => {
+        return { ...prevState, ...res.data };
+      });
     }
   });
   return null;
@@ -51,6 +61,14 @@ const RouteEditor: FunctionComponent = () => {
     elevation_gain: 0,
   });
   const [changeCenterFlag, setChangeCenterFlag] = useState<boolean>(false);
+  const [zoomSize, setZoomSize] = useState<number>(13);
+  const [FocusedMarkerInfo, setFocusedMarkerInfo] = useState<FocusedMarkerInfo>(
+    focusedMarkerInfoInitValue
+  );
+
+  useEffect(() => {
+    setFocusedMarkerInfo(focusedMarkerInfoInitValue);
+  }, [route]);
 
   //Mapのルート変更時にルートを取得してwaypointsを変更する
   useEffect(() => {
@@ -69,21 +87,27 @@ const RouteEditor: FunctionComponent = () => {
   async function onClickClearHandler(): Promise<void> {
     const res = await patchClear(routeId);
     if (res) {
-      setRoute({ ...route, ...res.data });
+      setRoute((prevState) => {
+        return { ...prevState, ...res.data };
+      });
     }
   }
 
   async function onClickUndoHandler(): Promise<void> {
     const res = await patchUndo(routeId);
     if (res) {
-      setRoute({ ...route, ...res.data });
+      setRoute((prevState) => {
+        return { ...prevState, ...res.data };
+      });
     }
   }
 
   async function onClickRedoHandler(): Promise<void> {
     const res = await patchRedo(routeId);
     if (res) {
-      setRoute({ ...route, ...res.data });
+      setRoute((prevState) => {
+        return { ...prevState, ...res.data };
+      });
     }
   }
 
@@ -111,8 +135,21 @@ const RouteEditor: FunctionComponent = () => {
           route={route}
           setRoute={setRoute}
           setChangeCenterFlag={setChangeCenterFlag}
+          setFocusedMarkerInfo={setFocusedMarkerInfo}
         />
-        <Polylines route={route} setRoute={setRoute} />
+        <Polylines
+          setZoomSize={setZoomSize}
+          setFocusedMarkerInfo={setFocusedMarkerInfo}
+          route={route}
+          setRoute={setRoute}
+        />
+        <FocusedMarker
+          zoomSize={zoomSize}
+          route={route}
+          setRoute={setRoute}
+          FocusedMarkerInfo={FocusedMarkerInfo}
+          setFocusedMarkerInfo={setFocusedMarkerInfo}
+        />
         <ClickLayer route={route} setRoute={setRoute} />
       </MapContainer>
       {/* Todo undoできない時はボタンをdisabledにする */}
@@ -120,6 +157,11 @@ const RouteEditor: FunctionComponent = () => {
       {/* Todo redoできない時はボタンをdisabledにする */}
       <button onClick={onClickRedoHandler}>redo</button>
       <button onClick={onClickClearHandler}>clear</button>
+      <ElevationGraph
+        segments={route.segments}
+        FocusedMarkerInfo={FocusedMarkerInfo}
+        setFocusedMarkerInfo={setFocusedMarkerInfo}
+      />
     </>
   );
 };
