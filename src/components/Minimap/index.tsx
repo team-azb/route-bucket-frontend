@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import {
   useMap,
   useMapEvent,
@@ -7,19 +7,21 @@ import {
   TileLayer,
 } from "react-leaflet";
 import { useEventHandlers } from "@react-leaflet/core";
+import L, { Map } from "leaflet";
 
-const POSITION_CLASSES = {
-  bottomleft: "leaflet-bottom leaflet-left",
-  bottomright: "leaflet-bottom leaflet-right",
-  topleft: "leaflet-top leaflet-left",
-  topright: "leaflet-top leaflet-right",
+type MinimapProps = {
+  zoom: number;
+};
+
+type MinimapBoundsProps = {
+  parentMap: Map;
+  zoom: number;
 };
 
 const BOUNDS_STYLE = { weight: 1 };
 
-function MinimapBounds({ parentMap, zoom }) {
+function MinimapBounds({ parentMap, zoom }: MinimapBoundsProps) {
   const minimap = useMap();
-
   // Clicking a point on the minimap sets the parent's map center
   const onClick = useCallback(
     (e) => {
@@ -28,7 +30,6 @@ function MinimapBounds({ parentMap, zoom }) {
     [parentMap]
   );
   useMapEvent("click", onClick);
-
   // Keep track of bounds in state to trigger renders
   const [bounds, setBounds] = useState(parentMap.getBounds());
   const onChange = useCallback(() => {
@@ -40,14 +41,26 @@ function MinimapBounds({ parentMap, zoom }) {
   // Listen to events on the parent map
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handlers = useMemo(() => ({ move: onChange, zoom: onChange }), []);
-  useEventHandlers({ instance: parentMap }, handlers);
+  const context = {
+    __version: 0,
+    map: parentMap,
+  };
+  useEventHandlers({ instance: parentMap, context: context }, handlers);
 
   return <Rectangle bounds={bounds} pathOptions={BOUNDS_STYLE} />;
 }
 
-export default function MinimapControl({ position, zoom }) {
+export default function Minimap({ zoom }: MinimapProps) {
   const parentMap = useMap();
   const mapZoom = zoom || 0;
+  const divRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (divRef.current) {
+      L.DomEvent.disableClickPropagation(divRef.current);
+      L.DomEvent.disableScrollPropagation(divRef.current);
+    }
+  });
 
   // Memoize the minimap so it's not affected by position changes
   const minimap = useMemo(
@@ -70,10 +83,8 @@ export default function MinimapControl({ position, zoom }) {
     []
   );
 
-  const positionClass =
-    (position && POSITION_CLASSES[position]) || POSITION_CLASSES.topright;
   return (
-    <div className={positionClass}>
+    <div ref={divRef} className={"leaflet-top leaflet-right"}>
       <div className="leaflet-control leaflet-bar">{minimap}</div>
     </div>
   );
