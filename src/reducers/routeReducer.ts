@@ -81,7 +81,7 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
     return async (action) => {
       const res = action.id && (await getRoute(action.id));
       res && dispatch({ type: "UPDATE_ROUTE", route: res.data });
-      action.setChangeCenterFlag && action.setChangeCenterFlag(true)
+      action.setChangeCenterFlag && action.setChangeCenterFlag(true);
     };
   },
   CLEAR: ({ dispatch, getState }) => {

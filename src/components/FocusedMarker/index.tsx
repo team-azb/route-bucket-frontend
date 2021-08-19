@@ -52,7 +52,7 @@ export default function FocusedMarker(props: FocusedMarkerProps) {
           draggable={true}
           position={props.FocusedMarkerInfo.position}
           eventHandlers={{
-            click: async (event: L.LeafletMouseEvent) => {
+            click: async (event) => {
               L.DomEvent.stopPropagation(event); //clickLayerに対してクリックイベントを送らない
               props.FocusedMarkerInfo.idx &&
                 onClickMarker(event.latlng, props.FocusedMarkerInfo.idx + 1);
