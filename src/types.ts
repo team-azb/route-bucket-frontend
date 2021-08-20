@@ -14,6 +14,7 @@ export type RouteGeometry = {
   waypoints: Position[];
   segments: Segment[];
   elevation_gain?: number;
+  total_distance?: number;
 };
 
 export type Route = RouteInfo & RouteGeometry;

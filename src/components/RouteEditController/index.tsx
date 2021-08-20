@@ -56,6 +56,7 @@ export default function RouteEditController(props: RouteEditControllerProps) {
             route={props.route}
             dispatchRoute={props.dispatchRoute}
           />
+          <p>総距離: {props.route.total_distance?.toFixed(0)}m</p>
           <p>獲得標高: {props.route.elevation_gain}m</p>
           <button onClick={onClickUndoHandler}>undo</button>
           <button onClick={onClickRedoHandler}>redo</button>
