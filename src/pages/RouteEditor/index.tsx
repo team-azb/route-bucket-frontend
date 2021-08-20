@@ -15,6 +15,7 @@ import {
   routeReducerAction,
   routeAsyncAction,
 } from "../../reducers/routeReducer";
+import { useWindowDimensions } from "../../hooks/windowDimensions";
 import "./index.css";
 
 //ClickLayerコンポーネントのpropsの型
@@ -72,6 +73,7 @@ function ClickLayer(props: ClickLayerProps) {
 }
 
 const RouteEditor: FunctionComponent = () => {
+  const { width } = useWindowDimensions();
   const { routeId } = useParams<RouteEditorParams>();
   const [route, dispatchRoute] = useReducerAsync(
     routeReducer,
@@ -142,14 +144,27 @@ const RouteEditor: FunctionComponent = () => {
             setFocusedMarkerInfo={setFocusedMarkerInfo}
           />
           <ClickLayer dispatchRoute={dispatchRoute} />
+          {width > 600 && (
+            <RouteEditController
+              isInsideMap={true}
+              routeId={routeId}
+              route={route}
+              dispatchRoute={dispatchRoute}
+              focusedMarkerInfo={focusedMarkerInfo}
+              setFocusedMarkerInfo={setFocusedMarkerInfo}
+            />
+          )}
+        </MapContainer>
+        {width <= 600 && (
           <RouteEditController
+            isInsideMap={false}
             routeId={routeId}
             route={route}
             dispatchRoute={dispatchRoute}
             focusedMarkerInfo={focusedMarkerInfo}
             setFocusedMarkerInfo={setFocusedMarkerInfo}
           />
-        </MapContainer>
+        )}
       </div>
     </>
   );

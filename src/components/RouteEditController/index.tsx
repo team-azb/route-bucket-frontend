@@ -11,6 +11,7 @@ import { Route, FocusedMarkerInfo } from "../../types";
 import "./index.css";
 
 type RouteEditControllerProps = {
+  isInsideMap: boolean;
   routeId: string;
   route: Route;
   dispatchRoute: React.Dispatch<routeReducerAction | routeAsyncAction>;
@@ -18,16 +19,7 @@ type RouteEditControllerProps = {
   setFocusedMarkerInfo: React.Dispatch<React.SetStateAction<FocusedMarkerInfo>>;
 };
 
-export default function RouteEditController(props: RouteEditControllerProps) {
-  const divRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (divRef.current) {
-      L.DomEvent.disableClickPropagation(divRef.current);
-      L.DomEvent.disableScrollPropagation(divRef.current);
-    }
-  });
-
+function RouteEditControllerDisplay(props: RouteEditControllerProps) {
   const onClickClearHandler = () => {
     props.dispatchRoute({ type: "CLEAR", id: props.routeId });
   };
@@ -43,32 +35,54 @@ export default function RouteEditController(props: RouteEditControllerProps) {
   function onClickExportHandler() {
     window.open(`${config.BACKEND_ORIGIN}/routes/${props.routeId}/gpx/`);
   }
+  return (
+    <>
+      <div className="route-info-edit-container">
+        <p>ルートid: {props.routeId}</p>
+        <EditableNameDisplay
+          route={props.route}
+          dispatchRoute={props.dispatchRoute}
+        />
+        <p>総距離: {props.route.total_distance?.toFixed(0)}m</p>
+        <p>獲得標高: {props.route.elevation_gain}m</p>
+        <button onClick={onClickUndoHandler}>undo</button>
+        <button onClick={onClickRedoHandler}>redo</button>
+        <button onClick={onClickClearHandler}>clear</button>
+        <button onClick={onClickExportHandler}>export as gpx</button>
+      </div>
+      <ElevationGraph
+        segments={props.route.segments}
+        focusedMarkerInfo={props.focusedMarkerInfo}
+        setFocusedMarkerInfo={props.setFocusedMarkerInfo}
+      />
+    </>
+  );
+}
+
+export default function RouteEditController(props: RouteEditControllerProps) {
+  const divRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (divRef.current) {
+      L.DomEvent.disableClickPropagation(divRef.current);
+      L.DomEvent.disableScrollPropagation(divRef.current);
+    }
+  });
 
   return (
-    <div className={"leaflet-bottom leaflet-left"}>
-      <div
-        ref={divRef}
-        className="leaflet-control leaflet-bar route-edit-controller-container"
-      >
-        <div className="route-info-edit-container">
-          <p>ルートid: {props.routeId}</p>
-          <EditableNameDisplay
-            route={props.route}
-            dispatchRoute={props.dispatchRoute}
-          />
-          <p>総距離: {props.route.total_distance?.toFixed(0)}m</p>
-          <p>獲得標高: {props.route.elevation_gain}m</p>
-          <button onClick={onClickUndoHandler}>undo</button>
-          <button onClick={onClickRedoHandler}>redo</button>
-          <button onClick={onClickClearHandler}>clear</button>
-          <button onClick={onClickExportHandler}>export as gpx</button>
+    <>
+      {props.isInsideMap ? (
+        <div className={"leaflet-bottom leaflet-left"}>
+          <div
+            ref={divRef}
+            className="leaflet-control leaflet-bar route-edit-controller-container"
+          >
+            <RouteEditControllerDisplay {...props} />
+          </div>
         </div>
-        <ElevationGraph
-          segments={props.route.segments}
-          focusedMarkerInfo={props.focusedMarkerInfo}
-          setFocusedMarkerInfo={props.setFocusedMarkerInfo}
-        />
-      </div>
-    </div>
+      ) : (
+        <RouteEditControllerDisplay {...props} />
+      )}
+    </>
   );
 }
