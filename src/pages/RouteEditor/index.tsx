@@ -44,6 +44,9 @@ const locateOption: L.Control.LocateOptions = {
   locateOptions: {
     maxZoom: 16,
   },
+  markerStyle: {
+    zIndexOffset: 100, //現在地表示のアイコンは一番前に出す
+  },
 };
 
 // Memo: 地図を切り替えるたびに読み込まれてしまう
