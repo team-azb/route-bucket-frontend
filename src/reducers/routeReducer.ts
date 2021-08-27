@@ -12,6 +12,7 @@ import {
   patchUndo,
 } from "../api/routes";
 
+//TODO: typeをenumで指定できるようにしたい
 export interface routeAsyncAction {
   type: string;
   id?: string;

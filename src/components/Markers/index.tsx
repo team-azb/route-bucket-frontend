@@ -84,7 +84,7 @@ function markerGenerator(
         dragend: () => {
           onDragMarker(idx);
         },
-      }} //todo: ここの関数を一つにまとめたい
+      }} //TODO: ここの関数を一つにまとめたい
     ></Marker>
   );
 }

@@ -127,9 +127,9 @@ const RouteEditor: FunctionComponent = () => {
         />
         <ClickLayer dispatchRoute={dispatchRoute} />
       </MapContainer>
-      {/* Todo undoできない時はボタンをdisabledにする */}
+      {/* TODO undoできない時はボタンをdisabledにする */}
       <button onClick={onClickUndoHandler}>undo</button>
-      {/* Todo redoできない時はボタンをdisabledにする */}
+      {/* TODO redoできない時はボタンをdisabledにする */}
       <button onClick={onClickRedoHandler}>redo</button>
       <button onClick={onClickClearHandler}>clear</button>
       <ElevationGraph
