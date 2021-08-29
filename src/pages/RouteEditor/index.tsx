@@ -2,25 +2,24 @@ import { useState, useEffect, FunctionComponent } from "react";
 import { useParams, Link } from "react-router-dom";
 import { MapContainer, TileLayer, useMapEvent } from "react-leaflet";
 import { LatLng, LeafletMouseEvent } from "leaflet";
-import {
-  getRoute,
-  patchAdd,
-  patchUndo,
-  patchRedo,
-  patchClear,
-} from "../../api/routes";
+import { useReducerAsync } from "use-reducer-async";
 import Markers from "../../components/Markers";
 import Polylines from "../../components/Polylines";
 import EditableNameDisplay from "../../components/EditableNameDisplay";
 import ElevationGraph from "../../components/ElevationGraph";
 import FocusedMarker from "../../components/FocusedMarker";
-import { Route, FocusedMarkerInfo } from "../../types";
+import { FocusedMarkerInfo } from "../../types";
+import {
+  routeReducer,
+  routeAsyncActionHandlers,
+  routeReducerAction,
+  routeAsyncAction,
+} from "../../reducers/routeReducer";
 import "leaflet/dist/leaflet.css";
 
 //ClickLayerコンポーネントのpropsの型
 type ClickLayerProps = {
-  route: Route;
-  setRoute: React.Dispatch<React.SetStateAction<Route>>;
+  dispatchRoute: React.Dispatch<routeReducerAction | routeAsyncAction>;
 };
 
 //URLのパラメータのinerface
@@ -36,30 +35,30 @@ const focusedMarkerInfoInitValue: FocusedMarkerInfo = {
 
 function ClickLayer(props: ClickLayerProps): null {
   useMapEvent("click", async (e: LeafletMouseEvent) => {
-    const res = await patchAdd(props.route.id, props.route.waypoints.length, {
+    props.dispatchRoute({
+      type: "APPEND",
       coord: {
         latitude: e.latlng.lat,
         longitude: e.latlng.lng,
       },
     });
-    if (res) {
-      props.setRoute((prevState) => {
-        return { ...prevState, ...res.data };
-      });
-    }
   });
   return null;
 }
 
 const RouteEditor: FunctionComponent = () => {
   const { routeId } = useParams<RouteEditorParams>();
-  const [route, setRoute] = useState<Route>({
-    id: routeId,
-    name: "",
-    waypoints: [],
-    segments: [],
-    elevation_gain: 0,
-  });
+  const [route, dispatchRoute] = useReducerAsync(
+    routeReducer,
+    {
+      id: routeId,
+      name: "",
+      waypoints: [],
+      segments: [],
+      elevation_gain: 0,
+    },
+    routeAsyncActionHandlers
+  );
   const [changeCenterFlag, setChangeCenterFlag] = useState<boolean>(false);
   const [zoomSize, setZoomSize] = useState<number>(13);
   const [FocusedMarkerInfo, setFocusedMarkerInfo] = useState<FocusedMarkerInfo>(
@@ -72,43 +71,20 @@ const RouteEditor: FunctionComponent = () => {
 
   //Mapのルート変更時にルートを取得してwaypointsを変更する
   useEffect(() => {
-    let unmounted = false;
-    (async () => {
-      const res = await getRoute(routeId);
-      if (res && !unmounted) {
-        setRoute({ ...res.data });
-      }
-    })();
-    return () => {
-      unmounted = true;
-    };
+    dispatchRoute({ type: "GET", id: routeId });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [routeId]);
 
-  async function onClickClearHandler(): Promise<void> {
-    const res = await patchClear(routeId);
-    if (res) {
-      setRoute((prevState) => {
-        return { ...prevState, ...res.data };
-      });
-    }
+  function onClickClearHandler() {
+    dispatchRoute({ type: "CLEAR", id: routeId });
   }
 
-  async function onClickUndoHandler(): Promise<void> {
-    const res = await patchUndo(routeId);
-    if (res) {
-      setRoute((prevState) => {
-        return { ...prevState, ...res.data };
-      });
-    }
+  function onClickUndoHandler() {
+    dispatchRoute({ type: "UNDO", id: routeId });
   }
 
-  async function onClickRedoHandler(): Promise<void> {
-    const res = await patchRedo(routeId);
-    if (res) {
-      setRoute((prevState) => {
-        return { ...prevState, ...res.data };
-      });
-    }
+  function onClickRedoHandler() {
+    dispatchRoute({ type: "REDO", id: routeId });
   }
 
   return (
@@ -117,7 +93,7 @@ const RouteEditor: FunctionComponent = () => {
       <hr />
       <p>ルートid: {routeId}</p>
 
-      <EditableNameDisplay route={route} setRoute={setRoute} />
+      <EditableNameDisplay route={route} dispatchRoute={dispatchRoute} />
 
       <p>獲得標高: {route.elevation_gain}m</p>
       <MapContainer
@@ -133,7 +109,7 @@ const RouteEditor: FunctionComponent = () => {
         <Markers
           changeCenterFlag={changeCenterFlag}
           route={route}
-          setRoute={setRoute}
+          dispatchRoute={dispatchRoute}
           setChangeCenterFlag={setChangeCenterFlag}
           setFocusedMarkerInfo={setFocusedMarkerInfo}
         />
@@ -141,20 +117,19 @@ const RouteEditor: FunctionComponent = () => {
           setZoomSize={setZoomSize}
           setFocusedMarkerInfo={setFocusedMarkerInfo}
           route={route}
-          setRoute={setRoute}
         />
         <FocusedMarker
           zoomSize={zoomSize}
           route={route}
-          setRoute={setRoute}
+          dispatchRoute={dispatchRoute}
           FocusedMarkerInfo={FocusedMarkerInfo}
           setFocusedMarkerInfo={setFocusedMarkerInfo}
         />
-        <ClickLayer route={route} setRoute={setRoute} />
+        <ClickLayer dispatchRoute={dispatchRoute} />
       </MapContainer>
-      {/* Todo undoできない時はボタンをdisabledにする */}
+      {/* TODO undoできない時はボタンをdisabledにする */}
       <button onClick={onClickUndoHandler}>undo</button>
-      {/* Todo redoできない時はボタンをdisabledにする */}
+      {/* TODO redoできない時はボタンをdisabledにする */}
       <button onClick={onClickRedoHandler}>redo</button>
       <button onClick={onClickClearHandler}>clear</button>
       <ElevationGraph

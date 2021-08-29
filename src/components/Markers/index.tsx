@@ -2,14 +2,17 @@ import { useEffect, useRef, createRef, RefObject } from "react";
 import { Marker, useMap } from "react-leaflet";
 import { Marker as MarkerType } from "leaflet";
 import { nanoid } from "nanoid";
-import { patchDelete, patchMove } from "../../api/routes";
 import { Position, Route, FocusedMarkerInfo } from "../../types";
 import { MarkerIcon, GoalMarkerIcon, StartMarkerIcon } from "./markerIcon";
+import {
+  routeReducerAction,
+  routeAsyncAction,
+} from "../../reducers/routeReducer";
 
 type MakersProps = {
   changeCenterFlag: boolean;
   route: Route;
-  setRoute: React.Dispatch<React.SetStateAction<Route>>;
+  dispatchRoute: React.Dispatch<routeReducerAction | routeAsyncAction>;
   setFocusedMarkerInfo: React.Dispatch<React.SetStateAction<FocusedMarkerInfo>>;
   setChangeCenterFlag: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -49,28 +52,20 @@ function markerGenerator(
   const markerIcon = getMarkerIcon(idx, 0, props.route.waypoints.length - 1);
   markerRef = createRef<MarkerType>();
   async function onClickMarker(idx: number) {
-    const res = await patchDelete(props.route.id, idx);
-    if (res) {
-      props.setRoute((prevState) => {
-        return { ...prevState, ...res.data };
-      });
-    }
+    props.dispatchRoute({ type: "DELETE", targetIdx: idx });
   }
 
   async function onDragMarker(idx: number) {
     const newPoint = markerRef.current?.getLatLng();
     if (newPoint) {
-      const res = await patchMove(props.route.id, idx, {
+      props.dispatchRoute({
+        type: "MOVE",
+        targetIdx: idx,
         coord: {
           latitude: newPoint.lat,
           longitude: newPoint.lng,
         },
       });
-      if (res) {
-        props.setRoute((prevState) => {
-          return { ...prevState, ...res.data };
-        });
-      }
     }
   }
 
@@ -89,7 +84,7 @@ function markerGenerator(
         dragend: () => {
           onDragMarker(idx);
         },
-      }} //todo: ここの関数を一つにまとめたい
+      }} //TODO: ここの関数を一つにまとめたい
     ></Marker>
   );
 }
