@@ -11,6 +11,7 @@ import {
   TooltipProps,
 } from "recharts";
 import L from "leaflet";
+import { meters2kilometers } from "../../utils";
 import { Segment, FocusedMarkerInfo } from "../../types";
 
 type ElevationGraphProp = {
@@ -23,10 +24,6 @@ type ElevationGraphTooltipContentProps = TooltipProps<number, string> & {
   FocusedMarkerInfo: FocusedMarkerInfo;
   setFocusedMarkerInfo: React.Dispatch<React.SetStateAction<FocusedMarkerInfo>>;
 };
-
-function meters2kilometers(meters: number) {
-  return meters / 1000;
-}
 
 function formatElevation(elevation: number) {
   return `${elevation}m`;

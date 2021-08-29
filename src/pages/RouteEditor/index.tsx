@@ -1,5 +1,5 @@
-import { useState, useEffect, FunctionComponent } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useState, useEffect, FunctionComponent, useMemo } from "react";
+import { useParams } from "react-router-dom";
 import { MapContainer, TileLayer, useMapEvent, useMap } from "react-leaflet";
 import L, { LatLng, LeafletMouseEvent } from "leaflet";
 import "leaflet.locatecontrol";
@@ -16,7 +16,6 @@ import {
   routeAsyncAction,
 } from "../../reducers/routeReducer";
 import { useWindowDimensions } from "../../hooks/windowDimensions";
-import "./index.css";
 
 //ClickLayerコンポーネントのpropsの型
 type ClickLayerProps = {
@@ -73,7 +72,10 @@ function ClickLayer(props: ClickLayerProps) {
 }
 
 const RouteEditor: FunctionComponent = () => {
-  const { width } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
+  const isMobile = useMemo(() => {
+    return width < 600;
+  }, [width]);
   const { routeId } = useParams<RouteEditorParams>();
   const [route, dispatchRoute] = useReducerAsync(
     routeReducer,
@@ -108,17 +110,13 @@ const RouteEditor: FunctionComponent = () => {
 
   return (
     <>
-      <Link to="/">ルート一覧へ</Link>
-      <hr />
-      <div className="route-editor-container">
+      <div>
         <MapContainer
-          // style={{  }}
+          style={{ width: width, height: isMobile ? height * 0.8 : height }}
           center={[35.68139740310467, 139.7671569841016]}
           zoom={13}
           scrollWheelZoom={true}
-          className={"route-editor-map-container"}
         >
-          <div style={{ zIndex: 1000 }}>ほげ</div>
           <LocateController />
           <TileLayer
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -144,7 +142,7 @@ const RouteEditor: FunctionComponent = () => {
             setFocusedMarkerInfo={setFocusedMarkerInfo}
           />
           <ClickLayer dispatchRoute={dispatchRoute} />
-          {width > 600 && (
+          {!isMobile && (
             <RouteEditController
               isInsideMap={true}
               routeId={routeId}
@@ -155,7 +153,7 @@ const RouteEditor: FunctionComponent = () => {
             />
           )}
         </MapContainer>
-        {width <= 600 && (
+        {isMobile && (
           <RouteEditController
             isInsideMap={false}
             routeId={routeId}
