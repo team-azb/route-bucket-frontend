@@ -1,7 +1,8 @@
 import { useState, useEffect, FunctionComponent } from "react";
 import { useParams, Link } from "react-router-dom";
-import { MapContainer, TileLayer, useMapEvent } from "react-leaflet";
-import { LatLng, LeafletMouseEvent } from "leaflet";
+import { MapContainer, TileLayer, useMapEvent, useMap } from "react-leaflet";
+import L, { LatLng, LeafletMouseEvent } from "leaflet";
+import "leaflet.locatecontrol";
 import { useReducerAsync } from "use-reducer-async";
 import Markers from "../../components/Markers";
 import Polylines from "../../components/Polylines";
@@ -15,7 +16,7 @@ import {
   routeReducerAction,
   routeAsyncAction,
 } from "../../reducers/routeReducer";
-import "leaflet/dist/leaflet.css";
+import { config } from "../../config";
 
 //ClickLayerコンポーネントのpropsの型
 type ClickLayerProps = {
@@ -33,7 +34,32 @@ const focusedMarkerInfoInitValue: FocusedMarkerInfo = {
   position: new LatLng(0, 0),
 };
 
-function ClickLayer(props: ClickLayerProps): null {
+//現在地表示に関するオプション
+const locateOption: L.Control.LocateOptions = {
+  position: "topright",
+  strings: {
+    title: "現在地を表示",
+    popup: "現在地",
+  },
+  locateOptions: {
+    maxZoom: 16,
+  },
+  markerStyle: {
+    zIndexOffset: 100, //現在地表示のアイコンは一番前に出す
+  },
+};
+
+// Memo: 地図を切り替えるたびに読み込まれてしまう
+// Todo: 現在地の読み込みが遅い(ブラウザの組み込みapiの方が圧倒的に早い)のを改善
+function LocateController() {
+  const map = useMap();
+  useEffect(() => {
+    L.control.locate(locateOption).addTo(map);
+  }, [map]);
+  return <></>;
+}
+
+function ClickLayer(props: ClickLayerProps) {
   useMapEvent("click", async (e: LeafletMouseEvent) => {
     props.dispatchRoute({
       type: "APPEND",
@@ -43,7 +69,7 @@ function ClickLayer(props: ClickLayerProps): null {
       },
     });
   });
-  return null;
+  return <></>;
 }
 
 const RouteEditor: FunctionComponent = () => {
@@ -87,6 +113,10 @@ const RouteEditor: FunctionComponent = () => {
     dispatchRoute({ type: "REDO", id: routeId });
   }
 
+  function onClickExportHandler() {
+    window.open(`${config.BACKEND_ORIGIN}/routes/${routeId}/gpx/`);
+  }
+
   return (
     <>
       <Link to="/">ルート一覧へ</Link>
@@ -102,6 +132,7 @@ const RouteEditor: FunctionComponent = () => {
         zoom={13}
         scrollWheelZoom={true}
       >
+        <LocateController />
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -132,6 +163,7 @@ const RouteEditor: FunctionComponent = () => {
       {/* TODO redoできない時はボタンをdisabledにする */}
       <button onClick={onClickRedoHandler}>redo</button>
       <button onClick={onClickClearHandler}>clear</button>
+      <button onClick={onClickExportHandler}>export as gpx</button>
       <ElevationGraph
         segments={route.segments}
         FocusedMarkerInfo={FocusedMarkerInfo}

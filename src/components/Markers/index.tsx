@@ -72,7 +72,9 @@ function markerGenerator(
   return (
     <Marker
       icon={markerIcon}
-      zIndexOffset={idx === 0 ? props.route.waypoints.length * 100 : idx * 100}
+      zIndexOffset={
+        idx === 0 || idx === props.route.waypoints.length - 1 ? 50 : 10
+      } //スタートとゴールのアイコンは前面に出す
       ref={markerRef}
       draggable={true}
       position={[pos.latitude, pos.longitude]}
