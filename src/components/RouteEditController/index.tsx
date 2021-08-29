@@ -34,17 +34,17 @@ function RouteEditControllerDisplay(props: RouteEditControllerProps) {
     props.dispatchRoute({ type: "REDO", id: props.routeId });
   };
 
-  function onClickExportHandler() {
+  const onClickExportHandler = () => {
     window.open(`${config.BACKEND_ORIGIN}/routes/${props.routeId}/gpx/`);
-  }
+  };
 
-  function onClickGoIndexPage() {
+  const onClickGoIndexPageHandler = () => {
     history.push("/");
-  }
+  };
   return (
     <div style={{ background: "#fff", opacity: 0.85 }}>
       <div style={{ padding: props.isInsideMap ? 20 : 5 }}>
-        <button onClick={onClickGoIndexPage}>{"< ルート一覧へ"}</button>
+        <button onClick={onClickGoIndexPageHandler}>{"< ルート一覧へ"}</button>
         <p>ルートid: {props.routeId}</p>
         <EditableNameDisplay
           route={props.route}
