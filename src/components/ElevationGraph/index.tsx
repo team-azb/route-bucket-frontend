@@ -11,10 +11,11 @@ import {
   TooltipProps,
 } from "recharts";
 import L from "leaflet";
+import { meters2kilometers } from "../../utils";
 import { Segment, FocusedMarkerInfo } from "../../types";
 
 type ElevationGraphProp = {
-  FocusedMarkerInfo: FocusedMarkerInfo;
+  focusedMarkerInfo: FocusedMarkerInfo;
   setFocusedMarkerInfo: React.Dispatch<React.SetStateAction<FocusedMarkerInfo>>;
   segments: Segment[];
 };
@@ -23,10 +24,6 @@ type ElevationGraphTooltipContentProps = TooltipProps<number, string> & {
   FocusedMarkerInfo: FocusedMarkerInfo;
   setFocusedMarkerInfo: React.Dispatch<React.SetStateAction<FocusedMarkerInfo>>;
 };
-
-function meters2kilometers(meters: number) {
-  return meters / 1000;
-}
 
 function formatElevation(elevation: number) {
   return `${elevation}m`;
@@ -112,6 +109,7 @@ export default function ElevationGraph(props: ElevationGraphProp) {
             tickFormatter={formatDistance}
           />
           <YAxis
+            width={40}
             type="number"
             dataKey="elevation"
             tickFormatter={formatElevation}
@@ -120,7 +118,7 @@ export default function ElevationGraph(props: ElevationGraphProp) {
             active={false}
             content={
               <ElevationGraphTooltipContent
-                FocusedMarkerInfo={props.FocusedMarkerInfo}
+                FocusedMarkerInfo={props.focusedMarkerInfo}
                 setFocusedMarkerInfo={props.setFocusedMarkerInfo}
               />
             }

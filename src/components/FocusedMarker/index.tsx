@@ -11,7 +11,7 @@ import {
 type FocusedMarkerProps = {
   zoomSize: number;
   route: Route;
-  FocusedMarkerInfo: FocusedMarkerInfo;
+  focusedMarkerInfo: FocusedMarkerInfo;
   setFocusedMarkerInfo: React.Dispatch<React.SetStateAction<FocusedMarkerInfo>>;
   dispatchRoute: React.Dispatch<routeReducerAction | routeAsyncAction>;
 };
@@ -31,10 +31,10 @@ export default function FocusedMarker(props: FocusedMarkerProps) {
 
   async function onDragMarker() {
     const newPoint = markerRef.current?.getLatLng();
-    if (newPoint && props.FocusedMarkerInfo.idx !== null) {
+    if (newPoint && props.focusedMarkerInfo.idx !== null) {
       props.dispatchRoute({
         type: "INSERT",
-        targetIdx: props.FocusedMarkerInfo.idx + 1,
+        targetIdx: props.focusedMarkerInfo.idx + 1,
         coord: {
           latitude: newPoint.lat,
           longitude: newPoint.lng,
@@ -45,17 +45,17 @@ export default function FocusedMarker(props: FocusedMarkerProps) {
 
   return (
     <>
-      {props.FocusedMarkerInfo.isDisplayed && (
+      {props.focusedMarkerInfo.isDisplayed && (
         <Marker
           icon={FocusedMarkerIcon(props.zoomSize)}
           ref={markerRef}
           draggable={true}
-          position={props.FocusedMarkerInfo.position}
+          position={props.focusedMarkerInfo.position}
           eventHandlers={{
-            click: async (event: L.LeafletMouseEvent) => {
+            click: async (event) => {
               L.DomEvent.stopPropagation(event); //clickLayerに対してクリックイベントを送らない
-              props.FocusedMarkerInfo.idx &&
-                onClickMarker(event.latlng, props.FocusedMarkerInfo.idx + 1);
+              props.focusedMarkerInfo.idx &&
+                onClickMarker(event.latlng, props.focusedMarkerInfo.idx + 1);
             },
             dragend: () => {
               onDragMarker();
