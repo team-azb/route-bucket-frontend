@@ -116,6 +116,7 @@ const RouteEditor: FunctionComponent = () => {
           center={[35.68139740310467, 139.7671569841016]}
           zoom={13}
           scrollWheelZoom={true}
+          tap={false}
         >
           <LocateController />
           <TileLayer
