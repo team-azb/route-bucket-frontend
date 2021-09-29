@@ -2,11 +2,11 @@ import { useRef } from "react";
 import { FocusedMarkerIcon } from "./focusedMarkerIcon";
 import { Marker } from "react-leaflet";
 import L, { Marker as MarkerType } from "leaflet";
-import { Route, FocusedMarkerInfo } from "../../types";
+import { Route, FocusedMarkerInfo } from "../../../types";
 import {
   routeAsyncAction,
   routeReducerAction,
-} from "../../reducers/routeReducer";
+} from "../../../reducers/routeReducer";
 
 type FocusedMarkerProps = {
   zoomSize: number;

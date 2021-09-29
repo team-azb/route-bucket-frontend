@@ -1,7 +1,7 @@
 import { Polyline, useMapEvent } from "react-leaflet";
 import { PathOptions } from "leaflet";
 import { nanoid } from "nanoid";
-import { Route, FocusedMarkerInfo, Segment } from "../../types";
+import { Route, FocusedMarkerInfo, Segment } from "../../../types";
 
 const pathOptions: PathOptions = {
   color: "#0000cd",

@@ -8,14 +8,14 @@ import Markers from "../../components/Markers";
 import Polylines from "../../components/Polylines";
 import FocusedMarker from "../../components/FocusedMarker";
 import RouteEditController from "../../components/RouteEditController";
-import { FocusedMarkerInfo } from "../../types";
+import { FocusedMarkerInfo } from "../../../types";
 import {
   routeReducer,
   routeAsyncActionHandlers,
   routeReducerAction,
   routeAsyncAction,
-} from "../../reducers/routeReducer";
-import { useWindowDimensions } from "../../hooks/windowDimensions";
+} from "../../../reducers/routeReducer";
+import { useWindowDimensions } from "../../../hooks/windowDimensions";
 
 //ClickLayerコンポーネントのpropsの型
 type ClickLayerProps = {

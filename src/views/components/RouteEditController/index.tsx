@@ -4,12 +4,12 @@ import L from "leaflet";
 import {
   routeReducerAction,
   routeAsyncAction,
-} from "../../reducers/routeReducer";
+} from "../../../reducers/routeReducer";
 import EditableNameDisplay from "../EditableNameDisplay";
 import ElevationGraph from "../ElevationGraph";
-import { config } from "../../config";
-import { Route, FocusedMarkerInfo } from "../../types";
-import { meters2kilometers } from "../../utils";
+import { config } from "../../../config";
+import { Route, FocusedMarkerInfo } from "../../../types";
+import { meters2kilometers } from "../../../utils";
 
 type RouteEditControllerProps = {
   isInsideMap: boolean;

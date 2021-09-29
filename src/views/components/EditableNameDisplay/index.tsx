@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Route } from "../../types";
+import { Route } from "../../../types";
 import {
   routeReducerAction,
   routeAsyncAction,
-} from "../../reducers/routeReducer";
+} from "../../../reducers/routeReducer";
 
 type EditableNameDisplayProps = {
   route: Route;

@@ -2,12 +2,12 @@ import { useEffect, useRef, createRef, RefObject } from "react";
 import { Marker, useMap } from "react-leaflet";
 import { Marker as MarkerType } from "leaflet";
 import { nanoid } from "nanoid";
-import { Position, Route, FocusedMarkerInfo } from "../../types";
+import { Position, Route, FocusedMarkerInfo } from "../../../types";
 import { MarkerIcon, GoalMarkerIcon, StartMarkerIcon } from "./markerIcon";
 import {
   routeReducerAction,
   routeAsyncAction,
-} from "../../reducers/routeReducer";
+} from "../../../reducers/routeReducer";
 
 type MakersProps = {
   changeCenterFlag: boolean;
