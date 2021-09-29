@@ -116,6 +116,8 @@ const RouteEditor: FunctionComponent = () => {
           center={[35.68139740310467, 139.7671569841016]}
           zoom={13}
           scrollWheelZoom={true}
+          // tapをfalseにしないと、safariでクリックの挙動がおかしくなる
+          // 参考：https://github.com/Leaflet/Leaflet/issues/7255
           tap={false}
         >
           <LocateController />
