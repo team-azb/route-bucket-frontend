@@ -16,6 +16,7 @@ import {
   routeAsyncAction,
 } from "../../reducers/routeReducer";
 import { useWindowDimensions } from "../../hooks/windowDimensions";
+import CircularProgress from "@mui/material/CircularProgress";
 
 //ClickLayerコンポーネントのpropsの型
 type ClickLayerProps = {
@@ -88,6 +89,7 @@ const RouteEditor: FunctionComponent = () => {
     },
     routeAsyncActionHandlers
   );
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [changeCenterFlag, setChangeCenterFlag] = useState<boolean>(false);
   const [zoomSize, setZoomSize] = useState<number>(13);
   const [focusedMarkerInfo, setFocusedMarkerInfo] = useState<FocusedMarkerInfo>(
@@ -104,6 +106,7 @@ const RouteEditor: FunctionComponent = () => {
       type: "GET",
       id: routeId,
       setChangeCenterFlag: setChangeCenterFlag,
+      setIsLoading: setIsLoading,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [routeId]);
@@ -111,6 +114,26 @@ const RouteEditor: FunctionComponent = () => {
   return (
     <>
       <div>
+        {isLoading && (
+          <div
+            // TODO: styleをCSSとかにまとめるかstyled component使う
+            style={{
+              zIndex: 5000,
+              background: "#fff",
+              opacity: 0.5,
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: width,
+              height: isMobile ? height * 0.8 : height,
+              alignItems: "center",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <CircularProgress />
+          </div>
+        )}
         <MapContainer
           style={{ width: width, height: isMobile ? height * 0.8 : height }}
           center={[35.68139740310467, 139.7671569841016]}
