@@ -26,7 +26,7 @@ function RouteEditControllerDisplay(props: RouteEditControllerProps) {
   const history = useHistory();
   const onClickClearHandler = () => {
     const approval = window.confirm(
-      "経路をリセットします。(リセットの取り消しはできません)\nよろしいですか？"
+      "経路をクリアします。(クリアの取り消しはできません)\nよろしいですか？"
     );
     approval &&
       props.dispatchRoute({
