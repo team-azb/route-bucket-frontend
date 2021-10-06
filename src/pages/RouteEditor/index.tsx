@@ -89,11 +89,11 @@ const RouteEditor: FunctionComponent = () => {
       waypoints: [],
       segments: [],
       elevation_gain: 0,
+      isLoaded: false,
     },
     routeAsyncActionHandlers
   );
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [changeCenterFlag, setChangeCenterFlag] = useState<boolean>(false);
   const [zoomSize, setZoomSize] = useState<number>(13);
   const [focusedMarkerInfo, setFocusedMarkerInfo] = useState<FocusedMarkerInfo>(
     focusedMarkerInfoInitValue
@@ -111,7 +111,6 @@ const RouteEditor: FunctionComponent = () => {
     dispatchRoute({
       type: "GET",
       id: routeId,
-      setChangeCenterFlag: setChangeCenterFlag,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [routeId]);
@@ -153,11 +152,9 @@ const RouteEditor: FunctionComponent = () => {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           <Markers
-            changeCenterFlag={changeCenterFlag}
             route={route}
             dispatchRoute={dispatchRoute}
             setIsLoading={setIsLoading}
-            setChangeCenterFlag={setChangeCenterFlag}
             setFocusedMarkerInfo={setFocusedMarkerInfo}
           />
           <Polylines

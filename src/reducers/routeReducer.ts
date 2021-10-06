@@ -19,7 +19,6 @@ export interface routeAsyncAction {
   coord?: Position;
   name?: string;
   targetIdx?: number;
-  setChangeCenterFlag?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface routeReducerAction {
@@ -80,8 +79,11 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
   GET: ({ dispatch }) => {
     return async (action) => {
       const res = action.id && (await getRoute(action.id));
-      res && dispatch({ type: "UPDATE_ROUTE", route: res.data });
-      action.setChangeCenterFlag && action.setChangeCenterFlag(true);
+      res &&
+        dispatch({
+          type: "UPDATE_ROUTE",
+          route: { ...res.data, isLoaded: true },
+        });
     };
   },
   CLEAR: ({ dispatch, getState }) => {
