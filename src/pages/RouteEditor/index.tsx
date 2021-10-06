@@ -27,6 +27,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 //ClickLayerコンポーネントのpropsの型
 type ClickLayerProps = {
   dispatchRoute: React.Dispatch<routeReducerAction | routeAsyncAction>;
+  isLoading: boolean;
   setIsLoading: React.Dispatch<SetStateAction<boolean>>;
 };
 
@@ -68,14 +69,15 @@ function LocateController() {
 
 function ClickLayer(props: ClickLayerProps) {
   useMapEvent("click", async (e: LeafletMouseEvent) => {
-    props.dispatchRoute({
-      type: "APPEND",
-      coord: {
-        latitude: e.latlng.lat,
-        longitude: e.latlng.lng,
-      },
-      setIsLoading: props.setIsLoading,
-    });
+    props.isLoading ||
+      props.dispatchRoute({
+        type: "APPEND",
+        coord: {
+          latitude: e.latlng.lat,
+          longitude: e.latlng.lng,
+        },
+        setIsLoading: props.setIsLoading,
+      });
   });
   return <></>;
 }
@@ -176,6 +178,7 @@ const RouteEditor: FunctionComponent = () => {
           />
           <ClickLayer
             dispatchRoute={dispatchRoute}
+            isLoading={isLoading}
             setIsLoading={setIsLoading}
           />
           {!isMobile && (
