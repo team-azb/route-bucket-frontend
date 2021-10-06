@@ -53,16 +53,17 @@ function markerGenerator(
   const markerIcon = getMarkerIcon(idx, 0, props.route.waypoints.length - 1);
   markerRef = createRef<MarkerType>();
   async function onClickMarker(idx: number) {
+    props.setIsLoading(true);
     props.dispatchRoute({
       type: "DELETE",
       targetIdx: idx,
-      setIsLoading: props.setIsLoading,
     });
   }
 
   async function onDragMarker(idx: number) {
     const newPoint = markerRef.current?.getLatLng();
     if (newPoint) {
+      props.setIsLoading(true);
       props.dispatchRoute({
         type: "MOVE",
         targetIdx: idx,
@@ -70,7 +71,6 @@ function markerGenerator(
           latitude: newPoint.lat,
           longitude: newPoint.lng,
         },
-        setIsLoading: props.setIsLoading,
       });
     }
   }

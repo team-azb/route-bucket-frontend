@@ -20,6 +20,7 @@ type FocusedMarkerProps = {
 export default function FocusedMarker(props: FocusedMarkerProps) {
   const markerRef = useRef<MarkerType>(null);
   function onClickMarker(latlng: L.LatLng, idx: number) {
+    props.setIsLoading(true);
     props.dispatchRoute({
       type: "INSERT",
       targetIdx: idx,
@@ -27,13 +28,13 @@ export default function FocusedMarker(props: FocusedMarkerProps) {
         latitude: latlng.lat,
         longitude: latlng.lng,
       },
-      setIsLoading: props.setIsLoading,
     });
   }
 
   async function onDragMarker() {
     const newPoint = markerRef.current?.getLatLng();
     if (newPoint && props.focusedMarkerInfo.idx !== null) {
+      props.setIsLoading(true);
       props.dispatchRoute({
         type: "INSERT",
         targetIdx: props.focusedMarkerInfo.idx + 1,
@@ -41,7 +42,6 @@ export default function FocusedMarker(props: FocusedMarkerProps) {
           latitude: newPoint.lat,
           longitude: newPoint.lng,
         },
-        setIsLoading: props.setIsLoading,
       });
     }
   }

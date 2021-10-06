@@ -20,7 +20,6 @@ export interface routeAsyncAction {
   name?: string;
   targetIdx?: number;
   setChangeCenterFlag?: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsLoading?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface routeReducerAction {
@@ -49,7 +48,6 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
 > = {
   APPEND: ({ dispatch, getState }) => {
     return async (action) => {
-      action.setIsLoading && action.setIsLoading(true);
       const route = getState();
       const res =
         action.coord &&
@@ -61,12 +59,10 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
           type: "UPDATE_ROUTE_GEOMETRY",
           newGeometry: res.data,
         });
-      action.setIsLoading && action.setIsLoading(false);
     };
   },
   INSERT: ({ dispatch, getState }) => {
     return async (action) => {
-      action.setIsLoading && action.setIsLoading(true);
       const route = getState();
       const res =
         action.targetIdx !== undefined &&
@@ -79,21 +75,17 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
           type: "UPDATE_ROUTE_GEOMETRY",
           newGeometry: res.data,
         });
-      action.setIsLoading && action.setIsLoading(false);
     };
   },
   GET: ({ dispatch }) => {
     return async (action) => {
-      action.setIsLoading && action.setIsLoading(true);
       const res = action.id && (await getRoute(action.id));
       res && dispatch({ type: "UPDATE_ROUTE", route: res.data });
       action.setChangeCenterFlag && action.setChangeCenterFlag(true);
-      action.setIsLoading && action.setIsLoading(false);
     };
   },
   CLEAR: ({ dispatch, getState }) => {
     return async (action) => {
-      action.setIsLoading && action.setIsLoading(true);
       const route = getState();
       const res = await patchClear(route.id);
       res &&
@@ -101,12 +93,10 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
           type: "UPDATE_ROUTE_GEOMETRY",
           newGeometry: res.data,
         });
-      action.setIsLoading && action.setIsLoading(false);
     };
   },
   UNDO: ({ dispatch, getState }) => {
     return async (action) => {
-      action.setIsLoading && action.setIsLoading(true);
       const route = getState();
       const res = await patchUndo(route.id);
       res &&
@@ -114,12 +104,10 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
           type: "UPDATE_ROUTE_GEOMETRY",
           newGeometry: res.data,
         });
-      action.setIsLoading && action.setIsLoading(false);
     };
   },
   REDO: ({ dispatch, getState }) => {
     return async (action) => {
-      action.setIsLoading && action.setIsLoading(true);
       const route = getState();
       const res = await patchRedo(route.id);
       res &&
@@ -127,7 +115,6 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
           type: "UPDATE_ROUTE_GEOMETRY",
           newGeometry: res.data,
         });
-      action.setIsLoading && action.setIsLoading(false);
     };
   },
   RENAME: ({ dispatch, getState }) => {
@@ -140,7 +127,6 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
   },
   MOVE: ({ dispatch, getState }) => {
     return async (action) => {
-      action.setIsLoading && action.setIsLoading(true);
       const route = getState();
       const res =
         action.targetIdx !== undefined &&
@@ -153,12 +139,10 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
           type: "UPDATE_ROUTE_GEOMETRY",
           newGeometry: res.data,
         });
-      action.setIsLoading && action.setIsLoading(false);
     };
   },
   DELETE: ({ dispatch, getState }) => {
     return async (action) => {
-      action.setIsLoading && action.setIsLoading(true);
       const route = getState();
       const res =
         action.targetIdx !== undefined &&
@@ -168,7 +152,6 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
           type: "UPDATE_ROUTE_GEOMETRY",
           newGeometry: res.data,
         });
-      action.setIsLoading && action.setIsLoading(false);
     };
   },
 };

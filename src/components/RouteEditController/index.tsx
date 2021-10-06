@@ -28,27 +28,26 @@ function RouteEditControllerDisplay(props: RouteEditControllerProps) {
     const approval = window.confirm(
       "経路をクリアします。(クリアの取り消しはできません)\nよろしいですか？"
     );
-    approval &&
-      props.dispatchRoute({
-        type: "CLEAR",
-        id: props.routeId,
-        setIsLoading: props.setIsLoading,
-      });
+    approval && props.setIsLoading(true);
+    props.dispatchRoute({
+      type: "CLEAR",
+      id: props.routeId,
+    });
   };
 
   const onClickUndoHandler = () => {
+    props.setIsLoading(true);
     props.dispatchRoute({
       type: "UNDO",
       id: props.routeId,
-      setIsLoading: props.setIsLoading,
     });
   };
 
   const onClickRedoHandler = () => {
+    props.setIsLoading(true);
     props.dispatchRoute({
       type: "REDO",
       id: props.routeId,
-      setIsLoading: props.setIsLoading,
     });
   };
 

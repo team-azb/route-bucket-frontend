@@ -1,10 +1,4 @@
-import {
-  useState,
-  useEffect,
-  FunctionComponent,
-  useMemo,
-  SetStateAction,
-} from "react";
+import { useState, useEffect, FunctionComponent, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { MapContainer, TileLayer, useMapEvent, useMap } from "react-leaflet";
 import L, { LatLng, LeafletMouseEvent } from "leaflet";
@@ -28,7 +22,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 type ClickLayerProps = {
   dispatchRoute: React.Dispatch<routeReducerAction | routeAsyncAction>;
   isLoading: boolean;
-  setIsLoading: React.Dispatch<SetStateAction<boolean>>;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 //URLのパラメータのinerface
@@ -69,15 +63,14 @@ function LocateController() {
 
 function ClickLayer(props: ClickLayerProps) {
   useMapEvent("click", async (e: LeafletMouseEvent) => {
-    props.isLoading ||
-      props.dispatchRoute({
-        type: "APPEND",
-        coord: {
-          latitude: e.latlng.lat,
-          longitude: e.latlng.lng,
-        },
-        setIsLoading: props.setIsLoading,
-      });
+    props.isLoading || props.setIsLoading(true);
+    props.dispatchRoute({
+      type: "APPEND",
+      coord: {
+        latitude: e.latlng.lat,
+        longitude: e.latlng.lng,
+      },
+    });
   });
   return <></>;
 }
@@ -108,15 +101,17 @@ const RouteEditor: FunctionComponent = () => {
 
   useEffect(() => {
     setFocusedMarkerInfo(focusedMarkerInfoInitValue);
+    //routeに変更が見られたらrouteのローディングが完了したものとし、isLoadingをfalseにする
+    setIsLoading(false);
   }, [route]);
 
   //Mapのルート変更時にルートを取得してwaypointsを変更する
   useEffect(() => {
+    setIsLoading(true);
     dispatchRoute({
       type: "GET",
       id: routeId,
       setChangeCenterFlag: setChangeCenterFlag,
-      setIsLoading: setIsLoading,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [routeId]);
@@ -161,9 +156,9 @@ const RouteEditor: FunctionComponent = () => {
             changeCenterFlag={changeCenterFlag}
             route={route}
             dispatchRoute={dispatchRoute}
+            setIsLoading={setIsLoading}
             setChangeCenterFlag={setChangeCenterFlag}
             setFocusedMarkerInfo={setFocusedMarkerInfo}
-            setIsLoading={setIsLoading}
           />
           <Polylines
             setZoomSize={setZoomSize}
@@ -174,9 +169,9 @@ const RouteEditor: FunctionComponent = () => {
             zoomSize={zoomSize}
             route={route}
             dispatchRoute={dispatchRoute}
+            setIsLoading={setIsLoading}
             focusedMarkerInfo={focusedMarkerInfo}
             setFocusedMarkerInfo={setFocusedMarkerInfo}
-            setIsLoading={setIsLoading}
           />
           <ClickLayer
             dispatchRoute={dispatchRoute}
@@ -189,9 +184,9 @@ const RouteEditor: FunctionComponent = () => {
               routeId={routeId}
               route={route}
               dispatchRoute={dispatchRoute}
+              setIsLoading={setIsLoading}
               focusedMarkerInfo={focusedMarkerInfo}
               setFocusedMarkerInfo={setFocusedMarkerInfo}
-              setIsLoading={setIsLoading}
             />
           )}
         </MapContainer>
@@ -201,9 +196,9 @@ const RouteEditor: FunctionComponent = () => {
             routeId={routeId}
             route={route}
             dispatchRoute={dispatchRoute}
+            setIsLoading={setIsLoading}
             focusedMarkerInfo={focusedMarkerInfo}
             setFocusedMarkerInfo={setFocusedMarkerInfo}
-            setIsLoading={setIsLoading}
           />
         )}
       </div>
