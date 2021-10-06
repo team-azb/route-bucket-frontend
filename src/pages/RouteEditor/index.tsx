@@ -128,9 +128,9 @@ const RouteEditor: FunctionComponent = () => {
           <div
             // TODO: styleをCSSとかにまとめるかstyled component使う
             style={{
-              zIndex: 5000,
+              zIndex: 2000,
               background: "#fff",
-              opacity: 0.5,
+              opacity: 0.7,
               position: "absolute",
               top: 0,
               left: 0,
@@ -141,7 +141,9 @@ const RouteEditor: FunctionComponent = () => {
               justifyContent: "center",
             }}
           >
+            {/* FIXME: opacityがCircularProgressなどにも適用されてしまう */}
             <CircularProgress />
+            <p style={{ fontWeight: "bold" }}>ルート計算中</p>
           </div>
         )}
         <MapContainer
