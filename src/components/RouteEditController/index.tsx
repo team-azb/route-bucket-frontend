@@ -24,11 +24,15 @@ type RouteEditControllerProps = {
 function RouteEditControllerDisplay(props: RouteEditControllerProps) {
   const history = useHistory();
   const onClickClearHandler = () => {
-    props.dispatchRoute({
-      type: "CLEAR",
-      id: props.routeId,
-      setIsLoading: props.setIsLoading,
-    });
+    const approval = window.confirm(
+      "経路をリセットします。(リセットの取り消しはできません)\nよろしいですか？"
+    );
+    approval &&
+      props.dispatchRoute({
+        type: "CLEAR",
+        id: props.routeId,
+        setIsLoading: props.setIsLoading,
+      });
   };
 
   const onClickUndoHandler = () => {
