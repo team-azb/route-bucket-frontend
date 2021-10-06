@@ -14,6 +14,7 @@ type FocusedMarkerProps = {
   focusedMarkerInfo: FocusedMarkerInfo;
   setFocusedMarkerInfo: React.Dispatch<React.SetStateAction<FocusedMarkerInfo>>;
   dispatchRoute: React.Dispatch<routeReducerAction | routeAsyncAction>;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function FocusedMarker(props: FocusedMarkerProps) {
@@ -26,6 +27,7 @@ export default function FocusedMarker(props: FocusedMarkerProps) {
         latitude: latlng.lat,
         longitude: latlng.lng,
       },
+      setIsLoading: props.setIsLoading,
     });
   }
 
@@ -39,6 +41,7 @@ export default function FocusedMarker(props: FocusedMarkerProps) {
           latitude: newPoint.lat,
           longitude: newPoint.lng,
         },
+        setIsLoading: props.setIsLoading,
       });
     }
   }

@@ -15,6 +15,7 @@ type MakersProps = {
   dispatchRoute: React.Dispatch<routeReducerAction | routeAsyncAction>;
   setFocusedMarkerInfo: React.Dispatch<React.SetStateAction<FocusedMarkerInfo>>;
   setChangeCenterFlag: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 /**
@@ -52,7 +53,11 @@ function markerGenerator(
   const markerIcon = getMarkerIcon(idx, 0, props.route.waypoints.length - 1);
   markerRef = createRef<MarkerType>();
   async function onClickMarker(idx: number) {
-    props.dispatchRoute({ type: "DELETE", targetIdx: idx });
+    props.dispatchRoute({
+      type: "DELETE",
+      targetIdx: idx,
+      setIsLoading: props.setIsLoading,
+    });
   }
 
   async function onDragMarker(idx: number) {
@@ -65,6 +70,7 @@ function markerGenerator(
           latitude: newPoint.lat,
           longitude: newPoint.lng,
         },
+        setIsLoading: props.setIsLoading,
       });
     }
   }

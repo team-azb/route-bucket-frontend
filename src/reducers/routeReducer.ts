@@ -49,6 +49,7 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
 > = {
   APPEND: ({ dispatch, getState }) => {
     return async (action) => {
+      action.setIsLoading && action.setIsLoading(true);
       const route = getState();
       const res =
         action.coord &&
@@ -60,10 +61,12 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
           type: "UPDATE_ROUTE_GEOMETRY",
           newGeometry: res.data,
         });
+      action.setIsLoading && action.setIsLoading(false);
     };
   },
   INSERT: ({ dispatch, getState }) => {
     return async (action) => {
+      action.setIsLoading && action.setIsLoading(true);
       const route = getState();
       const res =
         action.targetIdx !== undefined &&
@@ -76,6 +79,7 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
           type: "UPDATE_ROUTE_GEOMETRY",
           newGeometry: res.data,
         });
+      action.setIsLoading && action.setIsLoading(false);
     };
   },
   GET: ({ dispatch }) => {
@@ -89,6 +93,7 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
   },
   CLEAR: ({ dispatch, getState }) => {
     return async (action) => {
+      action.setIsLoading && action.setIsLoading(true);
       const route = getState();
       const res = await patchClear(route.id);
       res &&
@@ -96,10 +101,12 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
           type: "UPDATE_ROUTE_GEOMETRY",
           newGeometry: res.data,
         });
+      action.setIsLoading && action.setIsLoading(false);
     };
   },
   UNDO: ({ dispatch, getState }) => {
     return async (action) => {
+      action.setIsLoading && action.setIsLoading(true);
       const route = getState();
       const res = await patchUndo(route.id);
       res &&
@@ -107,10 +114,12 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
           type: "UPDATE_ROUTE_GEOMETRY",
           newGeometry: res.data,
         });
+      action.setIsLoading && action.setIsLoading(false);
     };
   },
   REDO: ({ dispatch, getState }) => {
     return async (action) => {
+      action.setIsLoading && action.setIsLoading(true);
       const route = getState();
       const res = await patchRedo(route.id);
       res &&
@@ -118,6 +127,7 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
           type: "UPDATE_ROUTE_GEOMETRY",
           newGeometry: res.data,
         });
+      action.setIsLoading && action.setIsLoading(false);
     };
   },
   RENAME: ({ dispatch, getState }) => {
@@ -130,6 +140,7 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
   },
   MOVE: ({ dispatch, getState }) => {
     return async (action) => {
+      action.setIsLoading && action.setIsLoading(true);
       const route = getState();
       const res =
         action.targetIdx !== undefined &&
@@ -142,10 +153,12 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
           type: "UPDATE_ROUTE_GEOMETRY",
           newGeometry: res.data,
         });
+      action.setIsLoading && action.setIsLoading(false);
     };
   },
   DELETE: ({ dispatch, getState }) => {
     return async (action) => {
+      action.setIsLoading && action.setIsLoading(true);
       const route = getState();
       const res =
         action.targetIdx !== undefined &&
@@ -155,6 +168,7 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
           type: "UPDATE_ROUTE_GEOMETRY",
           newGeometry: res.data,
         });
+      action.setIsLoading && action.setIsLoading(false);
     };
   },
 };

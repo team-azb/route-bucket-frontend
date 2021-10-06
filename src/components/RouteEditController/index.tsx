@@ -18,20 +18,33 @@ type RouteEditControllerProps = {
   dispatchRoute: React.Dispatch<routeReducerAction | routeAsyncAction>;
   focusedMarkerInfo: FocusedMarkerInfo;
   setFocusedMarkerInfo: React.Dispatch<React.SetStateAction<FocusedMarkerInfo>>;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 function RouteEditControllerDisplay(props: RouteEditControllerProps) {
   const history = useHistory();
   const onClickClearHandler = () => {
-    props.dispatchRoute({ type: "CLEAR", id: props.routeId });
+    props.dispatchRoute({
+      type: "CLEAR",
+      id: props.routeId,
+      setIsLoading: props.setIsLoading,
+    });
   };
 
   const onClickUndoHandler = () => {
-    props.dispatchRoute({ type: "UNDO", id: props.routeId });
+    props.dispatchRoute({
+      type: "UNDO",
+      id: props.routeId,
+      setIsLoading: props.setIsLoading,
+    });
   };
 
   const onClickRedoHandler = () => {
-    props.dispatchRoute({ type: "REDO", id: props.routeId });
+    props.dispatchRoute({
+      type: "REDO",
+      id: props.routeId,
+      setIsLoading: props.setIsLoading,
+    });
   };
 
   const onClickExportHandler = () => {

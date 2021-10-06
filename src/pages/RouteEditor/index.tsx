@@ -1,4 +1,10 @@
-import { useState, useEffect, FunctionComponent, useMemo } from "react";
+import {
+  useState,
+  useEffect,
+  FunctionComponent,
+  useMemo,
+  SetStateAction,
+} from "react";
 import { useParams } from "react-router-dom";
 import { MapContainer, TileLayer, useMapEvent, useMap } from "react-leaflet";
 import L, { LatLng, LeafletMouseEvent } from "leaflet";
@@ -21,6 +27,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 //ClickLayerコンポーネントのpropsの型
 type ClickLayerProps = {
   dispatchRoute: React.Dispatch<routeReducerAction | routeAsyncAction>;
+  setIsLoading: React.Dispatch<SetStateAction<boolean>>;
 };
 
 //URLのパラメータのinerface
@@ -67,6 +74,7 @@ function ClickLayer(props: ClickLayerProps) {
         latitude: e.latlng.lat,
         longitude: e.latlng.lng,
       },
+      setIsLoading: props.setIsLoading,
     });
   });
   return <></>;
@@ -151,6 +159,7 @@ const RouteEditor: FunctionComponent = () => {
             dispatchRoute={dispatchRoute}
             setChangeCenterFlag={setChangeCenterFlag}
             setFocusedMarkerInfo={setFocusedMarkerInfo}
+            setIsLoading={setIsLoading}
           />
           <Polylines
             setZoomSize={setZoomSize}
@@ -163,8 +172,12 @@ const RouteEditor: FunctionComponent = () => {
             dispatchRoute={dispatchRoute}
             focusedMarkerInfo={focusedMarkerInfo}
             setFocusedMarkerInfo={setFocusedMarkerInfo}
+            setIsLoading={setIsLoading}
           />
-          <ClickLayer dispatchRoute={dispatchRoute} />
+          <ClickLayer
+            dispatchRoute={dispatchRoute}
+            setIsLoading={setIsLoading}
+          />
           {!isMobile && (
             <RouteEditController
               isInsideMap={true}
@@ -173,6 +186,7 @@ const RouteEditor: FunctionComponent = () => {
               dispatchRoute={dispatchRoute}
               focusedMarkerInfo={focusedMarkerInfo}
               setFocusedMarkerInfo={setFocusedMarkerInfo}
+              setIsLoading={setIsLoading}
             />
           )}
         </MapContainer>
@@ -184,6 +198,7 @@ const RouteEditor: FunctionComponent = () => {
             dispatchRoute={dispatchRoute}
             focusedMarkerInfo={focusedMarkerInfo}
             setFocusedMarkerInfo={setFocusedMarkerInfo}
+            setIsLoading={setIsLoading}
           />
         )}
       </div>
