@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from "@mui/material";
 import { Route } from "../../types";
 import {
   routeReducerAction,
@@ -50,21 +51,21 @@ function NameInput(props: NameInputProps) {
         />
       </p>
 
-      <input
+      <Button
         onClick={() => {
           onSubmitName();
         }}
-        type="button"
-        value="更新"
-      />
+      >
+        更新
+      </Button>
 
-      <input
+      <Button
         onClick={() => {
           onQuitEditing();
         }}
-        type="button"
-        value="キャンセル"
-      />
+      >
+        キャンセル
+      </Button>
     </>
   );
 }
@@ -73,16 +74,16 @@ function NameDisplay(props: NameDisplayProps) {
   return (
     <>
       <p style={{ display: "inline" }}>ルート名: {props.route.name}</p>
-      <input
+      <Button
         onClick={() => {
           props.setIsEditable((prevState) => {
             return !prevState;
           });
         }}
-        type="button"
-        value="編集"
         style={{ display: "inline" }}
-      />
+      >
+        編集
+      </Button>
     </>
   );
 }

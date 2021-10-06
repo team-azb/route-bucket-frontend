@@ -10,6 +10,7 @@ import ElevationGraph from "../ElevationGraph";
 import { config } from "../../config";
 import { Route, FocusedMarkerInfo } from "../../types";
 import { meters2kilometers } from "../../utils";
+import { Button } from "@mui/material";
 
 type RouteEditControllerProps = {
   isInsideMap: boolean;
@@ -61,7 +62,9 @@ function RouteEditControllerDisplay(props: RouteEditControllerProps) {
   return (
     <div style={{ background: "#fff", opacity: 0.85 }}>
       <div style={{ padding: props.isInsideMap ? 20 : 5 }}>
-        <button onClick={onClickGoIndexPageHandler}>{"< ルート一覧へ"}</button>
+        <Button variant="contained" onClick={onClickGoIndexPageHandler}>
+          {"< ルート一覧へ"}
+        </Button>
         <p>ルートid: {props.routeId}</p>
         <EditableNameDisplay
           route={props.route}
@@ -71,10 +74,18 @@ function RouteEditControllerDisplay(props: RouteEditControllerProps) {
           総距離: {meters2kilometers(props.route.total_distance).toFixed(2)}km
         </p>
         <p>獲得標高: {props.route.elevation_gain}m</p>
-        <button onClick={onClickUndoHandler}>undo</button>
-        <button onClick={onClickRedoHandler}>redo</button>
-        <button onClick={onClickClearHandler}>clear</button>
-        <button onClick={onClickExportHandler}>export as gpx</button>
+        <Button variant="outlined" onClick={onClickUndoHandler}>
+          undo
+        </Button>
+        <Button variant="outlined" onClick={onClickRedoHandler}>
+          redo
+        </Button>
+        <Button variant="outlined" onClick={onClickClearHandler}>
+          clear
+        </Button>
+        <Button variant="outlined" onClick={onClickExportHandler}>
+          export as gpx
+        </Button>
       </div>
       <ElevationGraph
         segments={props.route.segments}
