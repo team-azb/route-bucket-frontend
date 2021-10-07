@@ -16,10 +16,13 @@ import {
   routeAsyncAction,
 } from "../../reducers/routeReducer";
 import { useWindowDimensions } from "../../hooks/windowDimensions";
+import CircularProgress from "@mui/material/CircularProgress";
 
 //ClickLayerコンポーネントのpropsの型
 type ClickLayerProps = {
   dispatchRoute: React.Dispatch<routeReducerAction | routeAsyncAction>;
+  isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 //URLのパラメータのinerface
@@ -60,6 +63,7 @@ function LocateController() {
 
 function ClickLayer(props: ClickLayerProps) {
   useMapEvent("click", async (e: LeafletMouseEvent) => {
+    props.isLoading || props.setIsLoading(true);
     props.dispatchRoute({
       type: "APPEND",
       coord: {
@@ -85,10 +89,11 @@ const RouteEditor: FunctionComponent = () => {
       waypoints: [],
       segments: [],
       elevation_gain: 0,
+      isLoaded: false,
     },
     routeAsyncActionHandlers
   );
-  const [changeCenterFlag, setChangeCenterFlag] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [zoomSize, setZoomSize] = useState<number>(13);
   const [focusedMarkerInfo, setFocusedMarkerInfo] = useState<FocusedMarkerInfo>(
     focusedMarkerInfoInitValue
@@ -96,14 +101,16 @@ const RouteEditor: FunctionComponent = () => {
 
   useEffect(() => {
     setFocusedMarkerInfo(focusedMarkerInfoInitValue);
+    //routeに変更が見られたらrouteのローディングが完了したものとし、isLoadingをfalseにする
+    setIsLoading(false);
   }, [route]);
 
   //Mapのルート変更時にルートを取得してwaypointsを変更する
   useEffect(() => {
+    setIsLoading(true);
     dispatchRoute({
       type: "GET",
       id: routeId,
-      setChangeCenterFlag: setChangeCenterFlag,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [routeId]);
@@ -111,6 +118,28 @@ const RouteEditor: FunctionComponent = () => {
   return (
     <>
       <div>
+        {isLoading && (
+          <div
+            // TODO: styleをCSSとかにまとめるかstyled component使う
+            style={{
+              zIndex: 2000,
+              background: "#fff",
+              opacity: 0.7,
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: width,
+              height: isMobile ? height * 0.8 : height,
+              alignItems: "center",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            {/* FIXME: opacityがCircularProgressなどにも適用されてしまう */}
+            <CircularProgress />
+            <p style={{ fontWeight: "bold" }}>ルート計算中</p>
+          </div>
+        )}
         <MapContainer
           style={{ width: width, height: isMobile ? height * 0.8 : height }}
           center={[35.68139740310467, 139.7671569841016]}
@@ -126,10 +155,9 @@ const RouteEditor: FunctionComponent = () => {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           <Markers
-            changeCenterFlag={changeCenterFlag}
             route={route}
             dispatchRoute={dispatchRoute}
-            setChangeCenterFlag={setChangeCenterFlag}
+            setIsLoading={setIsLoading}
             setFocusedMarkerInfo={setFocusedMarkerInfo}
           />
           <Polylines
@@ -141,16 +169,22 @@ const RouteEditor: FunctionComponent = () => {
             zoomSize={zoomSize}
             route={route}
             dispatchRoute={dispatchRoute}
+            setIsLoading={setIsLoading}
             focusedMarkerInfo={focusedMarkerInfo}
             setFocusedMarkerInfo={setFocusedMarkerInfo}
           />
-          <ClickLayer dispatchRoute={dispatchRoute} />
+          <ClickLayer
+            dispatchRoute={dispatchRoute}
+            isLoading={isLoading}
+            setIsLoading={setIsLoading}
+          />
           {!isMobile && (
             <RouteEditController
               isInsideMap={true}
               routeId={routeId}
               route={route}
               dispatchRoute={dispatchRoute}
+              setIsLoading={setIsLoading}
               focusedMarkerInfo={focusedMarkerInfo}
               setFocusedMarkerInfo={setFocusedMarkerInfo}
             />
@@ -162,6 +196,7 @@ const RouteEditor: FunctionComponent = () => {
             routeId={routeId}
             route={route}
             dispatchRoute={dispatchRoute}
+            setIsLoading={setIsLoading}
             focusedMarkerInfo={focusedMarkerInfo}
             setFocusedMarkerInfo={setFocusedMarkerInfo}
           />

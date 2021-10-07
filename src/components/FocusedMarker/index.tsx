@@ -14,11 +14,13 @@ type FocusedMarkerProps = {
   focusedMarkerInfo: FocusedMarkerInfo;
   setFocusedMarkerInfo: React.Dispatch<React.SetStateAction<FocusedMarkerInfo>>;
   dispatchRoute: React.Dispatch<routeReducerAction | routeAsyncAction>;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function FocusedMarker(props: FocusedMarkerProps) {
   const markerRef = useRef<MarkerType>(null);
   function onClickMarker(latlng: L.LatLng, idx: number) {
+    props.setIsLoading(true);
     props.dispatchRoute({
       type: "INSERT",
       targetIdx: idx,
@@ -32,6 +34,7 @@ export default function FocusedMarker(props: FocusedMarkerProps) {
   async function onDragMarker() {
     const newPoint = markerRef.current?.getLatLng();
     if (newPoint && props.focusedMarkerInfo.idx !== null) {
+      props.setIsLoading(true);
       props.dispatchRoute({
         type: "INSERT",
         targetIdx: props.focusedMarkerInfo.idx + 1,

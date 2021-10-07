@@ -8,6 +8,7 @@ export type Position = {
 export type RouteInfo = {
   id: string;
   name: string;
+  isLoaded: boolean;
 };
 
 export type RouteGeometry = {

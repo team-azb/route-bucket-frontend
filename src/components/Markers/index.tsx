@@ -1,4 +1,4 @@
-import { useEffect, useRef, createRef, RefObject } from "react";
+import { useState, useEffect, useRef, createRef, RefObject } from "react";
 import { Marker, useMap } from "react-leaflet";
 import { Marker as MarkerType } from "leaflet";
 import { nanoid } from "nanoid";
@@ -10,11 +10,10 @@ import {
 } from "../../reducers/routeReducer";
 
 type MakersProps = {
-  changeCenterFlag: boolean;
   route: Route;
   dispatchRoute: React.Dispatch<routeReducerAction | routeAsyncAction>;
   setFocusedMarkerInfo: React.Dispatch<React.SetStateAction<FocusedMarkerInfo>>;
-  setChangeCenterFlag: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 /**
@@ -52,12 +51,17 @@ function markerGenerator(
   const markerIcon = getMarkerIcon(idx, 0, props.route.waypoints.length - 1);
   markerRef = createRef<MarkerType>();
   async function onClickMarker(idx: number) {
-    props.dispatchRoute({ type: "DELETE", targetIdx: idx });
+    props.setIsLoading(true);
+    props.dispatchRoute({
+      type: "DELETE",
+      targetIdx: idx,
+    });
   }
 
   async function onDragMarker(idx: number) {
     const newPoint = markerRef.current?.getLatLng();
     if (newPoint) {
+      props.setIsLoading(true);
       props.dispatchRoute({
         type: "MOVE",
         targetIdx: idx,
@@ -92,22 +96,24 @@ function markerGenerator(
 }
 
 export default function Markers(props: MakersProps) {
+  const [changeCenterFlag, setChangeCenterFlag] = useState<boolean>(true);
   const map = useMap();
   const markerRefs = useRef<Array<RefObject<MarkerType>>>(
     Array(props.route.waypoints.length)
   );
+
   useEffect(() => {
-    if (props.changeCenterFlag) {
+    if (changeCenterFlag && props.route.isLoaded) {
       if (props.route.waypoints.length) {
         map.setView([
           props.route.waypoints[0].latitude,
           props.route.waypoints[0].longitude,
         ]);
       }
-      props.setChangeCenterFlag(false);
+      setChangeCenterFlag(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.changeCenterFlag]);
+  }, [props.route]);
   const markers = props.route.waypoints.map((pos: Position, idx: number) => {
     return markerGenerator(pos, idx, markerRefs.current[idx], props);
   });
