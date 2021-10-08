@@ -8,6 +8,7 @@ import Markers from "../../components/Markers";
 import Polylines from "../../components/Polylines";
 import FocusedMarker from "../../components/FocusedMarker";
 import RouteEditController from "../../components/RouteEditController";
+import Minimap from "../../components/Minimap";
 import { FocusedMarkerInfo } from "../../types";
 import {
   routeReducer,
@@ -189,6 +190,7 @@ const RouteEditor: FunctionComponent = () => {
               setFocusedMarkerInfo={setFocusedMarkerInfo}
             />
           )}
+          <Minimap zoom={8} />
         </MapContainer>
         {isMobile && (
           <RouteEditController
