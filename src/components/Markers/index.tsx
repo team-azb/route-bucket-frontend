@@ -104,10 +104,16 @@ export default function Markers(props: MakersProps) {
 
   useEffect(() => {
     if (changeCenterFlag && props.route.isLoaded) {
-      if (props.route.waypoints.length) {
-        map.setView([
-          props.route.waypoints[0].latitude,
-          props.route.waypoints[0].longitude,
+      if (props.route.bounding_box) {
+        map.fitBounds([
+          [
+            props.route.bounding_box.min_coord.latitude,
+            props.route.bounding_box.min_coord.longitude,
+          ],
+          [
+            props.route.bounding_box.max_coord.latitude,
+            props.route.bounding_box.max_coord.longitude,
+          ],
         ]);
       }
       setChangeCenterFlag(false);
