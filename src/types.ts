@@ -1,14 +1,18 @@
-export type Position = {
-  latitude: number;
-  longitude: number;
+export type Position = Coorinate & {
   elevation?: number;
   distance_from_start?: number;
+};
+
+export type Coorinate = {
+  latitude: number;
+  longitude: number;
 };
 
 export type RouteInfo = {
   id: string;
   name: string;
   isLoaded: boolean;
+  bounding_box?: BoundingBox;
 };
 
 export type RouteGeometry = {
@@ -22,6 +26,11 @@ export type Route = RouteInfo & RouteGeometry;
 
 export type Segment = {
   points: Position[];
+};
+
+export type BoundingBox = {
+  max_coord: Coorinate;
+  min_coord: Coorinate;
 };
 
 export type FocusedMarkerInfo = {
