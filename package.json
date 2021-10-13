@@ -35,7 +35,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "format": "prettier --write 'src/**/*.tsx' 'src/**/*.ts' 'src/**/*.jsx'"
+    "format": "prettier --write 'src/**/*.tsx' 'src/**/*.ts' 'src/**/*.jsx'",
+    "mock": "npx prism mock swagger/openapi.yml -p 8080"
   },
   "proxy": "http://localhost:8080",
   "eslintConfig": {
@@ -61,6 +62,7 @@
     "@types/lodash": "^4.14.171",
     "@types/react-router-dom": "^5.1.7",
     "@types/recharts": "^2.0.0",
-    "prettier": "^2.3.2"
+    "prettier": "^2.3.2",
+    "prism": "^4.1.2"
   }
 }
