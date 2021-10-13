@@ -1,4 +1,4 @@
-export type Position = Coorinate & {
+export type RoutePoint = Coorinate & {
   elevation?: number;
   distance_from_start?: number;
 };
@@ -16,7 +16,7 @@ export type RouteInfo = {
 };
 
 export type RouteGeometry = {
-  waypoints: Position[];
+  waypoints: RoutePoint[];
   segments: Segment[];
   elevation_gain?: number;
   total_distance?: number;
@@ -25,7 +25,7 @@ export type RouteGeometry = {
 export type Route = RouteInfo & RouteGeometry;
 
 export type Segment = {
-  points: Position[];
+  points: RoutePoint[];
 };
 
 export type BoundingBox = {
