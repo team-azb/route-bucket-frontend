@@ -1,6 +1,6 @@
 import { Reducer } from "react";
 import { AsyncActionHandlers } from "use-reducer-async";
-import { Route, RouteGeometry, Position } from "../types";
+import { Route, RouteGeometry, RoutePoint } from "../types";
 import {
   getRoute,
   patchAdd,
@@ -16,7 +16,7 @@ import {
 export interface routeAsyncAction {
   type: string;
   id?: string;
-  coord?: Position;
+  coord?: RoutePoint;
   name?: string;
   targetIdx?: number;
 }

@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, createRef, RefObject } from "react";
 import { Marker, useMap } from "react-leaflet";
 import { Marker as MarkerType } from "leaflet";
 import { nanoid } from "nanoid";
-import { Position, Route, FocusedMarkerInfo } from "../../types";
+import { RoutePoint, Route, FocusedMarkerInfo } from "../../types";
 import { MarkerIcon, GoalMarkerIcon, StartMarkerIcon } from "./markerIcon";
 import {
   routeReducerAction,
@@ -43,7 +43,7 @@ function getMarkerIcon(idx: number, firstIdx: number, lastIdx: number) {
  * @returns マーカーのJSX Element
  */
 function markerGenerator(
-  pos: Position,
+  pos: RoutePoint,
   idx: number,
   markerRef: RefObject<MarkerType<any>>,
   props: MakersProps
@@ -104,17 +104,23 @@ export default function Markers(props: MakersProps) {
 
   useEffect(() => {
     if (changeCenterFlag && props.route.isLoaded) {
-      if (props.route.waypoints.length) {
-        map.setView([
-          props.route.waypoints[0].latitude,
-          props.route.waypoints[0].longitude,
+      if (props.route.bounding_box) {
+        map.fitBounds([
+          [
+            props.route.bounding_box.min_coord.latitude,
+            props.route.bounding_box.min_coord.longitude,
+          ],
+          [
+            props.route.bounding_box.max_coord.latitude,
+            props.route.bounding_box.max_coord.longitude,
+          ],
         ]);
       }
       setChangeCenterFlag(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.route]);
-  const markers = props.route.waypoints.map((pos: Position, idx: number) => {
+  const markers = props.route.waypoints.map((pos: RoutePoint, idx: number) => {
     return markerGenerator(pos, idx, markerRefs.current[idx], props);
   });
   return <>{markers}</>;
