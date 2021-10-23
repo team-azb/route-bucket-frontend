@@ -88,6 +88,7 @@ const RouteEditor: FunctionComponent = () => {
       name: "",
       waypoints: [],
       segments: [],
+      total_distance: 0,
       elevation_gain: 0,
       isLoaded: false,
     },
