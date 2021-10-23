@@ -38,3 +38,5 @@ export type FocusedMarkerInfo = {
   idx: number;
   isDisplayed: boolean;
 };
+
+export type DrawingMode = "follow_road" | "freehand";

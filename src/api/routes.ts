@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Route, RouteGeometry, Coorinate } from "../types";
+import { Route, RouteGeometry, Coorinate, DrawingMode } from "../types";
 
 //axiosからのレスポンスのデータのインターフェース
 interface PatchResponse extends RouteGeometry {}
@@ -12,6 +12,7 @@ interface RouteResponse extends Route {}
 
 interface RouteRequestBody {
   coord: Coorinate;
+  mode: DrawingMode;
 }
 
 interface RenameRequestBody {
