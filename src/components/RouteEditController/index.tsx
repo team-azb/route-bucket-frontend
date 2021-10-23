@@ -10,7 +10,14 @@ import ElevationGraph from "../ElevationGraph";
 import { config } from "../../config";
 import { Route, FocusedMarkerInfo, DrawingMode } from "../../types";
 import { meters2kilometers } from "../../utils";
-import { Button, RadioGroup, Radio, FormControlLabel } from "@mui/material";
+import {
+  Button,
+  RadioGroup,
+  Radio,
+  FormControlLabel,
+  FormLabel,
+  Typography,
+} from "@mui/material";
 
 type RouteEditControllerProps = {
   isInsideMap: boolean;
@@ -82,21 +89,23 @@ function RouteEditControllerDisplay(props: RouteEditControllerProps) {
         <Button variant="contained" onClick={onClickGoIndexPageHandler}>
           {"< ルート一覧へ"}
         </Button>
-        <p>ルートid: {props.routeId}</p>
+        <hr />
+        <Typography>ルートid: {props.routeId}</Typography>
         <EditableNameDisplay
           route={props.route}
           dispatchRoute={props.dispatchRoute}
         />
-        <p>
+        <Typography>
           総距離: {meters2kilometers(props.route.total_distance).toFixed(2)}km
-        </p>
-        <p>獲得標高: {props.route.elevation_gain}m</p>
+        </Typography>
+        <Typography>獲得標高: {props.route.elevation_gain}m</Typography>
+        <hr />
+        <FormLabel component="legend">ルート作成モード</FormLabel>
         <RadioGroup
           row
           onChange={onChangeDrawingModeRadioHandler}
           value={props.drawingMode}
         >
-          <p>ルート作成モード</p>
           <FormControlLabel
             value="follow_road"
             control={<Radio />}
