@@ -8,7 +8,7 @@ import Markers from "../../components/Markers";
 import Polylines from "../../components/Polylines";
 import FocusedMarker from "../../components/FocusedMarker";
 import RouteEditController from "../../components/RouteEditController";
-import { FocusedMarkerInfo } from "../../types";
+import { FocusedMarkerInfo, DrawingMode } from "../../types";
 import {
   routeReducer,
   routeAsyncActionHandlers,
@@ -23,6 +23,7 @@ type ClickLayerProps = {
   dispatchRoute: React.Dispatch<routeReducerAction | routeAsyncAction>;
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  drawingMode: DrawingMode;
 };
 
 //URLのパラメータのinerface
@@ -70,6 +71,7 @@ function ClickLayer(props: ClickLayerProps) {
         latitude: e.latlng.lat,
         longitude: e.latlng.lng,
       },
+      mode: props.drawingMode,
     });
   });
   return <></>;
@@ -99,6 +101,7 @@ const RouteEditor: FunctionComponent = () => {
   const [focusedMarkerInfo, setFocusedMarkerInfo] = useState<FocusedMarkerInfo>(
     focusedMarkerInfoInitValue
   );
+  const [drawingMode, setDrawingMode] = useState<DrawingMode>("follow_road");
 
   useEffect(() => {
     setFocusedMarkerInfo(focusedMarkerInfoInitValue);
@@ -160,6 +163,7 @@ const RouteEditor: FunctionComponent = () => {
             dispatchRoute={dispatchRoute}
             setIsLoading={setIsLoading}
             setFocusedMarkerInfo={setFocusedMarkerInfo}
+            drawingMode={drawingMode}
           />
           <Polylines
             setZoomSize={setZoomSize}
@@ -173,11 +177,13 @@ const RouteEditor: FunctionComponent = () => {
             setIsLoading={setIsLoading}
             focusedMarkerInfo={focusedMarkerInfo}
             setFocusedMarkerInfo={setFocusedMarkerInfo}
+            drawingMode={drawingMode}
           />
           <ClickLayer
             dispatchRoute={dispatchRoute}
             isLoading={isLoading}
             setIsLoading={setIsLoading}
+            drawingMode={drawingMode}
           />
           {!isMobile && (
             <RouteEditController
@@ -188,6 +194,8 @@ const RouteEditor: FunctionComponent = () => {
               setIsLoading={setIsLoading}
               focusedMarkerInfo={focusedMarkerInfo}
               setFocusedMarkerInfo={setFocusedMarkerInfo}
+              drawingMode={drawingMode}
+              setDrawingMode={setDrawingMode}
             />
           )}
         </MapContainer>
@@ -200,6 +208,8 @@ const RouteEditor: FunctionComponent = () => {
             setIsLoading={setIsLoading}
             focusedMarkerInfo={focusedMarkerInfo}
             setFocusedMarkerInfo={setFocusedMarkerInfo}
+            drawingMode={drawingMode}
+            setDrawingMode={setDrawingMode}
           />
         )}
       </div>

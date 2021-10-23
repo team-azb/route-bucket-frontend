@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, createRef, RefObject } from "react";
 import { Marker, useMap } from "react-leaflet";
 import { Marker as MarkerType } from "leaflet";
 import { nanoid } from "nanoid";
-import { RoutePoint, Route, FocusedMarkerInfo } from "../../types";
+import { RoutePoint, Route, FocusedMarkerInfo, DrawingMode } from "../../types";
 import { MarkerIcon, GoalMarkerIcon, StartMarkerIcon } from "./markerIcon";
 import {
   routeReducerAction,
@@ -14,6 +14,7 @@ type MakersProps = {
   dispatchRoute: React.Dispatch<routeReducerAction | routeAsyncAction>;
   setFocusedMarkerInfo: React.Dispatch<React.SetStateAction<FocusedMarkerInfo>>;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  drawingMode: DrawingMode;
 };
 
 /**
@@ -69,6 +70,7 @@ function markerGenerator(
           latitude: newPoint.lat,
           longitude: newPoint.lng,
         },
+        mode: props.drawingMode,
       });
     }
   }
