@@ -21,7 +21,7 @@ interface RouteRemoveRequest {
   mode: DrawingMode;
 }
 
-interface RenameRequestBody {
+interface RenameRequest {
   name: string;
 }
 
@@ -140,7 +140,7 @@ export async function patchMove(
   return res;
 }
 
-export async function patchRename(routeId: string, payload: RenameRequestBody) {
+export async function patchRename(routeId: string, payload: RenameRequest) {
   try {
     let res = await axios.patch<RouteResponse>(
       `/routes/${routeId}/rename/`,
