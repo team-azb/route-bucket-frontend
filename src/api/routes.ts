@@ -15,6 +15,8 @@ interface RouteAddRequest {
   mode: DrawingMode;
 }
 
+interface RouteMoveRequest extends RouteAddRequest {}
+
 interface RouteRemoveRequest {
   mode: DrawingMode;
 }
@@ -121,7 +123,7 @@ export async function patchRedo(routeId: string) {
 export async function patchMove(
   routeId: string,
   idx: number,
-  payload: RouteAddRequest
+  payload: RouteMoveRequest
 ) {
   let res;
   try {
