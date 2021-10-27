@@ -71,17 +71,7 @@ function RouteEditControllerDisplay(props: RouteEditControllerProps) {
   const onChangeDrawingModeRadioHandler = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    switch (event.target.value) {
-      case "follow_road":
-        props.setDrawingMode(DrawingMode.FOLLOW_ROAD);
-        break;
-      case "freehand":
-        props.setDrawingMode(DrawingMode.FREEHAND);
-        break;
-      default:
-        props.setDrawingMode(DrawingMode.FOLLOW_ROAD);
-        break;
-    }
+    props.setDrawingMode(event.target.value as DrawingMode);
   };
   return (
     <div style={{ background: "#fff", opacity: 0.85 }}>
@@ -107,12 +97,12 @@ function RouteEditControllerDisplay(props: RouteEditControllerProps) {
           value={props.drawingMode}
         >
           <FormControlLabel
-            value="follow_road"
+            value={DrawingMode.FOLLOW_ROAD}
             control={<Radio />}
             label="自動補間"
           />
           <FormControlLabel
-            value="freehand"
+            value={DrawingMode.FREEHAND}
             control={<Radio />}
             label="フリーハンド"
           />
