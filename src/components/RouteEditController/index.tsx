@@ -73,13 +73,13 @@ function RouteEditControllerDisplay(props: RouteEditControllerProps) {
   ) => {
     switch (event.target.value) {
       case "follow_road":
-        props.setDrawingMode("follow_road");
+        props.setDrawingMode(DrawingMode.FOLLOW_ROAD);
         break;
       case "freehand":
-        props.setDrawingMode("freehand");
+        props.setDrawingMode(DrawingMode.FREEHAND);
         break;
       default:
-        props.setDrawingMode("follow_road");
+        props.setDrawingMode(DrawingMode.FOLLOW_ROAD);
         break;
     }
   };

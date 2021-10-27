@@ -39,4 +39,7 @@ export type FocusedMarkerInfo = {
   isDisplayed: boolean;
 };
 
-export type DrawingMode = "follow_road" | "freehand";
+export enum DrawingMode {
+  FOLLOW_ROAD = "follow_road",
+  FREEHAND = "freehand",
+}

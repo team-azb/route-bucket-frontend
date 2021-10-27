@@ -101,7 +101,9 @@ const RouteEditor: FunctionComponent = () => {
   const [focusedMarkerInfo, setFocusedMarkerInfo] = useState<FocusedMarkerInfo>(
     focusedMarkerInfoInitValue
   );
-  const [drawingMode, setDrawingMode] = useState<DrawingMode>("follow_road");
+  const [drawingMode, setDrawingMode] = useState<DrawingMode>(
+    DrawingMode.FOLLOW_ROAD
+  );
 
   useEffect(() => {
     setFocusedMarkerInfo(focusedMarkerInfoInitValue);
