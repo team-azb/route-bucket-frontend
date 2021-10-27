@@ -54,8 +54,9 @@ function markerGenerator(
   async function onClickMarker(idx: number) {
     props.setIsLoading(true);
     props.dispatchRoute({
-      type: "DELETE",
+      type: "REMOVE",
       targetIdx: idx,
+      mode: props.drawingMode,
     });
   }
 

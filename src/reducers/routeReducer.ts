@@ -5,7 +5,7 @@ import {
   getRoute,
   patchAdd,
   patchClear,
-  patchDelete,
+  patchRemove,
   patchMove,
   patchRedo,
   patchRename,
@@ -150,12 +150,15 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
         });
     };
   },
-  DELETE: ({ dispatch, getState }) => {
+  REMOVE: ({ dispatch, getState }) => {
     return async (action) => {
       const route = getState();
       const res =
         action.targetIdx !== undefined &&
-        (await patchDelete(route.id, action.targetIdx));
+        action.mode &&
+        (await patchRemove(route.id, action.targetIdx, {
+          mode: action.mode,
+        }));
       res &&
         dispatch({
           type: "UPDATE_ROUTE_GEOMETRY",
