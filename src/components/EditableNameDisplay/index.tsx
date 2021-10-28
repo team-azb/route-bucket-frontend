@@ -5,6 +5,7 @@ import {
   routeReducerAction,
   routeAsyncAction,
 } from "../../reducers/routeReducer";
+import { Typography } from "@mui/material";
 
 type EditableNameDisplayProps = {
   route: Route;
@@ -40,7 +41,7 @@ function NameInput(props: NameInputProps) {
 
   return (
     <>
-      <p style={{ display: "inline" }}>
+      <Typography style={{ display: "inline" }}>
         ルート名:{" "}
         <input
           onChange={(e) => {
@@ -49,7 +50,7 @@ function NameInput(props: NameInputProps) {
           type="text"
           value={nameInput}
         />
-      </p>
+      </Typography>
 
       <Button
         onClick={() => {
@@ -73,7 +74,9 @@ function NameInput(props: NameInputProps) {
 function NameDisplay(props: NameDisplayProps) {
   return (
     <>
-      <p style={{ display: "inline" }}>ルート名: {props.route.name}</p>
+      <Typography style={{ display: "inline" }}>
+        ルート名: {props.route.name}
+      </Typography>
       <Button
         onClick={() => {
           props.setIsEditable((prevState) => {

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Route, RouteGeometry, Coorinate } from "../types";
+import { Route, RouteGeometry, Coorinate, DrawingMode } from "../types";
 
 //axiosからのレスポンスのデータのインターフェース
 interface PatchResponse extends RouteGeometry {}
@@ -10,11 +10,18 @@ interface RoutesResponse {
 
 interface RouteResponse extends Route {}
 
-interface RouteRequestBody {
+interface RouteAddRequest {
   coord: Coorinate;
+  mode: DrawingMode;
 }
 
-interface RenameRequestBody {
+interface RouteMoveRequest extends RouteAddRequest {}
+
+interface RouteRemoveRequest {
+  mode: DrawingMode;
+}
+
+interface RenameRequest {
   name: string;
 }
 
@@ -41,7 +48,7 @@ export async function getRoutes() {
 export async function patchAdd(
   routeId: string,
   idx: number,
-  payload: RouteRequestBody
+  payload: RouteAddRequest
 ) {
   let res;
   try {
@@ -58,10 +65,17 @@ export async function patchAdd(
   return res;
 }
 
-export async function patchDelete(routeId: string, pos: number) {
+export async function patchRemove(
+  routeId: string,
+  pos: number,
+  payload: RouteRemoveRequest
+) {
   let res;
   try {
-    res = await axios.patch<PatchResponse>(`/routes/${routeId}/remove/${pos}`);
+    res = await axios.patch<PatchResponse>(
+      `/routes/${routeId}/remove/${pos}`,
+      payload
+    );
   } catch (error) {
     if (error.response.data.message) {
       console.error(error.response.data.message);
@@ -109,7 +123,7 @@ export async function patchRedo(routeId: string) {
 export async function patchMove(
   routeId: string,
   idx: number,
-  payload: RouteRequestBody
+  payload: RouteMoveRequest
 ) {
   let res;
   try {
@@ -126,7 +140,7 @@ export async function patchMove(
   return res;
 }
 
-export async function patchRename(routeId: string, payload: RenameRequestBody) {
+export async function patchRename(routeId: string, payload: RenameRequest) {
   try {
     let res = await axios.patch<RouteResponse>(
       `/routes/${routeId}/rename/`,

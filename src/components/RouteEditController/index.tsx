@@ -8,9 +8,16 @@ import {
 import EditableNameDisplay from "../EditableNameDisplay";
 import ElevationGraph from "../ElevationGraph";
 import { config } from "../../config";
-import { Route, FocusedMarkerInfo } from "../../types";
+import { Route, FocusedMarkerInfo, DrawingMode } from "../../types";
 import { meters2kilometers } from "../../utils";
-import { Button } from "@mui/material";
+import {
+  Button,
+  RadioGroup,
+  Radio,
+  FormControlLabel,
+  FormLabel,
+  Typography,
+} from "@mui/material";
 
 type RouteEditControllerProps = {
   isInsideMap: boolean;
@@ -20,6 +27,8 @@ type RouteEditControllerProps = {
   focusedMarkerInfo: FocusedMarkerInfo;
   setFocusedMarkerInfo: React.Dispatch<React.SetStateAction<FocusedMarkerInfo>>;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  drawingMode: DrawingMode;
+  setDrawingMode: React.Dispatch<React.SetStateAction<DrawingMode>>;
 };
 
 function RouteEditControllerDisplay(props: RouteEditControllerProps) {
@@ -58,21 +67,46 @@ function RouteEditControllerDisplay(props: RouteEditControllerProps) {
   const onClickGoIndexPageHandler = () => {
     history.push("/");
   };
+
+  const onChangeDrawingModeRadioHandler = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    props.setDrawingMode(event.target.value as DrawingMode);
+  };
   return (
     <div style={{ background: "#fff", opacity: 0.85 }}>
       <div style={{ padding: props.isInsideMap ? 20 : 5 }}>
         <Button variant="contained" onClick={onClickGoIndexPageHandler}>
           {"< ルート一覧へ"}
         </Button>
-        <p>ルートid: {props.routeId}</p>
+        <hr />
+        <Typography>ルートid: {props.routeId}</Typography>
         <EditableNameDisplay
           route={props.route}
           dispatchRoute={props.dispatchRoute}
         />
-        <p>
+        <Typography>
           総距離: {meters2kilometers(props.route.total_distance).toFixed(2)}km
-        </p>
-        <p>獲得標高: {props.route.elevation_gain}m</p>
+        </Typography>
+        <Typography>獲得標高: {props.route.elevation_gain}m</Typography>
+        <hr />
+        <FormLabel component="legend">ルート作成モード</FormLabel>
+        <RadioGroup
+          row
+          onChange={onChangeDrawingModeRadioHandler}
+          value={props.drawingMode}
+        >
+          <FormControlLabel
+            value={DrawingMode.FOLLOW_ROAD}
+            control={<Radio />}
+            label="自動補間"
+          />
+          <FormControlLabel
+            value={DrawingMode.FREEHAND}
+            control={<Radio />}
+            label="フリーハンド"
+          />
+        </RadioGroup>
         <Button variant="outlined" onClick={onClickUndoHandler}>
           undo
         </Button>

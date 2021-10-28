@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { FocusedMarkerIcon } from "./focusedMarkerIcon";
 import { Marker } from "react-leaflet";
 import L, { Marker as MarkerType } from "leaflet";
-import { Route, FocusedMarkerInfo } from "../../types";
+import { Route, FocusedMarkerInfo, DrawingMode } from "../../types";
 import {
   routeAsyncAction,
   routeReducerAction,
@@ -15,6 +15,7 @@ type FocusedMarkerProps = {
   setFocusedMarkerInfo: React.Dispatch<React.SetStateAction<FocusedMarkerInfo>>;
   dispatchRoute: React.Dispatch<routeReducerAction | routeAsyncAction>;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  drawingMode: DrawingMode;
 };
 
 export default function FocusedMarker(props: FocusedMarkerProps) {
@@ -28,6 +29,7 @@ export default function FocusedMarker(props: FocusedMarkerProps) {
         latitude: latlng.lat,
         longitude: latlng.lng,
       },
+      mode: props.drawingMode,
     });
   }
 
@@ -42,6 +44,7 @@ export default function FocusedMarker(props: FocusedMarkerProps) {
           latitude: newPoint.lat,
           longitude: newPoint.lng,
         },
+        mode: props.drawingMode,
       });
     }
   }

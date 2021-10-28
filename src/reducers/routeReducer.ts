@@ -1,11 +1,11 @@
 import { Reducer } from "react";
 import { AsyncActionHandlers } from "use-reducer-async";
-import { Route, RouteGeometry, RoutePoint } from "../types";
+import { Route, RouteGeometry, RoutePoint, DrawingMode } from "../types";
 import {
   getRoute,
   patchAdd,
   patchClear,
-  patchDelete,
+  patchRemove,
   patchMove,
   patchRedo,
   patchRename,
@@ -17,6 +17,7 @@ export interface routeAsyncAction {
   type: string;
   id?: string;
   coord?: RoutePoint;
+  mode?: DrawingMode;
   name?: string;
   targetIdx?: number;
 }
@@ -50,8 +51,10 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
       const route = getState();
       const res =
         action.coord &&
+        action.mode &&
         (await patchAdd(route.id, route.waypoints.length, {
           coord: action.coord,
+          mode: action.mode,
         }));
       res &&
         dispatch({
@@ -66,8 +69,10 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
       const res =
         action.targetIdx !== undefined &&
         action.coord &&
+        action.mode &&
         (await patchAdd(route.id, action.targetIdx, {
           coord: action.coord,
+          mode: action.mode,
         }));
       res &&
         dispatch({
@@ -133,8 +138,10 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
       const res =
         action.targetIdx !== undefined &&
         action.coord &&
+        action.mode &&
         (await patchMove(route.id, action.targetIdx, {
           coord: action.coord,
+          mode: action.mode,
         }));
       res &&
         dispatch({
@@ -143,12 +150,15 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
         });
     };
   },
-  DELETE: ({ dispatch, getState }) => {
+  REMOVE: ({ dispatch, getState }) => {
     return async (action) => {
       const route = getState();
       const res =
         action.targetIdx !== undefined &&
-        (await patchDelete(route.id, action.targetIdx));
+        action.mode &&
+        (await patchRemove(route.id, action.targetIdx, {
+          mode: action.mode,
+        }));
       res &&
         dispatch({
           type: "UPDATE_ROUTE_GEOMETRY",
