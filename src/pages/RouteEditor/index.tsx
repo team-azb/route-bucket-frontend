@@ -146,7 +146,9 @@ const RouteEditor: FunctionComponent = () => {
           >
             {/* FIXME: opacityがCircularProgressなどにも適用されてしまう */}
             <CircularProgress />
-            <p style={{ fontWeight: "bold" }}>ルート計算中</p>
+            <p style={{ fontWeight: "bold" }}>
+              {route.isLoaded ? "ルート計算中" : "ルート取得中"}
+            </p>
           </div>
         )}
         <MapContainer
