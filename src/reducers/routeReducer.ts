@@ -23,20 +23,23 @@ export interface routeAsyncAction {
 }
 
 export interface routeReducerAction {
-  type: "UPDATE_ROUTE" | "UPDATE_ROUTE_GEOMETRY";
+  type: "UPDATE_ROUTE" | "UPDATE_ROUTE_GEOMETRY" | "ERROR";
   newGeometry?: RouteGeometry;
   route?: Route;
+  errorMsg?: string;
 }
 
-export const routeReducer: Reducer<Route, routeReducerAction> = (
-  route,
-  action
-) => {
+export const routeReducer: Reducer<
+  Route & { error?: Error },
+  routeReducerAction
+> = (route, action) => {
   switch (action.type) {
     case "UPDATE_ROUTE":
-      return { ...route, ...action.route };
+      return { ...route, ...action.route, error: undefined };
     case "UPDATE_ROUTE_GEOMETRY":
-      return { ...route, ...action.newGeometry };
+      return { ...route, ...action.newGeometry, error: undefined };
+    case "ERROR":
+      return { ...route, error: new Error(action.errorMsg) };
     default:
       return route;
   }
@@ -56,11 +59,17 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
           coord: action.coord,
           mode: action.mode,
         }));
-      res &&
+      if (res) {
         dispatch({
           type: "UPDATE_ROUTE_GEOMETRY",
           newGeometry: res.data,
         });
+      } else {
+        dispatch({
+          type: "ERROR",
+          errorMsg: "地点の追加に失敗しました。",
+        });
+      }
     };
   },
   INSERT: ({ dispatch, getState }) => {
@@ -74,54 +83,84 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
           coord: action.coord,
           mode: action.mode,
         }));
-      res &&
+      if (res) {
         dispatch({
           type: "UPDATE_ROUTE_GEOMETRY",
           newGeometry: res.data,
         });
+      } else {
+        dispatch({
+          type: "ERROR",
+          errorMsg: "地点の挿入に失敗しました。",
+        });
+      }
     };
   },
   GET: ({ dispatch }) => {
     return async (action) => {
       const res = action.id && (await getRoute(action.id));
-      res &&
+      if (res) {
         dispatch({
           type: "UPDATE_ROUTE",
           route: { ...res.data, isLoaded: true },
         });
+      } else {
+        dispatch({
+          type: "ERROR",
+          errorMsg: "ルートの取得に失敗しました。",
+        });
+      }
     };
   },
   CLEAR: ({ dispatch, getState }) => {
     return async (action) => {
       const route = getState();
       const res = await patchClear(route.id);
-      res &&
+      if (res) {
         dispatch({
           type: "UPDATE_ROUTE_GEOMETRY",
           newGeometry: res.data,
         });
+      } else {
+        dispatch({
+          type: "ERROR",
+          errorMsg: "ルートのクリアに失敗しました。",
+        });
+      }
     };
   },
   UNDO: ({ dispatch, getState }) => {
     return async (action) => {
       const route = getState();
       const res = await patchUndo(route.id);
-      res &&
+      if (res) {
         dispatch({
           type: "UPDATE_ROUTE_GEOMETRY",
           newGeometry: res.data,
         });
+      } else {
+        dispatch({
+          type: "ERROR",
+          errorMsg: "操作の取り消しに失敗しました。",
+        });
+      }
     };
   },
   REDO: ({ dispatch, getState }) => {
     return async (action) => {
       const route = getState();
       const res = await patchRedo(route.id);
-      res &&
+      if (res) {
         dispatch({
           type: "UPDATE_ROUTE_GEOMETRY",
           newGeometry: res.data,
         });
+      } else {
+        dispatch({
+          type: "ERROR",
+          errorMsg: "操作のやり直しに失敗しました。",
+        });
+      }
     };
   },
   RENAME: ({ dispatch, getState }) => {
@@ -129,7 +168,14 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
       const route = getState();
       const res =
         action.name && (await patchRename(route.id, { name: action.name }));
-      res && dispatch({ type: "UPDATE_ROUTE", route: res.data });
+      if (res) {
+        dispatch({ type: "UPDATE_ROUTE", route: res.data });
+      } else {
+        dispatch({
+          type: "ERROR",
+          errorMsg: "ルート名の変更に失敗しました。",
+        });
+      }
     };
   },
   MOVE: ({ dispatch, getState }) => {
@@ -143,11 +189,17 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
           coord: action.coord,
           mode: action.mode,
         }));
-      res &&
+      if (res) {
         dispatch({
           type: "UPDATE_ROUTE_GEOMETRY",
           newGeometry: res.data,
         });
+      } else {
+        dispatch({
+          type: "ERROR",
+          errorMsg: "地点の変更に失敗しました。",
+        });
+      }
     };
   },
   REMOVE: ({ dispatch, getState }) => {
@@ -159,11 +211,17 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
         (await patchRemove(route.id, action.targetIdx, {
           mode: action.mode,
         }));
-      res &&
+      if (res) {
         dispatch({
           type: "UPDATE_ROUTE_GEOMETRY",
           newGeometry: res.data,
         });
+      } else {
+        dispatch({
+          type: "ERROR",
+          errorMsg: "地点の削除に失敗しました。",
+        });
+      }
     };
   },
 };

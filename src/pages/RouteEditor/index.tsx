@@ -109,6 +109,9 @@ const RouteEditor: FunctionComponent = () => {
     setFocusedMarkerInfo(focusedMarkerInfoInitValue);
     //routeに変更が見られたらrouteのローディングが完了したものとし、isLoadingをfalseにする
     setIsLoading(false);
+    if (route.error) {
+      alert(route.error.message);
+    }
   }, [route]);
 
   //Mapのルート変更時にルートを取得してwaypointsを変更する
