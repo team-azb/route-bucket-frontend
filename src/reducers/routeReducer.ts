@@ -12,22 +12,60 @@ import {
   patchUndo,
 } from "../api/routes";
 
-//TODO: typeをenumで指定できるようにしたい
-export interface routeAsyncAction {
-  type: string;
-  id?: string;
-  coord?: RoutePoint;
-  mode?: DrawingMode;
-  name?: string;
-  targetIdx?: number;
-}
+export type routeAsyncAction =
+  | {
+      type: "APPEND";
+      coord: RoutePoint;
+      mode: DrawingMode;
+    }
+  | {
+      type: "INSERT";
+      targetIdx: number;
+      coord: RoutePoint;
+      mode: DrawingMode;
+    }
+  | {
+      type: "GET";
+      id: string;
+    }
+  | {
+      type: "CLEAR";
+    }
+  | {
+      type: "UNDO";
+    }
+  | {
+      type: "REDO";
+    }
+  | {
+      type: "RENAME";
+      name: string;
+    }
+  | {
+      type: "MOVE";
+      targetIdx: number;
+      coord: RoutePoint;
+      mode: DrawingMode;
+    }
+  | {
+      type: "REMOVE";
+      targetIdx: number;
+      mode: DrawingMode;
+    };
 
-export interface routeReducerAction {
-  type: "UPDATE_ROUTE" | "UPDATE_ROUTE_GEOMETRY" | "ERROR";
-  newGeometry?: RouteGeometry;
-  route?: Route;
-  errorMsg?: string;
-}
+export type routeReducerAction =
+  | {
+      type: "UPDATE_ROUTE";
+      route: Route;
+    }
+  | {
+      type: "UPDATE_ROUTE_GEOMETRY";
+      newGeometry?: RouteGeometry;
+    }
+  | {
+      type: "ERROR";
+      errorMsg: string;
+    };
 
 export const routeReducer: Reducer<
   Route & { error?: Error },
@@ -46,19 +84,16 @@ export const routeReducer: Reducer<
 };
 
 export const routeAsyncActionHandlers: AsyncActionHandlers<
-  Reducer<Route, routeReducerAction>,
+  Reducer<Route & { error?: Error }, routeReducerAction>,
   routeAsyncAction
 > = {
   APPEND: ({ dispatch, getState }) => {
     return async (action) => {
       const route = getState();
-      const res =
-        action.coord &&
-        action.mode &&
-        (await patchAdd(route.id, route.waypoints.length, {
-          coord: action.coord,
-          mode: action.mode,
-        }));
+      const res = await patchAdd(route.id, route.waypoints.length, {
+        coord: action.coord,
+        mode: action.mode,
+      });
       if (res) {
         dispatch({
           type: "UPDATE_ROUTE_GEOMETRY",
@@ -75,14 +110,10 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
   INSERT: ({ dispatch, getState }) => {
     return async (action) => {
       const route = getState();
-      const res =
-        action.targetIdx !== undefined &&
-        action.coord &&
-        action.mode &&
-        (await patchAdd(route.id, action.targetIdx, {
-          coord: action.coord,
-          mode: action.mode,
-        }));
+      const res = await patchAdd(route.id, action.targetIdx, {
+        coord: action.coord,
+        mode: action.mode,
+      });
       if (res) {
         dispatch({
           type: "UPDATE_ROUTE_GEOMETRY",
@@ -98,7 +129,7 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
   },
   GET: ({ dispatch }) => {
     return async (action) => {
-      const res = action.id && (await getRoute(action.id));
+      const res = await getRoute(action.id);
       if (res) {
         dispatch({
           type: "UPDATE_ROUTE",
@@ -113,7 +144,7 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
     };
   },
   CLEAR: ({ dispatch, getState }) => {
-    return async (action) => {
+    return async () => {
       const route = getState();
       const res = await patchClear(route.id);
       if (res) {
@@ -130,7 +161,7 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
     };
   },
   UNDO: ({ dispatch, getState }) => {
-    return async (action) => {
+    return async () => {
       const route = getState();
       const res = await patchUndo(route.id);
       if (res) {
@@ -147,7 +178,7 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
     };
   },
   REDO: ({ dispatch, getState }) => {
-    return async (action) => {
+    return async () => {
       const route = getState();
       const res = await patchRedo(route.id);
       if (res) {
@@ -166,8 +197,7 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
   RENAME: ({ dispatch, getState }) => {
     return async (action) => {
       const route = getState();
-      const res =
-        action.name && (await patchRename(route.id, { name: action.name }));
+      const res = await patchRename(route.id, { name: action.name });
       if (res) {
         dispatch({ type: "UPDATE_ROUTE", route: res.data });
       } else {
@@ -181,14 +211,10 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
   MOVE: ({ dispatch, getState }) => {
     return async (action) => {
       const route = getState();
-      const res =
-        action.targetIdx !== undefined &&
-        action.coord &&
-        action.mode &&
-        (await patchMove(route.id, action.targetIdx, {
-          coord: action.coord,
-          mode: action.mode,
-        }));
+      const res = await patchMove(route.id, action.targetIdx, {
+        coord: action.coord,
+        mode: action.mode,
+      });
       if (res) {
         dispatch({
           type: "UPDATE_ROUTE_GEOMETRY",
@@ -205,12 +231,9 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
   REMOVE: ({ dispatch, getState }) => {
     return async (action) => {
       const route = getState();
-      const res =
-        action.targetIdx !== undefined &&
-        action.mode &&
-        (await patchRemove(route.id, action.targetIdx, {
-          mode: action.mode,
-        }));
+      const res = await patchRemove(route.id, action.targetIdx, {
+        mode: action.mode,
+      });
       if (res) {
         dispatch({
           type: "UPDATE_ROUTE_GEOMETRY",
