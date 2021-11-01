@@ -25,6 +25,16 @@ interface RenameRequest {
   name: string;
 }
 
+function hasAxiosResponseMessage(
+  error: unknown
+): error is { response: { data: { message: string } } } {
+  return axios.isAxiosError(error) &&
+    error.response &&
+    error.response.data.message
+    ? true
+    : false;
+}
+
 export async function getRoute(routeId: string) {
   let res;
   try {
@@ -58,11 +68,7 @@ export async function patchAdd(
     );
     return res;
   } catch (error) {
-    if (
-      axios.isAxiosError(error) &&
-      error.response &&
-      error.response.data.message
-    ) {
+    if (hasAxiosResponseMessage(error)) {
       console.error(error.response.data.message);
     }
   }
@@ -81,11 +87,7 @@ export async function patchRemove(
       payload
     );
   } catch (error) {
-    if (
-      axios.isAxiosError(error) &&
-      error.response &&
-      error.response.data.message
-    ) {
+    if (hasAxiosResponseMessage(error)) {
       console.error(error.response.data.message);
     }
   }
@@ -97,11 +99,7 @@ export async function patchClear(routeId: string) {
   try {
     res = await axios.patch<PatchResponse>(`/routes/${routeId}/clear/`);
   } catch (error) {
-    if (
-      axios.isAxiosError(error) &&
-      error.response &&
-      error.response.data.message
-    ) {
+    if (hasAxiosResponseMessage(error)) {
       console.error(error.response.data.message);
     }
   }
@@ -113,11 +111,7 @@ export async function patchUndo(routeId: string) {
   try {
     res = await axios.patch<PatchResponse>(`/routes/${routeId}/undo/`);
   } catch (error) {
-    if (
-      axios.isAxiosError(error) &&
-      error.response &&
-      error.response.data.message
-    ) {
+    if (hasAxiosResponseMessage(error)) {
       console.error(error.response.data.message);
     }
   }
@@ -129,11 +123,7 @@ export async function patchRedo(routeId: string) {
   try {
     res = await axios.patch<PatchResponse>(`/routes/${routeId}/redo/`);
   } catch (error) {
-    if (
-      axios.isAxiosError(error) &&
-      error.response &&
-      error.response.data.message
-    ) {
+    if (hasAxiosResponseMessage(error)) {
       console.error(error.response.data.message);
     }
   }
@@ -153,11 +143,7 @@ export async function patchMove(
     );
     return res;
   } catch (error) {
-    if (
-      axios.isAxiosError(error) &&
-      error.response &&
-      error.response.data.message
-    ) {
+    if (hasAxiosResponseMessage(error)) {
       console.error(error.response.data.message);
     }
   }
@@ -172,11 +158,7 @@ export async function patchRename(routeId: string, payload: RenameRequest) {
     );
     return res;
   } catch (error) {
-    if (
-      axios.isAxiosError(error) &&
-      error.response &&
-      error.response.data.message
-    ) {
+    if (hasAxiosResponseMessage(error)) {
       console.error(error.response.data.message);
     }
   }
@@ -188,11 +170,7 @@ export async function postRoutes(name: string) {
       name: name,
     });
   } catch (error) {
-    if (
-      axios.isAxiosError(error) &&
-      error.response &&
-      error.response.data.message
-    ) {
+    if (hasAxiosResponseMessage(error)) {
       console.error(error.response.data.message);
     }
   }
@@ -202,11 +180,7 @@ export async function deleteRoute(id: string) {
   try {
     await axios.delete(`/routes/${id}`);
   } catch (error) {
-    if (
-      axios.isAxiosError(error) &&
-      error.response &&
-      error.response.data.message
-    ) {
+    if (hasAxiosResponseMessage(error)) {
       console.error(error.response.data.message);
     }
   }
