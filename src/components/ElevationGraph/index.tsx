@@ -129,12 +129,8 @@ export default function ElevationGraph(props: ElevationGraphProp) {
             type="monotone"
             dataKey="elevation"
             stroke="#8884d8"
-            // activeDot={<ElevationGraphDot/>}
             activeDot={{
               r: 8,
-              onChangeCapture: (event) => {
-                console.log(event);
-              },
             }}
           />
         </LineChart>

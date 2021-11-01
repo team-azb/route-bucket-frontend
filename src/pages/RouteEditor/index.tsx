@@ -109,6 +109,9 @@ const RouteEditor: FunctionComponent = () => {
     setFocusedMarkerInfo(focusedMarkerInfoInitValue);
     //routeに変更が見られたらrouteのローディングが完了したものとし、isLoadingをfalseにする
     setIsLoading(false);
+    if (route.error) {
+      alert(route.error.message);
+    }
   }, [route]);
 
   //Mapのルート変更時にルートを取得してwaypointsを変更する
@@ -143,7 +146,9 @@ const RouteEditor: FunctionComponent = () => {
           >
             {/* FIXME: opacityがCircularProgressなどにも適用されてしまう */}
             <CircularProgress />
-            <p style={{ fontWeight: "bold" }}>ルート計算中</p>
+            <p style={{ fontWeight: "bold" }}>
+              {route.isLoaded ? "ルート計算中" : "ルート取得中"}
+            </p>
           </div>
         )}
         <MapContainer
