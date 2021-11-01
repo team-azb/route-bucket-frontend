@@ -1,4 +1,4 @@
-import { useState, useEffect, FunctionComponent, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { MapContainer, TileLayer, useMapEvent, useMap } from "react-leaflet";
 import L, { LatLng, LeafletMouseEvent } from "leaflet";
@@ -54,15 +54,15 @@ const locateOption: L.Control.LocateOptions = {
 
 // Memo: 地図を切り替えるたびに読み込まれてしまう
 // Todo: 現在地の読み込みが遅い(ブラウザの組み込みapiの方が圧倒的に早い)のを改善
-function LocateController() {
+const LocateController = () => {
   const map = useMap();
   useEffect(() => {
     L.control.locate(locateOption).addTo(map);
   }, [map]);
   return <></>;
-}
+};
 
-function ClickLayer(props: ClickLayerProps) {
+const ClickLayer = (props: ClickLayerProps) => {
   useMapEvent("click", async (e: LeafletMouseEvent) => {
     props.isLoading || props.setIsLoading(true);
     props.dispatchRoute({
@@ -75,9 +75,9 @@ function ClickLayer(props: ClickLayerProps) {
     });
   });
   return <></>;
-}
+};
 
-const RouteEditor: FunctionComponent = () => {
+const RouteEditor = () => {
   const { width, height } = useWindowDimensions();
   const isMobile = useMemo(() => {
     return width < 600;

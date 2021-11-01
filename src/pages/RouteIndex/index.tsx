@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { getRoutes, postRoutes, deleteRoute } from "../../api/routes";
 import { Route } from "../../types";
 
-function RouteIndex() {
+const RouteIndex = () => {
   const [inputValue, setInputValue] = useState<string>("");
   const [routes, setRoutes] = useState<Route[]>([]);
 
@@ -20,7 +20,7 @@ function RouteIndex() {
     };
   }, []);
 
-  async function onClickPost() {
+  const onClickPost = async () => {
     try {
       await postRoutes(inputValue);
       const getRes = await getRoutes();
@@ -30,9 +30,9 @@ function RouteIndex() {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
-  async function onClickDelete(id: string) {
+  const onClickDelete = async (id: string) => {
     try {
       await deleteRoute(id);
       const getRes = await getRoutes();
@@ -42,7 +42,7 @@ function RouteIndex() {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   const Routes = () => {
     const RouteList = routes.map((route) => {
@@ -78,6 +78,6 @@ function RouteIndex() {
       <Routes />
     </div>
   );
-}
+};
 
 export default RouteIndex;

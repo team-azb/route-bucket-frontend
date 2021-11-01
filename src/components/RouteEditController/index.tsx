@@ -31,7 +31,7 @@ type RouteEditControllerProps = {
   setDrawingMode: React.Dispatch<React.SetStateAction<DrawingMode>>;
 };
 
-function RouteEditControllerDisplay(props: RouteEditControllerProps) {
+const RouteEditControllerDisplay = (props: RouteEditControllerProps) => {
   const history = useHistory();
   const onClickClearHandler = () => {
     const approval = window.confirm(
@@ -126,9 +126,9 @@ function RouteEditControllerDisplay(props: RouteEditControllerProps) {
       />
     </div>
   );
-}
+};
 
-export default function RouteEditController(props: RouteEditControllerProps) {
+const RouteEditController = (props: RouteEditControllerProps) => {
   const divRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -155,4 +155,6 @@ export default function RouteEditController(props: RouteEditControllerProps) {
       )}
     </>
   );
-}
+};
+
+export default RouteEditController;

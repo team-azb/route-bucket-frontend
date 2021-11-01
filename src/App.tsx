@@ -6,7 +6,7 @@ import "leaflet/dist/leaflet.css";
 import "leaflet.locatecontrol/dist/L.Control.Locate.min.css";
 import "font-awesome/css/font-awesome.min.css";
 
-function App() {
+const App = () => {
   return (
     <Router>
       <Switch>
@@ -19,6 +19,6 @@ function App() {
       </Switch>
     </Router>
   );
-}
+};
 
 export default App;

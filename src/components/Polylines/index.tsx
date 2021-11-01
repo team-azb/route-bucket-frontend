@@ -22,11 +22,11 @@ type PolylineProps = {
  * @param props PolylineProps
  * @returns ポリーラインのJSX Element
  */
-function polylineGenerator(
+const polylineGenerator = (
   segment: Segment,
   idx: number,
   props: PolylineProps
-) {
+) => {
   return (
     <Polyline
       pathOptions={pathOptions}
@@ -49,9 +49,9 @@ function polylineGenerator(
       }}
     />
   );
-}
+};
 
-export default function Polylines(props: PolylineProps) {
+const Polylines = (props: PolylineProps) => {
   useMapEvent("zoomend", (event) => {
     props.setZoomSize(event.target._zoom);
   });
@@ -61,4 +61,6 @@ export default function Polylines(props: PolylineProps) {
   });
 
   return <>{polylines}</>;
-}
+};
+
+export default Polylines;

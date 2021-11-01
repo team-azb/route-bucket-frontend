@@ -23,21 +23,21 @@ type NameDisplayProps = {
   setIsEditable: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function NameInput(props: NameInputProps) {
+const NameInput = (props: NameInputProps) => {
   const [nameInput, setNameInput] = useState<string>(props.route.name);
 
-  function onSubmitName() {
+  const onSubmitName = () => {
     props.setIsEditable((prevState) => {
       return !prevState;
     });
     props.dispatchRoute({ type: "RENAME", name: nameInput });
-  }
+  };
 
-  function onQuitEditing() {
+  const onQuitEditing = () => {
     props.setIsEditable((prevState) => {
       return !prevState;
     });
-  }
+  };
 
   return (
     <>
@@ -69,9 +69,9 @@ function NameInput(props: NameInputProps) {
       </Button>
     </>
   );
-}
+};
 
-function NameDisplay(props: NameDisplayProps) {
+const NameDisplay = (props: NameDisplayProps) => {
   return (
     <>
       <Typography style={{ display: "inline" }}>
@@ -89,9 +89,9 @@ function NameDisplay(props: NameDisplayProps) {
       </Button>
     </>
   );
-}
+};
 
-export default function EditableNameDisplay(props: EditableNameDisplayProps) {
+const EditableNameDisplay = (props: EditableNameDisplayProps) => {
   const [isEditable, setIsEditable] = useState<boolean>(false);
   return (
     <>
@@ -106,4 +106,6 @@ export default function EditableNameDisplay(props: EditableNameDisplayProps) {
       )}
     </>
   );
-}
+};
+
+export default EditableNameDisplay;

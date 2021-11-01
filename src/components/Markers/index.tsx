@@ -24,7 +24,7 @@ type MakersProps = {
  * @param lastIdx ゴールのマーカーのindex
  * @returns マーカーで利用するicon
  */
-function getMarkerIcon(idx: number, firstIdx: number, lastIdx: number) {
+const getMarkerIcon = (idx: number, firstIdx: number, lastIdx: number) => {
   switch (idx) {
     case firstIdx:
       return StartMarkerIcon;
@@ -33,7 +33,7 @@ function getMarkerIcon(idx: number, firstIdx: number, lastIdx: number) {
     default:
       return MarkerIcon;
   }
-}
+};
 
 /**
  * map内でマーカーのJSX Elementを生成するための関数
@@ -43,24 +43,24 @@ function getMarkerIcon(idx: number, firstIdx: number, lastIdx: number) {
  * @param props Markersのprops
  * @returns マーカーのJSX Element
  */
-function markerGenerator(
+const markerGenerator = (
   pos: RoutePoint,
   idx: number,
   markerRef: RefObject<MarkerType<unknown>>,
   props: MakersProps
-) {
+) => {
   const markerIcon = getMarkerIcon(idx, 0, props.route.waypoints.length - 1);
   markerRef = createRef<MarkerType>();
-  async function onClickMarker(idx: number) {
+  const onClickMarker = (idx: number) => {
     props.setIsLoading(true);
     props.dispatchRoute({
       type: "REMOVE",
       targetIdx: idx,
       mode: props.drawingMode,
     });
-  }
+  };
 
-  async function onDragMarker(idx: number) {
+  const onDragMarker = (idx: number) => {
     const newPoint = markerRef.current?.getLatLng();
     if (newPoint) {
       props.setIsLoading(true);
@@ -74,7 +74,7 @@ function markerGenerator(
         mode: props.drawingMode,
       });
     }
-  }
+  };
 
   return (
     <Marker
@@ -96,9 +96,9 @@ function markerGenerator(
       }} //TODO: ここの関数を一つにまとめたい
     ></Marker>
   );
-}
+};
 
-export default function Markers(props: MakersProps) {
+const Markers = (props: MakersProps) => {
   const [changeCenterFlag, setChangeCenterFlag] = useState<boolean>(true);
   const map = useMap();
   const markerRefs = useRef<Array<RefObject<MarkerType>>>(
@@ -127,4 +127,6 @@ export default function Markers(props: MakersProps) {
     return markerGenerator(pos, idx, markerRefs.current[idx], props);
   });
   return <>{markers}</>;
-}
+};
+
+export default Markers;

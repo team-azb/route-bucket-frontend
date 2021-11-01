@@ -25,17 +25,17 @@ interface RenameRequestBody {
   name: string;
 }
 
-function hasAxiosResponseMessage(
+const hasAxiosResponseMessage = (
   error: unknown
-): error is { response: AxiosResponse<{ message: string }> } {
+): error is { response: AxiosResponse<{ message: string }> } => {
   return axios.isAxiosError(error) &&
     error.response &&
     error.response.data.message
     ? true
     : false;
-}
+};
 
-export async function getRoute(routeId: string) {
+export const getRoute = async (routeId: string) => {
   try {
     const res = await axios.get<RouteResponseBody>(`/routes/${routeId}`);
     return res;
@@ -44,9 +44,9 @@ export async function getRoute(routeId: string) {
       console.error(error.response.data.message);
     }
   }
-}
+};
 
-export async function getRoutes() {
+export const getRoutes = async () => {
   try {
     const res = await axios.get<RoutesResponseBody>("/routes/");
     return res;
@@ -55,13 +55,13 @@ export async function getRoutes() {
       console.error(error.response.data.message);
     }
   }
-}
+};
 
-export async function patchAdd(
+export const patchAdd = async (
   routeId: string,
   idx: number,
   payload: RouteAddRequestBody
-) {
+) => {
   try {
     const res = await axios.patch<PatchResponseBody>(
       `/routes/${routeId}/add/${idx}`,
@@ -73,13 +73,13 @@ export async function patchAdd(
       console.error(error.response.data.message);
     }
   }
-}
+};
 
-export async function patchRemove(
+export const patchRemove = async (
   routeId: string,
   pos: number,
   payload: RouteRemoveRequestBody
-) {
+) => {
   try {
     const res = await axios.patch<PatchResponseBody>(
       `/routes/${routeId}/remove/${pos}`,
@@ -91,9 +91,9 @@ export async function patchRemove(
       console.error(error.response.data.message);
     }
   }
-}
+};
 
-export async function patchClear(routeId: string) {
+export const patchClear = async (routeId: string) => {
   try {
     const res = await axios.patch<PatchResponseBody>(
       `/routes/${routeId}/clear/`
@@ -104,9 +104,9 @@ export async function patchClear(routeId: string) {
       console.error(error.response.data.message);
     }
   }
-}
+};
 
-export async function patchUndo(routeId: string) {
+export const patchUndo = async (routeId: string) => {
   try {
     const res = await axios.patch<PatchResponseBody>(
       `/routes/${routeId}/undo/`
@@ -117,9 +117,9 @@ export async function patchUndo(routeId: string) {
       console.error(error.response.data.message);
     }
   }
-}
+};
 
-export async function patchRedo(routeId: string) {
+export const patchRedo = async (routeId: string) => {
   try {
     const res = await axios.patch<PatchResponseBody>(
       `/routes/${routeId}/redo/`
@@ -130,13 +130,13 @@ export async function patchRedo(routeId: string) {
       console.error(error.response.data.message);
     }
   }
-}
+};
 
-export async function patchMove(
+export const patchMove = async (
   routeId: string,
   idx: number,
   payload: RouteMoveRequestBody
-) {
+) => {
   try {
     const res = await axios.patch<PatchResponseBody>(
       `/routes/${routeId}/move/${idx}`,
@@ -148,9 +148,12 @@ export async function patchMove(
       console.error(error.response.data.message);
     }
   }
-}
+};
 
-export async function patchRename(routeId: string, payload: RenameRequestBody) {
+export const patchRename = async (
+  routeId: string,
+  payload: RenameRequestBody
+) => {
   try {
     const res = await axios.patch<RouteResponseBody>(
       `/routes/${routeId}/rename/`,
@@ -162,9 +165,9 @@ export async function patchRename(routeId: string, payload: RenameRequestBody) {
       console.error(error.response.data.message);
     }
   }
-}
+};
 
-export async function postRoutes(name: string) {
+export const postRoutes = async (name: string) => {
   try {
     await axios.post("/routes/", {
       name: name,
@@ -174,9 +177,9 @@ export async function postRoutes(name: string) {
       console.error(error.response.data.message);
     }
   }
-}
+};
 
-export async function deleteRoute(id: string) {
+export const deleteRoute = async (id: string) => {
   try {
     await axios.delete(`/routes/${id}`);
   } catch (error) {
@@ -184,4 +187,4 @@ export async function deleteRoute(id: string) {
       console.error(error.response.data.message);
     }
   }
-}
+};

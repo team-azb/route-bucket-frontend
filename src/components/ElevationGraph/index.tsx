@@ -25,17 +25,17 @@ type ElevationGraphTooltipContentProps = TooltipProps<number, string> & {
   setFocusedMarkerInfo: React.Dispatch<React.SetStateAction<FocusedMarkerInfo>>;
 };
 
-function formatElevation(elevation: number) {
+const formatElevation = (elevation: number) => {
   return `${elevation}m`;
-}
+};
 
-function formatDistance(value: number) {
+const formatDistance = (value: number) => {
   return `${meters2kilometers(value).toFixed(2)}km`;
-}
+};
 
-function ElevationGraphTooltipContent(
+const ElevationGraphTooltipContent = (
   props: ElevationGraphTooltipContentProps
-) {
+) => {
   if (props.active && props.payload) {
     if (
       props.payload &&
@@ -68,9 +68,9 @@ function ElevationGraphTooltipContent(
   }
 
   return <></>;
-}
+};
 
-function segments2data(segments: Segment[]) {
+const segments2data = (segments: Segment[]) => {
   return segments
     .map((segment, idx) => {
       return segment.points.map((pos) => {
@@ -79,9 +79,9 @@ function segments2data(segments: Segment[]) {
     })
     .flat()
     .filter((pos) => pos.elevation);
-}
+};
 
-export default function ElevationGraph(props: ElevationGraphProp) {
+const ElevationGraph = (props: ElevationGraphProp) => {
   /**
    * rechartsにdataとして渡す配列
    */
@@ -137,4 +137,6 @@ export default function ElevationGraph(props: ElevationGraphProp) {
       </ResponsiveContainer>
     </div>
   );
-}
+};
+
+export default ElevationGraph;
