@@ -102,7 +102,7 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
       } else {
         dispatch({
           type: "ERROR",
-          errorMsg: "地点の追加に失敗しました。",
+          errorMsg: "点の追加に失敗しました。",
         });
       }
     };
@@ -122,7 +122,7 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
       } else {
         dispatch({
           type: "ERROR",
-          errorMsg: "地点の挿入に失敗しました。",
+          errorMsg: "点の挿入に失敗しました。",
         });
       }
     };
@@ -223,7 +223,7 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
       } else {
         dispatch({
           type: "ERROR",
-          errorMsg: "地点の変更に失敗しました。",
+          errorMsg: "点の変更操作に失敗しました。",
         });
       }
     };
@@ -242,7 +242,7 @@ export const routeAsyncActionHandlers: AsyncActionHandlers<
       } else {
         dispatch({
           type: "ERROR",
-          errorMsg: "地点の削除に失敗しました。",
+          errorMsg: "点の削除に失敗しました。",
         });
       }
     };
