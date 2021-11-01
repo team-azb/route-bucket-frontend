@@ -2,20 +2,20 @@ import axios, { AxiosResponse } from "axios";
 import { Route, RouteGeometry, Coorinate, DrawingMode } from "../types";
 
 //axiosからのレスポンスのデータのインターフェース
-interface PatchResponseBody extends RouteGeometry {}
+type PatchResponseBody = RouteGeometry;
 
 interface RoutesResponseBody {
   routes: Route[];
 }
 
-interface RouteResponseBody extends Route {}
+type RouteResponseBody = Route;
 
 interface RouteAddRequestBody {
   coord: Coorinate;
   mode: DrawingMode;
 }
 
-interface RouteMoveRequestBody extends RouteAddRequestBody {}
+type RouteMoveRequestBody = RouteAddRequestBody;
 
 interface RouteRemoveRequestBody {
   mode: DrawingMode;
@@ -36,27 +36,25 @@ function hasAxiosResponseMessage(
 }
 
 export async function getRoute(routeId: string) {
-  let res;
   try {
-    res = await axios.get<RouteResponseBody>(`/routes/${routeId}`);
+    const res = await axios.get<RouteResponseBody>(`/routes/${routeId}`);
+    return res;
   } catch (error) {
     if (hasAxiosResponseMessage(error)) {
       console.error(error.response.data.message);
     }
   }
-  return res;
 }
 
 export async function getRoutes() {
-  let res;
   try {
-    res = await axios.get<RoutesResponseBody>("/routes/");
+    const res = await axios.get<RoutesResponseBody>("/routes/");
+    return res;
   } catch (error) {
     if (hasAxiosResponseMessage(error)) {
       console.error(error.response.data.message);
     }
   }
-  return res;
 }
 
 export async function patchAdd(
@@ -64,9 +62,8 @@ export async function patchAdd(
   idx: number,
   payload: RouteAddRequestBody
 ) {
-  let res;
   try {
-    res = await axios.patch<PatchResponseBody>(
+    const res = await axios.patch<PatchResponseBody>(
       `/routes/${routeId}/add/${idx}`,
       payload
     );
@@ -76,7 +73,6 @@ export async function patchAdd(
       console.error(error.response.data.message);
     }
   }
-  return res;
 }
 
 export async function patchRemove(
@@ -84,54 +80,56 @@ export async function patchRemove(
   pos: number,
   payload: RouteRemoveRequestBody
 ) {
-  let res;
   try {
-    res = await axios.patch<PatchResponseBody>(
+    const res = await axios.patch<PatchResponseBody>(
       `/routes/${routeId}/remove/${pos}`,
       payload
     );
+    return res;
   } catch (error) {
     if (hasAxiosResponseMessage(error)) {
       console.error(error.response.data.message);
     }
   }
-  return res;
 }
 
 export async function patchClear(routeId: string) {
-  let res;
   try {
-    res = await axios.patch<PatchResponseBody>(`/routes/${routeId}/clear/`);
+    const res = await axios.patch<PatchResponseBody>(
+      `/routes/${routeId}/clear/`
+    );
+    return res;
   } catch (error) {
     if (hasAxiosResponseMessage(error)) {
       console.error(error.response.data.message);
     }
   }
-  return res;
 }
 
 export async function patchUndo(routeId: string) {
-  let res;
   try {
-    res = await axios.patch<PatchResponseBody>(`/routes/${routeId}/undo/`);
+    const res = await axios.patch<PatchResponseBody>(
+      `/routes/${routeId}/undo/`
+    );
+    return res;
   } catch (error) {
     if (hasAxiosResponseMessage(error)) {
       console.error(error.response.data.message);
     }
   }
-  return res;
 }
 
 export async function patchRedo(routeId: string) {
-  let res;
   try {
-    res = await axios.patch<PatchResponseBody>(`/routes/${routeId}/redo/`);
+    const res = await axios.patch<PatchResponseBody>(
+      `/routes/${routeId}/redo/`
+    );
+    return res;
   } catch (error) {
     if (hasAxiosResponseMessage(error)) {
       console.error(error.response.data.message);
     }
   }
-  return res;
 }
 
 export async function patchMove(
@@ -139,9 +137,8 @@ export async function patchMove(
   idx: number,
   payload: RouteMoveRequestBody
 ) {
-  let res;
   try {
-    res = await axios.patch<PatchResponseBody>(
+    const res = await axios.patch<PatchResponseBody>(
       `/routes/${routeId}/move/${idx}`,
       payload
     );
@@ -151,12 +148,11 @@ export async function patchMove(
       console.error(error.response.data.message);
     }
   }
-  return res;
 }
 
 export async function patchRename(routeId: string, payload: RenameRequestBody) {
   try {
-    let res = await axios.patch<RouteResponseBody>(
+    const res = await axios.patch<RouteResponseBody>(
       `/routes/${routeId}/rename/`,
       payload
     );

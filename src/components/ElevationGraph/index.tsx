@@ -85,7 +85,7 @@ export default function ElevationGraph(props: ElevationGraphProp) {
   /**
    * rechartsにdataとして渡す配列
    */
-  const pointsData = useMemo<any[]>(() => {
+  const pointsData = useMemo<unknown[]>(() => {
     return segments2data(props.segments);
   }, [props.segments]);
 

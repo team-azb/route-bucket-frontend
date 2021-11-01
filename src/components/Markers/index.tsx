@@ -46,7 +46,7 @@ function getMarkerIcon(idx: number, firstIdx: number, lastIdx: number) {
 function markerGenerator(
   pos: RoutePoint,
   idx: number,
-  markerRef: RefObject<MarkerType<any>>,
+  markerRef: RefObject<MarkerType<unknown>>,
   props: MakersProps
 ) {
   const markerIcon = getMarkerIcon(idx, 0, props.route.waypoints.length - 1);

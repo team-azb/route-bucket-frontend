@@ -10,8 +10,12 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route exact path="/" children={<RouteIndex />} />
-        <Route path="/:routeId" children={<RouteEditor />} />
+        <Route exact path="/">
+          <RouteIndex />
+        </Route>
+        <Route path="/:routeId">
+          <RouteEditor />
+        </Route>
       </Switch>
     </Router>
   );
