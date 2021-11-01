@@ -22,7 +22,7 @@ export type RouteGeometry = {
   total_distance: number;
 };
 
-export type Route = RouteInfo & RouteGeometry;
+export type Route = RouteInfo & RouteGeometry & { error?: Error };
 
 export type Segment = {
   points: RoutePoint[];

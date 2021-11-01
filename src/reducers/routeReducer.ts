@@ -84,7 +84,7 @@ export const routeReducer: Reducer<
 };
 
 export const routeAsyncActionHandlers: AsyncActionHandlers<
-  Reducer<Route & { error?: Error }, routeReducerAction>,
+  Reducer<Route, routeReducerAction>,
   routeAsyncAction
 > = {
   APPEND: ({ dispatch, getState }) => {
