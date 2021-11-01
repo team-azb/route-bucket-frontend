@@ -40,7 +40,9 @@ export async function getRoute(routeId: string) {
   try {
     res = await axios.get<RouteResponse>(`/routes/${routeId}`);
   } catch (error) {
-    console.error(error);
+    if (hasAxiosResponseMessage(error)) {
+      console.error(error.response.data.message);
+    }
   }
   return res;
 }
@@ -50,7 +52,9 @@ export async function getRoutes() {
   try {
     res = await axios.get<RoutesResponse>("/routes/");
   } catch (error) {
-    console.error(error);
+    if (hasAxiosResponseMessage(error)) {
+      console.error(error.response.data.message);
+    }
   }
   return res;
 }
