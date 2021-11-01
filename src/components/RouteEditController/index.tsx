@@ -37,10 +37,12 @@ function RouteEditControllerDisplay(props: RouteEditControllerProps) {
     const approval = window.confirm(
       "経路をクリアします。(クリアの取り消しはできません)\nよろしいですか？"
     );
-    approval && props.setIsLoading(true);
-    props.dispatchRoute({
-      type: "CLEAR",
-    });
+    if (approval) {
+      props.setIsLoading(true);
+      props.dispatchRoute({
+        type: "CLEAR",
+      });
+    }
   };
 
   const onClickUndoHandler = () => {
