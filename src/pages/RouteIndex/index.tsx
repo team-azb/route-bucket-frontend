@@ -49,7 +49,7 @@ function RouteIndex() {
       return (
         <li key={route.id}>
           <h3>{route.name}</h3>
-          <Link to={`/${route.id}`}>
+          <Link to={`/routes/${route.id}`}>
             <button>ルートを編集</button>
           </Link>
           <button
