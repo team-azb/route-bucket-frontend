@@ -17,6 +17,7 @@ import {
 } from "../../reducers/routeReducer";
 import { useWindowDimensions } from "../../hooks/windowDimensions";
 import CircularProgress from "@mui/material/CircularProgress";
+import PrivateTemplate from "../../components/PrivateTemplate";
 
 //ClickLayerコンポーネントのpropsの型
 type ClickLayerProps = {
@@ -125,7 +126,7 @@ const RouteEditor: FunctionComponent = () => {
   }, [routeId]);
 
   return (
-    <>
+    <PrivateTemplate>
       <div>
         {isLoading && (
           <div
@@ -220,7 +221,7 @@ const RouteEditor: FunctionComponent = () => {
           />
         )}
       </div>
-    </>
+    </PrivateTemplate>
   );
 };
 

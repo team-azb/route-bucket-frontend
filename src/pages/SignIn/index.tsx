@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
+import { useHistory } from "react-router";
+import { paths } from "../../consts/path";
 
 const SignIn = () => {
   const [emailInput, setEmailInput] = useState<string>("");
   const [passwordInput, setPasswordInput] = useState<string>("");
+  const history = useHistory();
   const onClickSigninHandler = async () => {
     const auth = getAuth();
     try {
-      await signInWithEmailAndPassword(
-        auth,
-        emailInput,
-        passwordInput
-      );
+      await signInWithEmailAndPassword(auth, emailInput, passwordInput);
       alert("ログイン成功");
+      history.push(paths.routeIndex);
     } catch (error) {
       alert("ログイン失敗");
     }

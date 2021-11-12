@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getRoutes, postRoutes, deleteRoute } from "../../api/routes";
 import { Route } from "../../types";
+import PrivateTemplate from "../../components/PrivateTemplate";
 
 function RouteIndex() {
   const [inputValue, setInputValue] = useState<string>("");
@@ -67,16 +68,18 @@ function RouteIndex() {
   };
 
   return (
-    <div>
-      <h2>ルートの作成</h2>
-      <input
-        type="text"
-        onChange={(event) => setInputValue(event.target.value)}
-      />
-      <button onClick={onClickPost}>create route</button>
-      <h2>ルートの一覧</h2>
-      <Routes />
-    </div>
+    <PrivateTemplate>
+      <div>
+        <h2>ルートの作成</h2>
+        <input
+          type="text"
+          onChange={(event) => setInputValue(event.target.value)}
+        />
+        <button onClick={onClickPost}>create route</button>
+        <h2>ルートの一覧</h2>
+        <Routes />
+      </div>
+    </PrivateTemplate>
   );
 }
 

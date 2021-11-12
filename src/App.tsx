@@ -8,7 +8,7 @@ import "leaflet/dist/leaflet.css";
 import "leaflet.locatecontrol/dist/L.Control.Locate.min.css";
 import "font-awesome/css/font-awesome.min.css";
 import { paths } from "./consts/path";
-import { UserProvider } from "./contexts/userContext"
+import { UserProvider } from "./contexts/userContext";
 
 function App() {
   return (
@@ -16,7 +16,7 @@ function App() {
       <Switch>
         <UserProvider>
           <Route exact path={paths.top} children={<Top />} />
-          <Route path={paths.routeIndex} children={<RouteIndex />} />
+          <Route exact path={paths.routeIndex} children={<RouteIndex />} />
           <Route path={paths.signIn} children={<SignIn />} />
           <Route path={paths.routeEditer} children={<RouteEditor />} />
         </UserProvider>
