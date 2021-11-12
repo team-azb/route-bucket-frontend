@@ -2,6 +2,7 @@ import RouteIndex from "./pages//RouteIndex";
 import RouteEditor from "./pages/RouteEditor";
 import SignIn from "./pages/SignIn";
 import Top from "./pages/Top";
+import PasswordReset from "./pages/PasswordReset";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
 import "leaflet/dist/leaflet.css";
@@ -19,6 +20,7 @@ function App() {
           <Route exact path={paths.routeIndex} children={<RouteIndex />} />
           <Route path={paths.signIn} children={<SignIn />} />
           <Route path={paths.routeEditer} children={<RouteEditor />} />
+          <Route path={paths.passwordReset} children={<PasswordReset />} />
         </UserProvider>
       </Switch>
     </Router>

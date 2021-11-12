@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
 import { useHistory } from "react-router";
 import { paths } from "../../consts/path";
+import { Link } from "react-router-dom";
 
 const SignIn = () => {
   const [emailInput, setEmailInput] = useState<string>("");
@@ -51,6 +52,7 @@ const SignIn = () => {
             value="サインイン"
           />
         </div>
+        <Link to={paths.passwordReset}>パスワードを忘れた方はこちら</Link>
       </div>
     </>
   );
