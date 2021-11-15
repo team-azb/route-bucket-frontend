@@ -10,7 +10,7 @@ import { initializeApp } from "firebase/app";
 Leaflet.Icon.Default.imagePath =
   "//cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/";
 
-const firebaseConfig = {
+const FIREBASE_CONFIG = {
   apiKey: "AIzaSyBuwuzk6vGRZs7BNQdSrIU-4lcVMRx_39k",
   authDomain: "route-bucket-dev.firebaseapp.com",
   projectId: "route-bucket-dev",
@@ -19,7 +19,7 @@ const firebaseConfig = {
   appId: "1:816609137730:web:e40cb4cb567ce8c26809db",
   measurementId: "G-DZXT9VND9L",
 };
-initializeApp(firebaseConfig);
+initializeApp(FIREBASE_CONFIG);
 
 ReactDOM.render(
   <React.StrictMode>
