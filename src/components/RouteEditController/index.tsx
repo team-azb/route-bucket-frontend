@@ -18,7 +18,7 @@ import {
   FormLabel,
   Typography,
 } from "@mui/material";
-import { paths } from "../../consts/path";
+import { pagePaths } from "../../consts/path";
 
 type RouteEditControllerProps = {
   isInsideMap: boolean;
@@ -65,7 +65,7 @@ function RouteEditControllerDisplay(props: RouteEditControllerProps) {
   };
 
   const onClickGoIndexPageHandler = () => {
-    history.push(paths.routeIndex);
+    history.push(pagePaths.ROUTE_INDEX);
   };
 
   const onChangeDrawingModeRadioHandler = (

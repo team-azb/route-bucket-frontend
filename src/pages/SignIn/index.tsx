@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
 import { useHistory } from "react-router";
-import { paths } from "../../consts/path";
+import { pagePaths } from "../../consts/path";
 import { Link } from "react-router-dom";
 
 const SignIn = () => {
@@ -13,7 +13,7 @@ const SignIn = () => {
     try {
       await signInWithEmailAndPassword(auth, emailInput, passwordInput);
       alert("ログイン成功");
-      history.push(paths.routeIndex);
+      history.push(pagePaths.ROUTE_INDEX);
     } catch (error) {
       alert("ログイン失敗");
     }
@@ -52,7 +52,7 @@ const SignIn = () => {
             value="サインイン"
           />
         </div>
-        <Link to={paths.passwordReset}>パスワードを忘れた方はこちら</Link>
+        <Link to={pagePaths.PASSWORD_RESET}>パスワードを忘れた方はこちら</Link>
       </div>
     </>
   );

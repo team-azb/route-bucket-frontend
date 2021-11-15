@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { paths } from "../../consts/path";
+import { pagePaths } from "../../consts/path";
 import { signOut, getAuth } from "firebase/auth";
 
 const Top = () => {
@@ -19,12 +19,12 @@ const Top = () => {
       <h1>トップページ</h1>
       <ul>
         <li>
-          <Link to={paths.routeIndex}>
+          <Link to={pagePaths.ROUTE_INDEX}>
             <button>ルート一覧</button>
           </Link>
         </li>
         <li>
-          <Link to={paths.signIn}>
+          <Link to={pagePaths.SIGN_IN}>
             <button>サインイン</button>
           </Link>
         </li>

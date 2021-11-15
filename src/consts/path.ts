@@ -1,7 +1,13 @@
-export const paths = {
-  top: "/",
-  routeIndex: "/routes",
-  routeEditer: "/routes/:routeId",
-  signIn: "/signin",
-  passwordReset: "/password_reset",
+export const pagePaths = {
+  TOP: "/",
+  ROUTE_INDEX: "/routes",
+  ROUTE_EDITOR: "/routes/:routeId",
+  SIGN_IN: "/signin",
+  PASSWORD_RESET: "/password_reset",
+};
+
+export const staticFileUrls = {
+  START_MARKER_ICON: "http://localhost:3000/icons/start_pin.svg",
+  MARKER_ICON: "http://localhost:3000/icons/fmd_good_black_24dp.svg",
+  GOAL_MARKER_ICON: "http://localhost:3000/icons/goal_pin.svg",
 };
