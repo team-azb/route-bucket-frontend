@@ -6,6 +6,10 @@ export const pagePaths = {
   PASSWORD_RESET: "/password_reset",
 };
 
+export const generateRouteEditorPath = (routeId: string) => {
+  return `/routes/${routeId}`;
+};
+
 export const staticFileUrls = {
   START_MARKER_ICON: "http://localhost:3000/icons/start_pin.svg",
   MARKER_ICON: "http://localhost:3000/icons/fmd_good_black_24dp.svg",
