@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getRoutes, postRoutes, deleteRoute } from "../../api/routes";
 import { Route } from "../../types";
-import PrivateTemplate from "../../components/PrivateTemplate";
+import SignInRequiredTemplate from "../../components/SignInRequiredTemplate";
 import { generateRouteEditorPath } from "../../consts/path";
 
 function RouteIndex() {
@@ -69,7 +69,7 @@ function RouteIndex() {
   };
 
   return (
-    <PrivateTemplate>
+    <SignInRequiredTemplate>
       <div>
         <h2>ルートの作成</h2>
         <input
@@ -80,7 +80,7 @@ function RouteIndex() {
         <h2>ルートの一覧</h2>
         <Routes />
       </div>
-    </PrivateTemplate>
+    </SignInRequiredTemplate>
   );
 }
 
