@@ -52,7 +52,7 @@ const SignIn = () => {
             value="サインイン"
           />
         </div>
-        <Link to={pagePaths.PASSWORD_RESET}>パスワードを忘れた方はこちら</Link>
+        <Link to={pagePaths.PASSWORD_RESET}>パスワードを忘れた場合</Link>
       </div>
     </>
   );
