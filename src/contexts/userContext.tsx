@@ -8,10 +8,10 @@ export const UserProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   useEffect(() => {
     const auth = getAuth();
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribeWhenUnmounted = onAuthStateChanged(auth, (user) => {
       setUser(user);
     });
-    return unsubscribe;
+    return unsubscribeWhenUnmounted;
   }, []);
   return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
 };
