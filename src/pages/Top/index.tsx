@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { pagePaths } from "../../consts/path";
+import { pagePaths } from "../../consts/uriComponents";
 import { signOut, getAuth } from "firebase/auth";
 
 const Top = () => {

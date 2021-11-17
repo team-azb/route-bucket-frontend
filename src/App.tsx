@@ -8,7 +8,7 @@ import "./App.css";
 import "leaflet/dist/leaflet.css";
 import "leaflet.locatecontrol/dist/L.Control.Locate.min.css";
 import "font-awesome/css/font-awesome.min.css";
-import { pagePaths } from "./consts/path";
+import { pagePaths } from "./consts/uriComponents";
 import { AuthentificatedUserProvider } from "./contexts/authentificatedUserContext";
 
 function App() {

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { getRoutes, postRoutes, deleteRoute } from "../../api/routes";
 import { Route } from "../../types";
 import SignInRequiredTemplate from "../../components/SignInRequiredTemplate";
-import { pagePaths } from "../../consts/path";
+import { pagePaths } from "../../consts/uriComponents";
 
 function RouteIndex() {
   const [inputValue, setInputValue] = useState<string>("");

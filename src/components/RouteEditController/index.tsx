@@ -18,7 +18,7 @@ import {
   FormLabel,
   Typography,
 } from "@mui/material";
-import { pagePaths } from "../../consts/path";
+import { pagePaths } from "../../consts/uriComponents";
 
 type RouteEditControllerProps = {
   isInsideMap: boolean;

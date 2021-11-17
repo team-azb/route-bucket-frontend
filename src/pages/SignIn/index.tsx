@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
 import { useHistory } from "react-router";
-import { pagePaths } from "../../consts/path";
+import { pagePaths } from "../../consts/uriComponents";
 import { Link } from "react-router-dom";
 
 const SignIn = () => {
