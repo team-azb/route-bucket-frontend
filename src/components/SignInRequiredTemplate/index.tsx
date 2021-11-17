@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
-import { UserContext } from "../../contexts/userContext";
+import { AuthentificatedUserContext } from "../../contexts/authentificatedUserContext";
 import { Link } from "react-router-dom";
 import { pagePaths } from "../../consts/path";
 
 const SignInRequiredTemplate: React.FC = ({ children }) => {
-  const user = useContext(UserContext);
+  const user = useContext(AuthentificatedUserContext);
 
   const redirectMessage = (
     <div>
