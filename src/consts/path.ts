@@ -4,10 +4,9 @@ export const pagePaths = {
   ROUTE_EDITOR: "/routes/:routeId",
   SIGN_IN: "/signin",
   PASSWORD_RESET: "/password_reset",
-};
-
-export const generateRouteEditorPath = (routeId: string) => {
-  return `/routes/${routeId}`;
+  routeEditorPath: (routeId: string) => {
+    return `/routes/${routeId}`;
+  },
 };
 
 export const staticFileUrls = {
