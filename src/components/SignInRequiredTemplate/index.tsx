@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
-import { AuthentificatedUserContext } from "../../contexts/authentificatedUserContext";
+import { SignedInUserUserContext } from "../../contexts/signedInUserContext";
 import { Link } from "react-router-dom";
 import { pagePaths } from "../../consts/uriComponents";
 
 const SignInRequiredTemplate: React.FC = ({ children }) => {
-  const user = useContext(AuthentificatedUserContext);
+  const signedInUser = useContext(SignedInUserUserContext);
 
   const redirectMessage = (
     <div>
@@ -13,7 +13,7 @@ const SignInRequiredTemplate: React.FC = ({ children }) => {
     </div>
   );
 
-  return <>{user ? children : redirectMessage}</>;
+  return <>{signedInUser ? children : redirectMessage}</>;
 };
 
 export default SignInRequiredTemplate;
