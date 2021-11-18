@@ -1,13 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { pagePaths } from "../../consts/uriComponents";
-import { signOut, getAuth } from "firebase/auth";
+import { signOut } from "../../api/auth";
 
 const Top = () => {
   const onClickSignoutHandler = async () => {
-    const auth = getAuth();
     try {
-      await signOut(auth);
+      await signOut();
       alert("サインアウト成功");
     } catch (error) {
       alert("サインアウト失敗");
