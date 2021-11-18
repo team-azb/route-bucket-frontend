@@ -51,7 +51,7 @@ function markerGenerator(
 ) {
   const markerIcon = getMarkerIcon(idx, 0, props.route.waypoints.length - 1);
   markerRef = createRef<MarkerType>();
-  async function onClickMarker(idx: number) {
+  async function clickMarkerHandler(idx: number) {
     props.setIsLoading(true);
     props.dispatchRoute({
       type: "REMOVE",
@@ -60,7 +60,7 @@ function markerGenerator(
     });
   }
 
-  async function onDragMarker(idx: number) {
+  async function dragMarkerHandler(idx: number) {
     const newPoint = markerRef.current?.getLatLng();
     if (newPoint) {
       props.setIsLoading(true);
@@ -88,10 +88,10 @@ function markerGenerator(
       key={nanoid()}
       eventHandlers={{
         click: () => {
-          onClickMarker(idx);
+          clickMarkerHandler(idx);
         },
         dragend: () => {
-          onDragMarker(idx);
+          dragMarkerHandler(idx);
         },
       }} //TODO: ここの関数を一つにまとめたい
     ></Marker>

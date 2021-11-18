@@ -26,14 +26,14 @@ type NameDisplayProps = {
 function NameInput(props: NameInputProps) {
   const [nameInput, setNameInput] = useState<string>(props.route.name);
 
-  function onSubmitName() {
+  function submitNameHandler() {
     props.setIsEditable((prevState) => {
       return !prevState;
     });
     props.dispatchRoute({ type: "RENAME", name: nameInput });
   }
 
-  function onQuitEditing() {
+  function quitEditingHandler() {
     props.setIsEditable((prevState) => {
       return !prevState;
     });
@@ -54,7 +54,7 @@ function NameInput(props: NameInputProps) {
 
       <Button
         onClick={() => {
-          onSubmitName();
+          submitNameHandler();
         }}
       >
         更新
@@ -62,7 +62,7 @@ function NameInput(props: NameInputProps) {
 
       <Button
         onClick={() => {
-          onQuitEditing();
+          quitEditingHandler();
         }}
       >
         キャンセル

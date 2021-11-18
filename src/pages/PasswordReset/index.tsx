@@ -3,7 +3,7 @@ import { sendPasswordResetEmail } from "../../api/auth";
 
 const PasswordReset = () => {
   const [emailInput, setEmailInput] = useState<string>("");
-  const onClickSend = async () => {
+  const sendHandler = async () => {
     try {
       await sendPasswordResetEmail(emailInput);
       alert("送信しました。");
@@ -22,7 +22,7 @@ const PasswordReset = () => {
         }}
         type="email"
       />
-      <input onClick={onClickSend} type="button" value="送信" />
+      <input onClick={sendHandler} type="button" value="送信" />
     </>
   );
 };

@@ -8,7 +8,7 @@ const SignIn = () => {
   const [emailInput, setEmailInput] = useState<string>("");
   const [passwordInput, setPasswordInput] = useState<string>("");
   const history = useHistory();
-  const onClickSigninHandler = async () => {
+  const signInHandler = async () => {
     try {
       await signInWithEmailAndPassword(emailInput, passwordInput);
       alert("ログイン成功");
@@ -45,11 +45,7 @@ const SignIn = () => {
           />
         </div>
         <div>
-          <input
-            onClick={onClickSigninHandler}
-            type="button"
-            value="サインイン"
-          />
+          <input onClick={signInHandler} type="button" value="サインイン" />
         </div>
         <Link to={pagePaths.PASSWORD_RESET}>パスワードを忘れた場合</Link>
       </div>

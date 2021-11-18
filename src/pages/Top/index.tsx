@@ -4,7 +4,7 @@ import { pagePaths } from "../../consts/uriComponents";
 import { signOut } from "../../api/auth";
 
 const Top = () => {
-  const onClickSignoutHandler = async () => {
+  const signOutHandler = async () => {
     try {
       await signOut();
       alert("サインアウト成功");
@@ -28,7 +28,7 @@ const Top = () => {
           </Link>
         </li>
         <li>
-          <button onClick={onClickSignoutHandler}>サインアウト</button>
+          <button onClick={signOutHandler}>サインアウト</button>
         </li>
       </ul>
     </>

@@ -22,7 +22,7 @@ function RouteIndex() {
     };
   }, []);
 
-  async function onClickPost() {
+  async function createRouteHandler() {
     try {
       await postRoutes(inputValue);
       const getRes = await getRoutes();
@@ -34,7 +34,7 @@ function RouteIndex() {
     }
   }
 
-  async function onClickDelete(id: string) {
+  async function deleteRouteHandler(id: string) {
     try {
       await deleteRoute(id);
       const getRes = await getRoutes();
@@ -56,7 +56,7 @@ function RouteIndex() {
           </Link>
           <button
             onClick={() => {
-              onClickDelete(route.id);
+              deleteRouteHandler(route.id);
             }}
           >
             ルートを削除
@@ -76,7 +76,7 @@ function RouteIndex() {
           type="text"
           onChange={(event) => setInputValue(event.target.value)}
         />
-        <button onClick={onClickPost}>create route</button>
+        <button onClick={createRouteHandler}>create route</button>
         <h2>ルートの一覧</h2>
         <Routes />
       </div>
