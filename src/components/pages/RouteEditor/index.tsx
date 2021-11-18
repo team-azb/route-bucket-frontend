@@ -127,7 +127,7 @@ const RouteEditor: FunctionComponent = () => {
 
   return (
     <SignInRequiredTemplate>
-      <div>
+      <div style={{position: "relative"}}>
         {isLoading && (
           <div
             // TODO: styleをCSSとかにまとめるかstyled component使う
