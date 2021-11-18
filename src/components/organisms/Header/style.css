@@ -1,0 +1,16 @@
+.header__container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  height: 64px;
+  background: #20746a 0% 0% no-repeat padding-box;
+}
+
+.header__link {
+  font-size: 2rem;
+  color: #fff;
+  font-weight: 600;
+  margin-right: 36px;
+  text-decoration: none;
+}
