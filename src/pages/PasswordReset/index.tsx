@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+import { sendPasswordResetEmail } from "../../api/auth";
 
 const PasswordReset = () => {
   const [emailInput, setEmailInput] = useState<string>("");
   const onClickSend = async () => {
-    const auth = getAuth();
     try {
-      await sendPasswordResetEmail(auth, emailInput);
+      await sendPasswordResetEmail(emailInput);
       alert("送信しました。");
     } catch (error) {
       alert("送信できませんでした。");
