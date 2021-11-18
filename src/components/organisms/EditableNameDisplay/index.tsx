@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Button } from "@mui/material";
-import { Route } from "../../types";
+import { Route } from "../../../types";
 import {
   routeReducerAction,
   routeAsyncAction,
-} from "../../reducers/routeReducer";
+} from "../../../reducers/routeReducer";
 import { Typography } from "@mui/material";
 
 type EditableNameDisplayProps = {

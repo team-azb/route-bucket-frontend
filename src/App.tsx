@@ -1,8 +1,8 @@
-import RouteIndex from "./pages//RouteIndex";
-import RouteEditor from "./pages/RouteEditor";
-import SignIn from "./pages/SignIn";
-import Top from "./pages/Top";
-import PasswordReset from "./pages/PasswordReset";
+import RouteIndex from "./components/pages/RouteIndex";
+import RouteEditor from "./components/pages/RouteEditor";
+import SignIn from "./components/pages/SignIn";
+import Top from "./components/pages/Top";
+import PasswordReset from "./components/pages/PasswordReset";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
 import "leaflet/dist/leaflet.css";

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router";
-import { pagePaths } from "../../consts/uriComponents";
+import { pagePaths } from "../../../consts/uriComponents";
 import { Link } from "react-router-dom";
-import { signInWithEmailAndPassword } from "../../api/auth";
+import { signInWithEmailAndPassword } from "../../../api/auth";
 
 const SignIn = () => {
   const [emailInput, setEmailInput] = useState<string>("");

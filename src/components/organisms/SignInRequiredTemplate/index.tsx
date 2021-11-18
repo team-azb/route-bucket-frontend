@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
-import { SignedInUserUserContext } from "../../contexts/signedInUserContext";
+import { SignedInUserUserContext } from "../../../contexts/signedInUserContext";
 import { Link } from "react-router-dom";
-import { pagePaths } from "../../consts/uriComponents";
+import { pagePaths } from "../../../consts/uriComponents";
 
 const SignInRequiredTemplate: React.FC = ({ children }) => {
   const signedInUser = useContext(SignedInUserUserContext);

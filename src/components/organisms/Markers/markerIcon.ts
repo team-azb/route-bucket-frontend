@@ -1,5 +1,5 @@
 import L from "leaflet";
-import { ORIGIN, pagePaths } from "../../consts/uriComponents";
+import { ORIGIN, pagePaths } from "../../../consts/uriComponents";
 
 //TODO: 環境変数にしてビルド環境によってURL切り替える
 export const MarkerIcon = new L.Icon({

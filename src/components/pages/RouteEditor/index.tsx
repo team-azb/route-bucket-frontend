@@ -4,20 +4,20 @@ import { MapContainer, TileLayer, useMapEvent, useMap } from "react-leaflet";
 import L, { LatLng, LeafletMouseEvent } from "leaflet";
 import "leaflet.locatecontrol";
 import { useReducerAsync } from "use-reducer-async";
-import Markers from "../../components/Markers";
-import Polylines from "../../components/Polylines";
-import FocusedMarker from "../../components/FocusedMarker";
-import RouteEditController from "../../components/RouteEditController";
-import { FocusedMarkerInfo, DrawingMode } from "../../types";
+import Markers from "../../organisms/Markers";
+import Polylines from "../../organisms/Polylines";
+import FocusedMarker from "../../organisms/FocusedMarker";
+import RouteEditController from "../../organisms/RouteEditController";
+import { FocusedMarkerInfo, DrawingMode } from "../../../types";
 import {
   routeReducer,
   routeAsyncActionHandlers,
   routeReducerAction,
   routeAsyncAction,
-} from "../../reducers/routeReducer";
-import { useWindowDimensions } from "../../hooks/windowDimensions";
+} from "../../../reducers/routeReducer";
+import { useWindowDimensions } from "../../../hooks/windowDimensions";
 import CircularProgress from "@mui/material/CircularProgress";
-import SignInRequiredTemplate from "../../components/SignInRequiredTemplate";
+import SignInRequiredTemplate from "../../organisms/SignInRequiredTemplate";
 
 //ClickLayerコンポーネントのpropsの型
 type ClickLayerProps = {

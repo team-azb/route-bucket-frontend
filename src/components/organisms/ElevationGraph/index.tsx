@@ -11,8 +11,8 @@ import {
   TooltipProps,
 } from "recharts";
 import L from "leaflet";
-import { meters2kilometers } from "../../utils";
-import { Segment, FocusedMarkerInfo } from "../../types";
+import { meters2kilometers } from "../../../utils";
+import { Segment, FocusedMarkerInfo } from "../../../types";
 
 type ElevationGraphProp = {
   focusedMarkerInfo: FocusedMarkerInfo;

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { pagePaths } from "../../consts/uriComponents";
-import { signOut } from "../../api/auth";
+import { pagePaths } from "../../../consts/uriComponents";
+import { signOut } from "../../../api/auth";
 
 const Top = () => {
   const signOutHandler = async () => {
