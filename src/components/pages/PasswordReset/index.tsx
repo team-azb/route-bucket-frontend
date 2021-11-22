@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { sendPasswordResetEmail } from "../../../api/auth";
+import "./style.css";
 
 const PasswordReset = () => {
   const [emailInput, setEmailInput] = useState<string>("");
@@ -13,17 +14,33 @@ const PasswordReset = () => {
   };
 
   return (
-    <>
-      <p>パスワード再設定用リンクを入力したemailに送信します。</p>
-      <input
-        value={emailInput}
-        onChange={(event) => {
-          setEmailInput(event.target.value);
-        }}
-        type="email"
-      />
-      <input onClick={sendHandler} type="button" value="送信" />
-    </>
+    <div className="pwd-reset__container">
+      <h1 className="pwd-reset__title">パスワード再設定</h1>
+      <hr />
+      <div className="pwd-reset__form--wrapper">
+        <div className="pwd-reset__form--container">
+          <h2>
+            登録したメールアドレスにパスワード再設定用のリンクを送信します。
+          </h2>
+          <div className="pwd-reset__form--field">
+            <label className="pwd-reset__form--label" htmlFor="email">
+              メールアドレス
+            </label>
+            <input
+              className="signin__form--input"
+              value={emailInput}
+              onChange={(event) => {
+                setEmailInput(event.target.value);
+              }}
+              type="email"
+            />
+          </div>
+          <button className="pwd-reset__form--button" onClick={sendHandler}>
+            送信
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 
