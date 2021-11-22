@@ -1,4 +1,5 @@
 import L from "leaflet";
+import { ORIGIN, pagePaths } from "../../../consts/uriComponents";
 
 /**
  *
@@ -7,8 +8,8 @@ import L from "leaflet";
  */
 export const FocusedMarkerIcon = (size: number) => {
   return new L.Icon({
-    iconUrl: "icons/circle_black_24dp.svg",
-    iconRetinaUrl: "icons/circle_black_24dp.svg",
+    iconUrl: ORIGIN + pagePaths.FOCUSED_MARKER_ICON,
+    iconRetinaUrl: ORIGIN + pagePaths.FOCUSED_MARKER_ICON,
     iconSize: new L.Point(size, size),
   });
 };

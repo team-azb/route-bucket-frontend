@@ -10,6 +10,7 @@ export const pagePaths = {
   START_MARKER_ICON: "/icons/start_pin.svg",
   MARKER_ICON: "/icons/fmd_good_black_24dp.svg",
   GOAL_MARKER_ICON: "/icons/goal_pin.svg",
+  FOCUSED_MARKER_ICON: "/icons/circle_black_24dp.svg",
 };
 
 export const ORIGIN = "http://localhost:3000";
