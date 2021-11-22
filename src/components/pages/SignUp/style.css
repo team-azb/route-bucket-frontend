@@ -36,9 +36,14 @@
   font-weight: 600;
 }
 
+.signup__form--span {
+  font-size: 1.2rem;
+  font-weight: normal;
+}
+
 .signup__form--input {
   font-size: 1.5rem;
-  min-width: 400px;
+  min-width: 450px;
   height: 40px;
   border: 1px solid #707070;
   border-radius: 5px;

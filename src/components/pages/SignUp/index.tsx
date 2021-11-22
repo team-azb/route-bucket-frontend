@@ -2,6 +2,8 @@ import React, { ChangeEvent, useState } from "react";
 import "./style.css";
 
 type Form = {
+  id: string;
+  name: string;
   email: string;
   password: string;
   confirm: string;
@@ -9,6 +11,8 @@ type Form = {
 
 const SignUp = () => {
   const [form, setForm] = useState<Form>({
+    id: "",
+    name: "",
     email: "",
     password: "",
     confirm: "",
@@ -33,6 +37,36 @@ const SignUp = () => {
       <hr />
       <div className="signup__form--wrapper">
         <div className="signup__form--container">
+          <div className="signup__form--field">
+            <label htmlFor="text" className="signup__form--label">
+              ID
+              <br />
+              <span className="signup__form--span">
+                ※ユーザーの識別のために使用されます。後から変更不可することはできません。
+              </span>
+            </label>
+            <input
+              type="text"
+              name="id"
+              className="signup__form--input"
+              onChange={changeFormHandler}
+            />
+          </div>
+          <div className="signup__form--field">
+            <label htmlFor="text" className="signup__form--label">
+              ニックネーム
+              <br />
+              <span className="signup__form--span">
+                ※IDとは別にユーザー名として使用されます。後から変更可能です。
+              </span>
+            </label>
+            <input
+              type="text"
+              name="name"
+              className="signup__form--input"
+              onChange={changeFormHandler}
+            />
+          </div>
           <div className="signup__form--field">
             <label htmlFor="email" className="signup__form--label">
               メールアドレス
