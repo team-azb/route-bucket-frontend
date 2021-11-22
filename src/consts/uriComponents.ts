@@ -3,6 +3,7 @@ export const pagePaths = {
   ROUTE_INDEX: "/routes",
   ROUTE_EDITOR: "/routes/:routeId",
   SIGN_IN: "/signin",
+  SIGN_UP: "/signup",
   PASSWORD_RESET: "/password_reset",
   routeEditorPath: (routeId: string) => {
     return `/routes/${routeId}`;

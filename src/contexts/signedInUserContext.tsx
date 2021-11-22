@@ -3,7 +3,7 @@ import { onAuthStateChanged, User } from "../api/auth";
 
 export const SignedInUserUserContext = createContext<User | null>(null);
 
-export const SignedInUserUserProvider: React.FC = ({ children }) => {
+export const SignedInUserProvider: React.FC = ({ children }) => {
   const [signedInUser, setSignedInUser] = useState<User | null>(null);
   useEffect(() => {
     const unsubscribeWhenUnmounted = onAuthStateChanged((signedInUser) => {
