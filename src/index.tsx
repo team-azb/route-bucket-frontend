@@ -4,10 +4,22 @@ import Leaflet from "leaflet";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { initializeApp } from "firebase/app";
 
 //ここでマーカーの画像のパスを指定する(defaultはundefined); => この処理はどっか別に移したいところ
 Leaflet.Icon.Default.imagePath =
   "//cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/";
+
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyBuwuzk6vGRZs7BNQdSrIU-4lcVMRx_39k",
+  authDomain: "route-bucket-dev.firebaseapp.com",
+  projectId: "route-bucket-dev",
+  storageBucket: "route-bucket-dev.appspot.com",
+  messagingSenderId: "816609137730",
+  appId: "1:816609137730:web:e40cb4cb567ce8c26809db",
+  measurementId: "G-DZXT9VND9L",
+};
+initializeApp(FIREBASE_CONFIG);
 
 ReactDOM.render(
   <React.StrictMode>

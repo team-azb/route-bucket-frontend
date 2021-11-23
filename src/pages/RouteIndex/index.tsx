@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getRoutes, postRoutes, deleteRoute } from "../../api/routes";
 import { Route } from "../../types";
+import SignInRequiredTemplate from "../../components/SignInRequiredTemplate";
+import { pagePaths } from "../../consts/uriComponents";
 
 function RouteIndex() {
   const [inputValue, setInputValue] = useState<string>("");
@@ -20,7 +22,7 @@ function RouteIndex() {
     };
   }, []);
 
-  async function onClickPost() {
+  async function createRouteHandler() {
     try {
       await postRoutes(inputValue);
       const getRes = await getRoutes();
@@ -32,7 +34,7 @@ function RouteIndex() {
     }
   }
 
-  async function onClickDelete(id: string) {
+  async function deleteRouteHandler(id: string) {
     try {
       await deleteRoute(id);
       const getRes = await getRoutes();
@@ -49,12 +51,12 @@ function RouteIndex() {
       return (
         <li key={route.id}>
           <h3>{route.name}</h3>
-          <Link to={`/${route.id}`}>
+          <Link to={pagePaths.routeEditorPath(route.id)}>
             <button>ルートを編集</button>
           </Link>
           <button
             onClick={() => {
-              onClickDelete(route.id);
+              deleteRouteHandler(route.id);
             }}
           >
             ルートを削除
@@ -67,16 +69,18 @@ function RouteIndex() {
   };
 
   return (
-    <div>
-      <h2>ルートの作成</h2>
-      <input
-        type="text"
-        onChange={(event) => setInputValue(event.target.value)}
-      />
-      <button onClick={onClickPost}>create route</button>
-      <h2>ルートの一覧</h2>
-      <Routes />
-    </div>
+    <SignInRequiredTemplate>
+      <div>
+        <h2>ルートの作成</h2>
+        <input
+          type="text"
+          onChange={(event) => setInputValue(event.target.value)}
+        />
+        <button onClick={createRouteHandler}>create route</button>
+        <h2>ルートの一覧</h2>
+        <Routes />
+      </div>
+    </SignInRequiredTemplate>
   );
 }
 

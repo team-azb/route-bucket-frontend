@@ -18,6 +18,7 @@ import {
   FormLabel,
   Typography,
 } from "@mui/material";
+import { pagePaths } from "../../consts/uriComponents";
 
 type RouteEditControllerProps = {
   isInsideMap: boolean;
@@ -33,7 +34,7 @@ type RouteEditControllerProps = {
 
 function RouteEditControllerDisplay(props: RouteEditControllerProps) {
   const history = useHistory();
-  const onClickClearHandler = () => {
+  const clearHandler = () => {
     const approval = window.confirm(
       "経路をクリアします。(クリアの取り消しはできません)\nよろしいですか？"
     );
@@ -45,29 +46,29 @@ function RouteEditControllerDisplay(props: RouteEditControllerProps) {
     }
   };
 
-  const onClickUndoHandler = () => {
+  const undoHandler = () => {
     props.setIsLoading(true);
     props.dispatchRoute({
       type: "UNDO",
     });
   };
 
-  const onClickRedoHandler = () => {
+  const redoHandler = () => {
     props.setIsLoading(true);
     props.dispatchRoute({
       type: "REDO",
     });
   };
 
-  const onClickExportHandler = () => {
+  const exportGpxHandler = () => {
     window.open(`${config.BACKEND_ORIGIN}/routes/${props.routeId}/gpx/`);
   };
 
-  const onClickGoIndexPageHandler = () => {
-    history.push("/");
+  const moveToIndexPageHandler = () => {
+    history.push(pagePaths.ROUTE_INDEX);
   };
 
-  const onChangeDrawingModeRadioHandler = (
+  const changeDrawingModeHandler = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     props.setDrawingMode(event.target.value as DrawingMode);
@@ -75,7 +76,7 @@ function RouteEditControllerDisplay(props: RouteEditControllerProps) {
   return (
     <div style={{ background: "#fff", opacity: 0.85 }}>
       <div style={{ padding: props.isInsideMap ? 20 : 5 }}>
-        <Button variant="contained" onClick={onClickGoIndexPageHandler}>
+        <Button variant="contained" onClick={moveToIndexPageHandler}>
           {"< ルート一覧へ"}
         </Button>
         <hr />
@@ -92,7 +93,7 @@ function RouteEditControllerDisplay(props: RouteEditControllerProps) {
         <FormLabel component="legend">ルート作成モード</FormLabel>
         <RadioGroup
           row
-          onChange={onChangeDrawingModeRadioHandler}
+          onChange={changeDrawingModeHandler}
           value={props.drawingMode}
         >
           <FormControlLabel
@@ -106,16 +107,16 @@ function RouteEditControllerDisplay(props: RouteEditControllerProps) {
             label="フリーハンド"
           />
         </RadioGroup>
-        <Button variant="outlined" onClick={onClickUndoHandler}>
+        <Button variant="outlined" onClick={undoHandler}>
           undo
         </Button>
-        <Button variant="outlined" onClick={onClickRedoHandler}>
+        <Button variant="outlined" onClick={redoHandler}>
           redo
         </Button>
-        <Button variant="outlined" onClick={onClickClearHandler}>
+        <Button variant="outlined" onClick={clearHandler}>
           clear
         </Button>
-        <Button variant="outlined" onClick={onClickExportHandler}>
+        <Button variant="outlined" onClick={exportGpxHandler}>
           export as gpx
         </Button>
       </div>
