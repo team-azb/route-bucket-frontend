@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { Button } from "@mui/material";
 import { Route } from "../../../types";
 import {
   routeReducerAction,
   routeAsyncAction,
 } from "../../../reducers/routeReducer";
-import { Typography } from "@mui/material";
+import "./style.css";
 
 type EditableNameDisplayProps = {
   route: Route;
@@ -41,32 +40,35 @@ function NameInput(props: NameInputProps) {
 
   return (
     <>
-      <Typography style={{ display: "inline" }}>
+      <p style={{ display: "inline" }}>
         ルート名:{" "}
         <input
+          className="editable-display__input"
           onChange={(e) => {
             setNameInput(e.target.value);
           }}
           type="text"
           value={nameInput}
         />
-      </Typography>
+      </p>
 
-      <Button
+      <button
+        className="editable-display__btn"
         onClick={() => {
           submitNameHandler();
         }}
       >
         更新
-      </Button>
+      </button>
 
-      <Button
+      <button
+        className="editable-display__btn"
         onClick={() => {
           quitEditingHandler();
         }}
       >
         キャンセル
-      </Button>
+      </button>
     </>
   );
 }
@@ -74,10 +76,9 @@ function NameInput(props: NameInputProps) {
 function NameDisplay(props: NameDisplayProps) {
   return (
     <>
-      <Typography style={{ display: "inline" }}>
-        ルート名: {props.route.name}
-      </Typography>
-      <Button
+      <p style={{ display: "inline" }}>ルート名: {props.route.name}</p>
+      <button
+        className="editable-display__btn"
         onClick={() => {
           props.setIsEditable((prevState) => {
             return !prevState;
@@ -86,7 +87,7 @@ function NameDisplay(props: NameDisplayProps) {
         style={{ display: "inline" }}
       >
         編集
-      </Button>
+      </button>
     </>
   );
 }

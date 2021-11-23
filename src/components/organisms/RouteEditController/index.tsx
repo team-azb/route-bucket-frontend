@@ -10,15 +10,8 @@ import ElevationGraph from "../ElevationGraph";
 import { config } from "../../../config";
 import { Route, FocusedMarkerInfo, DrawingMode } from "../../../types";
 import { meters2kilometers } from "../../../utils";
-import {
-  Button,
-  RadioGroup,
-  Radio,
-  FormControlLabel,
-  FormLabel,
-  Typography,
-} from "@mui/material";
 import { pagePaths } from "../../../consts/uriComponents";
+import "./style.css";
 
 type RouteEditControllerProps = {
   isInsideMap: boolean;
@@ -76,49 +69,68 @@ function RouteEditControllerDisplay(props: RouteEditControllerProps) {
   return (
     <div style={{ background: "#fff", opacity: 0.85 }}>
       <div style={{ padding: props.isInsideMap ? 20 : 5 }}>
-        <Button variant="contained" onClick={moveToIndexPageHandler}>
+        <button
+          className="controller__back-btn"
+          onClick={moveToIndexPageHandler}
+        >
           {"< ルート一覧へ"}
-        </Button>
+        </button>
         <hr />
-        <Typography>ルートid: {props.routeId}</Typography>
+        <p>ルートid: {props.routeId}</p>
         <EditableNameDisplay
           route={props.route}
           dispatchRoute={props.dispatchRoute}
         />
-        <Typography>
+        <p>
           総距離: {meters2kilometers(props.route.total_distance).toFixed(2)}km
-        </Typography>
-        <Typography>獲得標高: {props.route.elevation_gain}m</Typography>
+        </p>
+        <p>獲得標高: {props.route.elevation_gain}m</p>
         <hr />
-        <FormLabel component="legend">ルート作成モード</FormLabel>
-        <RadioGroup
-          row
-          onChange={changeDrawingModeHandler}
-          value={props.drawingMode}
-        >
-          <FormControlLabel
+        <p className="controller__radio-group--title">ルート作成モード</p>
+        <div className="controller__radio-group--container">
+          <input
+            className="controller__radio-group--radio"
+            type="radio"
+            id="followRoad"
+            name="drawingMode"
             value={DrawingMode.FOLLOW_ROAD}
-            control={<Radio />}
-            label="自動補間"
+            onChange={changeDrawingModeHandler}
+            checked={props.drawingMode === DrawingMode.FOLLOW_ROAD}
           />
-          <FormControlLabel
+          <label
+            className="controller__radio-group--label"
+            htmlFor="followRoad"
+          >
+            自動補間
+          </label>
+          <input
+            className="controller__radio-group--radio"
+            type="radio"
+            id="freehand"
+            name="drawingMode"
             value={DrawingMode.FREEHAND}
-            control={<Radio />}
-            label="フリーハンド"
+            onChange={changeDrawingModeHandler}
+            checked={props.drawingMode === DrawingMode.FREEHAND}
           />
-        </RadioGroup>
-        <Button variant="outlined" onClick={undoHandler}>
+          <label className="controller__radio-group--label" htmlFor="freehand">
+            フリーハンド
+          </label>
+        </div>
+        <button className="controller__operation-btn" onClick={undoHandler}>
           undo
-        </Button>
-        <Button variant="outlined" onClick={redoHandler}>
+        </button>
+        <button className="controller__operation-btn" onClick={redoHandler}>
           redo
-        </Button>
-        <Button variant="outlined" onClick={clearHandler}>
+        </button>
+        <button className="controller__operation-btn" onClick={clearHandler}>
           clear
-        </Button>
-        <Button variant="outlined" onClick={exportGpxHandler}>
+        </button>
+        <button
+          className="controller__operation-btn"
+          onClick={exportGpxHandler}
+        >
           export as gpx
-        </Button>
+        </button>
       </div>
       <ElevationGraph
         segments={props.route.segments}
