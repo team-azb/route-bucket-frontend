@@ -1,7 +1,7 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useContext } from "react";
 import { onAuthStateChanged, User } from "../api/auth";
 
-export const SignedInUserUserContext = createContext<User | null>(null);
+const SignedInUserUserContext = createContext<User | null>(null);
 
 export const SignedInUserProvider: React.FC = ({ children }) => {
   const [signedInUser, setSignedInUser] = useState<User | null>(null);
@@ -16,4 +16,9 @@ export const SignedInUserProvider: React.FC = ({ children }) => {
       {children}
     </SignedInUserUserContext.Provider>
   );
+};
+
+export const useSignedInUserUserContext = () => {
+  const signedInUser = useContext(SignedInUserUserContext);
+  return signedInUser;
 };
