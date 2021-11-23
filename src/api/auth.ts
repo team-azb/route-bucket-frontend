@@ -8,7 +8,6 @@ import {
   getAuth,
   User as FirebaseUser,
 } from "firebase/auth";
-import { hasAxiosResponseMessage } from "./helpers";
 
 enum Gender {
   MALE = "male",
@@ -57,13 +56,6 @@ export const onAuthStateChanged = (callback: NextOrObserver<FirebaseUser>) => {
 };
 
 export const signUp = async (payload: CreateUserRequestBody) => {
-  let res;
-  try {
-    res = await axios.post<CreateUserResponseBody>(`/users/`, payload);
-  } catch (error) {
-    if (hasAxiosResponseMessage(error)) {
-      console.error(error.response.data.message);
-    }
-  }
+  const res = await axios.post<CreateUserResponseBody>(`/users/`, payload);
   return res;
 };

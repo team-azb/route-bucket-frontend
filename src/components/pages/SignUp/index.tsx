@@ -1,5 +1,12 @@
 import React, { ChangeEvent, useState } from "react";
-import { signUp, CreateUserRequestBody } from "../../../api/auth";
+import { useHistory } from "react-router";
+import {
+  signUp,
+  CreateUserRequestBody,
+  signInWithEmailAndPassword,
+} from "../../../api/auth";
+import { hasAxiosResponseMessage } from "../../../api/helpers";
+import { pagePaths } from "../../../consts/uriComponents";
 import "./style.css";
 
 type Form = {
@@ -18,6 +25,7 @@ const SignUp = () => {
     password: "",
     password_confirmation: "",
   });
+  const history = useHistory();
 
   const changeFormHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setForm((prevState) => {
@@ -29,7 +37,16 @@ const SignUp = () => {
   };
 
   const sendFormHandler = async () => {
-    await signUp(form as CreateUserRequestBody);
+    try {
+      await signUp(form as CreateUserRequestBody);
+    } catch (error) {
+      if (hasAxiosResponseMessage(error)) {
+        alert(error.response.data.message);
+        return;
+      }
+    }
+    await signInWithEmailAndPassword(form.email, form.password);
+    history.push(pagePaths.ROUTE_INDEX);
   };
 
   return (
