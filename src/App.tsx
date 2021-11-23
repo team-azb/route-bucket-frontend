@@ -15,9 +15,9 @@ import { SignedInUserProvider } from "./contexts/signedInUserContext";
 function App() {
   return (
     <Router>
-      <Header />
-      <Switch>
-        <SignedInUserProvider>
+      <SignedInUserProvider>
+        <Header />
+        <Switch>
           <Route exact path={pagePaths.TOP} children={<Top />} />
           <Route exact path={pagePaths.ROUTE_INDEX} children={<RouteIndex />} />
           <Route exact path={pagePaths.SIGN_IN} children={<SignIn />} />
@@ -28,8 +28,8 @@ function App() {
             path={pagePaths.PASSWORD_RESET}
             children={<PasswordReset />}
           />
-        </SignedInUserProvider>
-      </Switch>
+        </Switch>
+      </SignedInUserProvider>
     </Router>
   );
 }

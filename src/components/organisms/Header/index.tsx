@@ -1,9 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { pagePaths } from "../../../consts/uriComponents";
+import { useSignedInUserUserContext } from "../../../contexts/signedInUserContext";
 import "./style.css";
 
 const Header = () => {
+  const signedInUser = useSignedInUserUserContext();
   return (
     <div className="header__container">
       <div className="header__left-section">
@@ -18,9 +20,11 @@ const Header = () => {
         >
           ルート検索
         </Link>
-        <Link className="header__right-section--link" to={pagePaths.SIGN_IN}>
-          サインイン
-        </Link>
+        {signedInUser ? null : (
+          <Link className="header__right-section--link" to={pagePaths.SIGN_IN}>
+            サインイン
+          </Link>
+        )}
       </div>
     </div>
   );
