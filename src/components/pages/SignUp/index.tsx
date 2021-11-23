@@ -1,4 +1,5 @@
 import React, { ChangeEvent, useState } from "react";
+import { signUp, CreateUserRequestBody } from "../../../api/auth";
 import "./style.css";
 
 type Form = {
@@ -6,7 +7,7 @@ type Form = {
   name: string;
   email: string;
   password: string;
-  confirm: string;
+  password_confirmation: string;
 };
 
 const SignUp = () => {
@@ -15,7 +16,7 @@ const SignUp = () => {
     name: "",
     email: "",
     password: "",
-    confirm: "",
+    password_confirmation: "",
   });
 
   const changeFormHandler = (event: ChangeEvent<HTMLInputElement>) => {
@@ -27,8 +28,8 @@ const SignUp = () => {
     });
   };
 
-  const sendFormhandler = () => {
-    console.log(form);
+  const sendFormHandler = async () => {
+    await signUp(form as CreateUserRequestBody);
   };
 
   return (
@@ -95,13 +96,13 @@ const SignUp = () => {
             </label>
             <input
               type="password"
-              name="confirmation"
+              name="password_confirmation"
               className="signup__form--input"
               onChange={changeFormHandler}
             />
           </div>
           <div className="signup__form--field">
-            <button className="signup__form--button" onClick={sendFormhandler}>
+            <button className="signup__form--button" onClick={sendFormHandler}>
               サインアップ
             </button>
           </div>
