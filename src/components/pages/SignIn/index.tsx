@@ -12,10 +12,10 @@ const SignIn = () => {
   const signInHandler = async () => {
     try {
       await signInWithEmailAndPassword(emailInput, passwordInput);
-      alert("ログイン成功");
+      alert("サインイン成功");
       history.push(pagePaths.ROUTE_INDEX);
     } catch (error) {
-      alert("ログイン失敗");
+      alert("サインイン失敗");
     }
   };
 

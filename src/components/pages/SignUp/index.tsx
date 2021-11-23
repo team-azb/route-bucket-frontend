@@ -45,8 +45,13 @@ const SignUp = () => {
         return;
       }
     }
-    await signInWithEmailAndPassword(form.email, form.password);
-    history.push(pagePaths.ROUTE_INDEX);
+    try {
+      await signInWithEmailAndPassword(form.email, form.password);
+      alert("サインイン成功");
+      history.push(pagePaths.ROUTE_INDEX);
+    } catch (error) {
+      alert("サインイン失敗");
+    }
   };
 
   return (
