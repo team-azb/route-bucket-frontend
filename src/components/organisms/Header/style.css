@@ -2,15 +2,36 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-end;
   height: 64px;
   background: #20746a 0% 0% no-repeat padding-box;
 }
 
-.header__link {
+.header__right-section--link {
   font-size: 1.5rem;
   color: #fff;
   font-weight: 600;
   margin-right: 36px;
   text-decoration: none;
+}
+
+.header__left-section--link {
+  font-size: 1.5rem;
+  color: #fff;
+  font-weight: 600;
+  margin-left: 36px;
+  text-decoration: none;
+}
+
+.header__right-section {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.header__left-section {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
 }
