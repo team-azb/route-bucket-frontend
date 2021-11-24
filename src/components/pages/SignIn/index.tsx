@@ -24,7 +24,7 @@ const SignIn = () => {
       <h1 className="signin__title">サインイン</h1>
       <hr />
       <div className="signin__form--wrapper">
-        <div className="singin__form--container">
+        <div className="signin__form--container">
           <div className="signin__form--field">
             <label className="signin__form--label" htmlFor="email">
               メールアドレス

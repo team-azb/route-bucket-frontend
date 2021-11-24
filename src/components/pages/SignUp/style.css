@@ -28,11 +28,20 @@
 .signup__form--field {
   display: flex;
   flex-direction: column;
-  margin: 15px 0;
+  margin: 10px 0;
 }
 
 .signup__form--label {
   font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.signup__form--error-label {
+  margin-top: 1px;
+  height: 1.2rem;
+  line-height: 1.2rem;
+  color: red;
+  font-size: 1.2rem;
   font-weight: 600;
 }
 
@@ -56,5 +65,15 @@
   border: none;
   border-radius: 5px;
   background-color: #20746a;
+  color: #fff;
+}
+
+.signup__form--button:disabled {
+  padding: 5px 30px;
+  cursor: not-allowed;
+  border: none;
+  border-radius: 5px;
+  background-color: #20746a;
+  opacity: 0.5;
   color: #fff;
 }
