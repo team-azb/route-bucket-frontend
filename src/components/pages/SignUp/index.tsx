@@ -126,7 +126,7 @@ const SignUp = () => {
     }
   };
 
-  const isDisabled = (form: Form) => {
+  const isUnableToSend = (form: Form) => {
     const hasEmptyField = Object.keys(form).some((key) => {
       return form[key as FormFields] === "";
     });
@@ -226,7 +226,7 @@ const SignUp = () => {
           </div>
           <div className="signup__form--field">
             <button
-              disabled={isDisabled(form)}
+              disabled={isUnableToSend(form)}
               className="signup__form--button"
               onClick={sendFormHandler}
             >
