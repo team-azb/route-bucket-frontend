@@ -1,16 +1,20 @@
 import React, { ChangeEvent, useState } from "react";
 import { useHistory } from "react-router";
 import { toast } from "react-toastify";
-import * as EmailValidator from "email-validator";
 import {
   signUp,
   CreateUserRequestBody,
   signInWithEmailAndPassword,
 } from "../../../api/auth";
 import { pagePaths } from "../../../consts/uriComponents";
+import {
+  isValidEmail,
+  isValidUserId,
+  isValidUserName,
+  isValidPassword,
+  isValidPasswordConfirmation,
+} from "./helper";
 import "./style.css";
-
-const USER_ID_REGEX = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i;
 
 enum FormFields {
   ID = "id",
@@ -21,57 +25,60 @@ enum FormFields {
 }
 
 type Form = {
-  [FormFields.ID]: string;
-  [FormFields.NAME]: string;
-  [FormFields.EMAIL]: string;
-  [FormFields.PASSWORD]: string;
-  [FormFields.PASSWORD_CONFIRMATION]: string;
+  [field in FormFields]: string;
+};
+
+const mergeValidationMessageForm = (
+  prevValidationMessage: Form,
+  newMessages: { [field in FormFields]?: string }
+) => {
+  return { ...prevValidationMessage, ...newMessages } as Form;
 };
 
 const updateValidationMessages = (
-  name: FormFields,
+  fieldName: FormFields,
   value: string,
   form: Form,
   prevValidationMessage: Form
 ) => {
-  switch (name) {
+  switch (fieldName) {
     case FormFields.ID:
-      return {
-        ...prevValidationMessage,
-        [FormFields.ID]: USER_ID_REGEX.test(value)
+      return mergeValidationMessageForm(prevValidationMessage, {
+        [FormFields.ID]: isValidUserId(value)
           ? ""
           : "ユーザーIDのパターンと不一致",
-      };
+      });
     case FormFields.NAME:
-      return {
-        ...prevValidationMessage,
-        [FormFields.NAME]:
-          value.length > 0 && value.length < 51
-            ? ""
-            : "ニックネームは1文字以上50文字以下",
-      };
-    case FormFields.EMAIL:
-      return {
-        ...prevValidationMessage,
-        [FormFields.EMAIL]: EmailValidator.validate(value)
+      return mergeValidationMessageForm(prevValidationMessage, {
+        [FormFields.NAME]: isValidUserName(value)
           ? ""
-          : "不適切なemailの形式",
-      };
+          : "ニックネームは1文字以上50文字以下",
+      });
+    case FormFields.EMAIL:
+      return mergeValidationMessageForm(prevValidationMessage, {
+        [FormFields.EMAIL]: isValidEmail(value) ? "" : "不適切なemailの形式",
+      });
     case FormFields.PASSWORD:
-      return {
-        ...prevValidationMessage,
-        [FormFields.PASSWORD]: value.length > 5 ? "" : "パスワードは6文字以上",
-        [FormFields.PASSWORD_CONFIRMATION]:
-          value === form[FormFields.PASSWORD_CONFIRMATION]
-            ? ""
-            : "パスワードと不一致",
-      };
+      return mergeValidationMessageForm(prevValidationMessage, {
+        [FormFields.PASSWORD]: isValidPassword(value)
+          ? ""
+          : "パスワードは6文字以上",
+        [FormFields.PASSWORD_CONFIRMATION]: isValidPasswordConfirmation(
+          value,
+          form[FormFields.PASSWORD_CONFIRMATION]
+        )
+          ? ""
+          : "パスワードと不一致",
+      });
     case FormFields.PASSWORD_CONFIRMATION:
-      return {
-        ...prevValidationMessage,
-        [FormFields.PASSWORD_CONFIRMATION]:
-          value === form[FormFields.PASSWORD] ? "" : "パスワードと不一致",
-      };
+      return mergeValidationMessageForm(prevValidationMessage, {
+        [FormFields.PASSWORD_CONFIRMATION]: isValidPasswordConfirmation(
+          value,
+          form[FormFields.PASSWORD]
+        )
+          ? ""
+          : "パスワードと不一致",
+      });
   }
 };
 
