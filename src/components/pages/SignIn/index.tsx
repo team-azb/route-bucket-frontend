@@ -10,7 +10,10 @@ const SignIn = () => {
   const [emailInput, setEmailInput] = useState<string>("");
   const [passwordInput, setPasswordInput] = useState<string>("");
   const history = useHistory();
-  const signInHandler = async () => {
+  const signInHandler: React.MouseEventHandler<HTMLButtonElement> = async (
+    event
+  ) => {
+    event.preventDefault();
     try {
       await signInWithEmailAndPassword(emailInput, passwordInput);
       toast.success("サインイン成功");
@@ -21,7 +24,7 @@ const SignIn = () => {
   };
 
   return (
-    <div className="signin__container">
+    <form className="signin__container">
       <h1 className="signin__title">サインイン</h1>
       <hr />
       <div className="signin__form--wrapper">
@@ -67,7 +70,7 @@ const SignIn = () => {
           </div>
         </div>
       </div>
-    </div>
+    </form>
   );
 };
 
