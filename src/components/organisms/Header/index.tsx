@@ -4,10 +4,12 @@ import { pagePaths } from "../../../consts/uriComponents";
 import { useSignedInUserUserContext } from "../../../contexts/signedInUserContext";
 import "./style.css";
 
+export const HEADER_HEIGHT_PX = 64;
+
 const Header = () => {
   const signedInUser = useSignedInUserUserContext();
   return (
-    <div className="header__container">
+    <div className="header__container" style={{ height: HEADER_HEIGHT_PX }}>
       <div className="header__left-section">
         <Link className="header__left-section--link" to={pagePaths.TOP}>
           Route Bucket β

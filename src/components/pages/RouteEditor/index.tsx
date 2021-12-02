@@ -18,6 +18,7 @@ import {
 import { useWindowDimensions } from "../../../hooks/windowDimensions";
 import CircularProgress from "@mui/material/CircularProgress";
 import SignInRequiredTemplate from "../../organisms/SignInRequiredTemplate";
+import { HEADER_HEIGHT_PX } from "../../organisms/Header";
 import "./style.css";
 
 //ClickLayerコンポーネントのpropsの型
@@ -41,7 +42,7 @@ const focusedMarkerInfoInitValue: FocusedMarkerInfo = {
 
 //現在地表示に関するオプション
 const locateOption: L.Control.LocateOptions = {
-  position: "topleft",
+  position: "topright",
   strings: {
     title: "現在地を表示",
     popup: "現在地",
@@ -81,6 +82,9 @@ function ClickLayer(props: ClickLayerProps) {
 
 const RouteEditor: FunctionComponent = () => {
   const { width, height } = useWindowDimensions();
+  const mapHeight = useMemo(() => {
+    return height - HEADER_HEIGHT_PX;
+  }, [height]);
   const isMobile = useMemo(() => {
     return width < 600;
   }, [width]);
@@ -134,7 +138,7 @@ const RouteEditor: FunctionComponent = () => {
             className="route-editor__loading--container"
             style={{
               width: width,
-              height: isMobile ? height * 0.8 : height,
+              height: isMobile ? mapHeight * 0.8 : mapHeight,
             }}
           >
             {/* FIXME: opacityがCircularProgressなどにも適用されてしまう */}
@@ -145,7 +149,10 @@ const RouteEditor: FunctionComponent = () => {
           </div>
         )}
         <MapContainer
-          style={{ width: width, height: isMobile ? height * 0.8 : height }}
+          style={{
+            width: width,
+            height: isMobile ? mapHeight * 0.8 : mapHeight,
+          }}
           center={[35.68139740310467, 139.7671569841016]}
           zoom={13}
           scrollWheelZoom={true}
