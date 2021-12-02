@@ -18,6 +18,7 @@ import {
 import { useWindowDimensions } from "../../../hooks/windowDimensions";
 import CircularProgress from "@mui/material/CircularProgress";
 import SignInRequiredTemplate from "../../organisms/SignInRequiredTemplate";
+import "./style.css";
 
 //ClickLayerコンポーネントのpropsの型
 type ClickLayerProps = {
@@ -127,27 +128,18 @@ const RouteEditor: FunctionComponent = () => {
 
   return (
     <SignInRequiredTemplate>
-      <div style={{ position: "relative" }}>
+      <div className="route-editor__loading--wrapper">
         {isLoading && (
           <div
-            // TODO: styleをCSSとかにまとめるかstyled component使う
+            className="route-editor__loading--container"
             style={{
-              zIndex: 2000,
-              background: "#fff",
-              opacity: 0.7,
-              position: "absolute",
-              top: 0,
-              left: 0,
               width: width,
               height: isMobile ? height * 0.8 : height,
-              alignItems: "center",
-              display: "flex",
-              justifyContent: "center",
             }}
           >
             {/* FIXME: opacityがCircularProgressなどにも適用されてしまう */}
             <CircularProgress />
-            <p style={{ fontWeight: "bold" }}>
+            <p className="route-editor__loading--text">
               {route.isLoaded ? "ルート計算中" : "ルート取得中"}
             </p>
           </div>
