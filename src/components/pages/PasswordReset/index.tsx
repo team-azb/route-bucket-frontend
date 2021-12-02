@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 import { sendPasswordResetEmail } from "../../../api/auth";
 import "./style.css";
 
@@ -7,9 +8,9 @@ const PasswordReset = () => {
   const sendHandler = async () => {
     try {
       await sendPasswordResetEmail(emailInput);
-      alert("送信しました。");
+      toast.success("メールを送信しました。");
     } catch (error) {
-      alert("送信できませんでした。");
+      toast.error("メールを送信できませんでした。");
     }
   };
 

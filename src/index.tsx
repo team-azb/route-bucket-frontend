@@ -2,6 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import Leaflet from "leaflet";
 import "./index.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { initializeApp } from "firebase/app";
@@ -23,6 +25,7 @@ initializeApp(FIREBASE_CONFIG);
 
 ReactDOM.render(
   <React.StrictMode>
+    <ToastContainer position="top-center" />
     <App />
   </React.StrictMode>,
   document.getElementById("root")

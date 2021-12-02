@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import { pagePaths } from "../../../consts/uriComponents";
 import { signOut } from "../../../api/auth";
 
@@ -7,9 +8,9 @@ const Top = () => {
   const signOutHandler = async () => {
     try {
       await signOut();
-      alert("サインアウト成功");
+      toast.success("サインアウト成功");
     } catch (error) {
-      alert("サインアウト失敗");
+      toast.error("サインアウト失敗");
     }
   };
 

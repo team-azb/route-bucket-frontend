@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useState } from "react";
 import { useHistory } from "react-router";
+import { toast } from "react-toastify";
 import * as EmailValidator from "email-validator";
 import {
   signUp,
@@ -113,15 +114,15 @@ const SignUp = () => {
       await signUp(form as CreateUserRequestBody);
     } catch (error) {
       if (error instanceof Error) {
-        alert(error.message);
+        toast.error(error.message);
       }
     }
     try {
       await signInWithEmailAndPassword(form.email, form.password);
-      alert("サインイン成功");
+      toast.success("サインイン成功");
       history.push(pagePaths.ROUTE_INDEX);
     } catch (error) {
-      alert("サインイン失敗");
+      toast.error("サインイン失敗");
     }
   };
 

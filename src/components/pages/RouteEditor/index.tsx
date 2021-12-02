@@ -4,6 +4,7 @@ import { MapContainer, TileLayer, useMapEvent, useMap } from "react-leaflet";
 import L, { LatLng, LeafletMouseEvent } from "leaflet";
 import "leaflet.locatecontrol";
 import { useReducerAsync } from "use-reducer-async";
+import { toast } from "react-toastify";
 import Markers from "../../organisms/Markers";
 import Polylines from "../../organisms/Polylines";
 import FocusedMarker from "../../organisms/FocusedMarker";
@@ -116,7 +117,7 @@ const RouteEditor: FunctionComponent = () => {
     //routeに変更が見られたらrouteのローディングが完了したものとし、isLoadingをfalseにする
     setIsLoading(false);
     if (route.error) {
-      alert(route.error.message);
+      toast.error(route.error.message);
     }
   }, [route]);
 

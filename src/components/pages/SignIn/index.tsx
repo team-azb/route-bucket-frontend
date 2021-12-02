@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router";
+import { toast } from "react-toastify";
 import { pagePaths } from "../../../consts/uriComponents";
 import { Link } from "react-router-dom";
 import { signInWithEmailAndPassword } from "../../../api/auth";
@@ -12,10 +13,10 @@ const SignIn = () => {
   const signInHandler = async () => {
     try {
       await signInWithEmailAndPassword(emailInput, passwordInput);
-      alert("サインイン成功");
+      toast.success("サインイン成功");
       history.push(pagePaths.ROUTE_INDEX);
     } catch (error) {
-      alert("サインイン失敗");
+      toast.error("サインイン失敗");
     }
   };
 
