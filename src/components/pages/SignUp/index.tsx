@@ -6,7 +6,6 @@ import {
   CreateUserRequestBody,
   signInWithEmailAndPassword,
 } from "../../../api/auth";
-import { hasAxiosResponseMessage } from "../../../api/helpers";
 import { pagePaths } from "../../../consts/uriComponents";
 import "./style.css";
 
@@ -113,9 +112,8 @@ const SignUp = () => {
     try {
       await signUp(form as CreateUserRequestBody);
     } catch (error) {
-      if (hasAxiosResponseMessage(error)) {
-        alert(error.response.data.message);
-        return;
+      if (error instanceof Error) {
+        alert(error.message);
       }
     }
     try {
