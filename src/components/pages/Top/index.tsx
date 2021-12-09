@@ -29,6 +29,11 @@ const Top = () => {
           </Link>
         </li>
         <li>
+          <Link to={pagePaths.SIGN_UP}>
+            <button>サインアップ</button>
+          </Link>
+        </li>
+        <li>
           <button onClick={signOutHandler}>サインアウト</button>
         </li>
       </ul>
