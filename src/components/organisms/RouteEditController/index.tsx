@@ -11,7 +11,7 @@ import { config } from "../../../config";
 import { Route, FocusedMarkerInfo, DrawingMode } from "../../../types";
 import { meters2kilometers } from "../../../utils";
 import { pagePaths } from "../../../consts/uriComponents";
-import "./style.css";
+import styles from "./style.module.css";
 
 type RouteEditControllerProps = {
   isInsideMap: boolean;
@@ -69,10 +69,7 @@ function RouteEditControllerDisplay(props: RouteEditControllerProps) {
   return (
     <div style={{ background: "#fff", opacity: 0.85 }}>
       <div style={{ padding: props.isInsideMap ? 20 : 5 }}>
-        <button
-          className="controller__back-btn"
-          onClick={moveToIndexPageHandler}
-        >
+        <button className={styles.backBtn} onClick={moveToIndexPageHandler}>
           {"< ルート一覧へ"}
         </button>
         <hr />
@@ -86,10 +83,10 @@ function RouteEditControllerDisplay(props: RouteEditControllerProps) {
         </p>
         <p>獲得標高: {props.route.elevation_gain}m</p>
         <hr />
-        <p className="controller__radio-group--title">ルート作成モード</p>
-        <div className="controller__radio-group--container">
+        <p className={styles.radioGroupTitle}>ルート作成モード</p>
+        <div className={styles.radioGroupContainer}>
           <input
-            className="controller__radio-group--radio"
+            className={styles.radioGroupRadio}
             type="radio"
             id="followRoad"
             name="drawingMode"
@@ -97,14 +94,11 @@ function RouteEditControllerDisplay(props: RouteEditControllerProps) {
             onChange={changeDrawingModeHandler}
             checked={props.drawingMode === DrawingMode.FOLLOW_ROAD}
           />
-          <label
-            className="controller__radio-group--label"
-            htmlFor="followRoad"
-          >
+          <label className={styles.radioGroupLabel} htmlFor="followRoad">
             自動補間
           </label>
           <input
-            className="controller__radio-group--radio"
+            className={styles.radioGroupRadio}
             type="radio"
             id="freehand"
             name="drawingMode"
@@ -112,23 +106,20 @@ function RouteEditControllerDisplay(props: RouteEditControllerProps) {
             onChange={changeDrawingModeHandler}
             checked={props.drawingMode === DrawingMode.FREEHAND}
           />
-          <label className="controller__radio-group--label" htmlFor="freehand">
+          <label className={styles.radioGroupLabel} htmlFor="freehand">
             フリーハンド
           </label>
         </div>
-        <button className="controller__operation-btn" onClick={undoHandler}>
+        <button className={styles.operationBtn} onClick={undoHandler}>
           undo
         </button>
-        <button className="controller__operation-btn" onClick={redoHandler}>
+        <button className={styles.operationBtn} onClick={redoHandler}>
           redo
         </button>
-        <button className="controller__operation-btn" onClick={clearHandler}>
+        <button className={styles.operationBtn} onClick={clearHandler}>
           clear
         </button>
-        <button
-          className="controller__operation-btn"
-          onClick={exportGpxHandler}
-        >
+        <button className={styles.operationBtn} onClick={exportGpxHandler}>
           export as gpx
         </button>
       </div>
@@ -154,7 +145,7 @@ export default function RouteEditController(props: RouteEditControllerProps) {
   return (
     <>
       {props.isInsideMap ? (
-        <div className={"leaflet-bottom leaflet-left"}>
+        <div className="leaflet-bottom leaflet-left">
           <div
             ref={divRef}
             className="leaflet-control leaflet-bar"

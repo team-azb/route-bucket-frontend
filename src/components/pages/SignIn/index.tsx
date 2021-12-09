@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { pagePaths } from "../../../consts/uriComponents";
 import { Link } from "react-router-dom";
 import { signInWithEmailAndPassword } from "../../../api/auth";
-import "./style.css";
+import styles from "./style.module.css";
 
 const SignIn = () => {
   const [emailInput, setEmailInput] = useState<string>("");
@@ -24,17 +24,17 @@ const SignIn = () => {
   };
 
   return (
-    <form className="signin__container">
-      <h1 className="signin__title">サインイン</h1>
+    <form className={styles.container}>
+      <h1 className={styles.title}>サインイン</h1>
       <hr />
-      <div className="signin__form--wrapper">
-        <div className="signin__form--container">
-          <div className="signin__form--field">
-            <label className="signin__form--label" htmlFor="email">
+      <div className={styles.formWrapper}>
+        <div className={styles.formContainer}>
+          <div className={styles.formField}>
+            <label className={styles.formLabel} htmlFor="email">
               メールアドレス
             </label>
             <input
-              className="signin__form--input"
+              className={styles.formInput}
               value={emailInput}
               onChange={(event) => {
                 setEmailInput(event.target.value);
@@ -43,12 +43,12 @@ const SignIn = () => {
               type="email"
             />
           </div>
-          <div className="signin__form--field">
-            <label className="signin__form--label" htmlFor="password">
+          <div className={styles.formField}>
+            <label className={styles.formLabel} htmlFor="password">
               パスワード
             </label>
             <input
-              className="signin__form--input"
+              className={styles.formInput}
               value={passwordInput}
               onChange={(event) => {
                 setPasswordInput(event.target.value);
@@ -57,14 +57,11 @@ const SignIn = () => {
               type="password"
             />
           </div>
-          <div className="signin__form--field">
-            <button className="signin__form--button" onClick={signInHandler}>
+          <div className={styles.formField}>
+            <button className={styles.formButton} onClick={signInHandler}>
               サインイン
             </button>
-            <Link
-              className="signin__form--anchor"
-              to={pagePaths.PASSWORD_RESET}
-            >
+            <Link className={styles.formAnchor} to={pagePaths.PASSWORD_RESET}>
               パスワードを忘れた場合
             </Link>
           </div>

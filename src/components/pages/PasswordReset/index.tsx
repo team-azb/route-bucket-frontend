@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { sendPasswordResetEmail } from "../../../api/auth";
-import "./style.css";
+import styles from "./style.module.css";
 
 const PasswordReset = () => {
   const [emailInput, setEmailInput] = useState<string>("");
@@ -15,20 +15,20 @@ const PasswordReset = () => {
   };
 
   return (
-    <div className="pwd-reset__container">
-      <h1 className="pwd-reset__title">パスワード再設定</h1>
+    <div className={styles.container}>
+      <h1 className={styles.title}>パスワード再設定</h1>
       <hr />
-      <div className="pwd-reset__form--wrapper">
-        <div className="pwd-reset__form--container">
+      <div className={styles.formWrapper}>
+        <div className={styles.formContainer}>
           <h2>
             登録したメールアドレスにパスワード再設定用のリンクを送信します。
           </h2>
-          <div className="pwd-reset__form--field">
-            <label className="pwd-reset__form--label" htmlFor="email">
+          <div className={styles.formField}>
+            <label className={styles.formLabel} htmlFor="email">
               メールアドレス
             </label>
             <input
-              className="signin__form--input"
+              className={styles.formInput}
               value={emailInput}
               onChange={(event) => {
                 setEmailInput(event.target.value);
@@ -36,7 +36,7 @@ const PasswordReset = () => {
               type="email"
             />
           </div>
-          <button className="pwd-reset__form--button" onClick={sendHandler}>
+          <button className={styles.formButton} onClick={sendHandler}>
             送信
           </button>
         </div>

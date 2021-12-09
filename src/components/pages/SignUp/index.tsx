@@ -1,11 +1,11 @@
 import React from "react";
 import SignUpForm from "../../organisms/SignUpForm";
-import "./style.css";
+import styles from "./style.module.css";
 
 const SignUp = () => {
   return (
-    <div className="signup__container">
-      <h1 className="signup__title">サインアップ</h1>
+    <div className={styles.container}>
+      <h1 className={styles.title}>サインアップ</h1>
       <hr />
       <SignUpForm />
     </div>

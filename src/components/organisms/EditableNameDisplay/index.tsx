@@ -4,7 +4,7 @@ import {
   routeReducerAction,
   routeAsyncAction,
 } from "../../../reducers/routeReducer";
-import "./style.css";
+import styles from "./style.module.css";
 
 type EditableNameDisplayProps = {
   route: Route;
@@ -43,7 +43,7 @@ function NameInput(props: NameInputProps) {
       <p style={{ display: "inline" }}>
         ルート名:{" "}
         <input
-          className="editable-display__input"
+          className={styles.input}
           onChange={(e) => {
             setNameInput(e.target.value);
           }}
@@ -53,7 +53,7 @@ function NameInput(props: NameInputProps) {
       </p>
 
       <button
-        className="editable-display__btn"
+        className={styles.btn}
         onClick={() => {
           submitNameHandler();
         }}
@@ -62,7 +62,7 @@ function NameInput(props: NameInputProps) {
       </button>
 
       <button
-        className="editable-display__btn"
+        className={styles.btn}
         onClick={() => {
           quitEditingHandler();
         }}
@@ -78,7 +78,7 @@ function NameDisplay(props: NameDisplayProps) {
     <>
       <p style={{ display: "inline" }}>ルート名: {props.route.name}</p>
       <button
-        className="editable-display__btn"
+        className={styles.btn}
         onClick={() => {
           props.setIsEditable((prevState) => {
             return !prevState;

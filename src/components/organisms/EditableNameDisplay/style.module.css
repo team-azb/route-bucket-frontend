@@ -1,8 +1,8 @@
-.editable-display__input {
+.input {
   font-size: 1.2rem;
 }
 
-.editable-display__btn {
+.btn {
   cursor: pointer;
   border: none;
   background: none;

@@ -1,11 +1,11 @@
-.header__container {
+.container {
   display: flex;
   flex-direction: row;
   align-items: center;
   background: #20746a 0% 0% no-repeat padding-box;
 }
 
-.header__right-section--link {
+.right-section-link {
   font-size: 1.5rem;
   color: #fff;
   font-weight: 600;
@@ -13,7 +13,7 @@
   text-decoration: none;
 }
 
-.header__left-section--link {
+.left-section-link {
   font-size: 1.5rem;
   color: #fff;
   font-weight: 600;
@@ -21,14 +21,14 @@
   text-decoration: none;
 }
 
-.header__right-section {
+.right-section {
   flex: 1;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
 }
 
-.header__left-section {
+.left-section {
   flex: 1;
   display: flex;
   flex-direction: row;
