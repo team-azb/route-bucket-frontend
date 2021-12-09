@@ -24,3 +24,15 @@ export const isValidPasswordConfirmation = (
 ) => {
   return password === confirmation;
 };
+
+export const isValidBrithdate = (date: string) => {
+  const now = new Date();
+  return new Date(date) < now;
+};
+
+export const optionFieldWrapper = (
+  value: string,
+  callback: (value: string) => boolean
+) => {
+  return value === "" ? true : callback(value);
+};

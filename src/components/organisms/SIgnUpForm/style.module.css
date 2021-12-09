@@ -8,7 +8,7 @@
   margin-top: 80px;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: left;
   flex-direction: column;
   border: 1px solid #707070;
   border-radius: 20px;
@@ -49,6 +49,10 @@
   padding-left: 10px;
 }
 
+.button-wrapper {
+  align-items: center;
+}
+
 .button {
   padding: 5px 30px;
   cursor: pointer;
@@ -59,11 +63,24 @@
 }
 
 .button:disabled {
-  padding: 5px 30px;
   cursor: not-allowed;
-  border: none;
-  border-radius: 5px;
-  background-color: #20746a;
   opacity: 0.5;
-  color: #fff;
+}
+
+.radio-group-container {
+  padding-top: 5px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.radio-group-label {
+  font-size: 1.8rem;
+  margin-right: 10px;
+}
+
+.radio-group-radio {
+  height: 1.8rem;
+  margin: 0;
+  margin-right: 2px;
 }

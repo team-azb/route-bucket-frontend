@@ -13,8 +13,16 @@ import {
   isValidUserName,
   isValidPassword,
   isValidPasswordConfirmation,
+  isValidBrithdate,
+  optionFieldWrapper,
 } from "./helper";
 import styles from "./style.module.css";
+
+enum Gender {
+  MALE = "male",
+  FEMALE = "female",
+  OTHERS = "others",
+}
 
 enum FormFields {
   ID = "id",
@@ -22,10 +30,18 @@ enum FormFields {
   EMAIL = "email",
   PASSWORD = "password",
   PASSWORD_CONFIRMATION = "password_confirmation",
+  GENDER = "gender",
+  BRITHDATE = "birthdate",
 }
 
 type Form = {
-  [field in FormFields]: string;
+  [FormFields.ID]: string;
+  [FormFields.NAME]: string;
+  [FormFields.EMAIL]: string;
+  [FormFields.PASSWORD]: string;
+  [FormFields.PASSWORD_CONFIRMATION]: string;
+  [FormFields.GENDER]?: Gender | "na";
+  [FormFields.BRITHDATE]?: Date;
 };
 
 const mergeValidationMessageForm = (
@@ -79,6 +95,14 @@ const updateValidationMessages = (
           ? ""
           : "パスワードと不一致",
       });
+    case FormFields.BRITHDATE:
+      return mergeValidationMessageForm(prevValidationMessage, {
+        [FormFields.BRITHDATE]: optionFieldWrapper(value, isValidBrithdate)
+          ? ""
+          : "生年月日が不適切です",
+      });
+    default:
+      return prevValidationMessage;
   }
 };
 
@@ -89,6 +113,7 @@ const SignUpForm = () => {
     email: "",
     password: "",
     password_confirmation: "",
+    gender: "na",
   });
   const [validatonMessages, setValidatonMessages] = useState<Form>({
     id: "",
@@ -122,6 +147,7 @@ const SignUpForm = () => {
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
+        return;
       }
     }
     try {
@@ -229,6 +255,76 @@ const SignUpForm = () => {
           </label>
         </div>
         <div className={styles.field}>
+          <label className={styles.label}>（オプション）性別</label>
+          <div className={styles.radioGroupContainer}>
+            <input
+              className={styles.radioGroupRadio}
+              id="male"
+              type="radio"
+              name="gender"
+              value="male"
+              checked={form.gender === "male"}
+              onChange={changeFormHandler}
+            />
+            <label className={styles.radioGroupLabel} htmlFor="male">
+              男性
+            </label>
+            <input
+              className={styles.radioGroupRadio}
+              id="female"
+              type="radio"
+              name="gender"
+              value="female"
+              checked={form.gender === "female"}
+              onChange={changeFormHandler}
+            />
+            <label className={styles.radioGroupLabel} htmlFor="female">
+              女性
+            </label>
+            <input
+              className={styles.radioGroupRadio}
+              id="others"
+              type="radio"
+              name="gender"
+              value="others"
+              checked={form.gender === "others"}
+              onChange={changeFormHandler}
+            />
+            <label className={styles.radioGroupLabel} htmlFor="others">
+              その他
+            </label>
+            <input
+              className={styles.radioGroupRadio}
+              id="na"
+              type="radio"
+              name="gender"
+              value="na"
+              checked={form.gender === "na"}
+              onChange={changeFormHandler}
+            />
+            <label className={styles.radioGroupLabel} htmlFor="na">
+              未回答
+            </label>
+          </div>
+          <label className={styles.errorLabel} htmlFor="confirmation">
+            {validatonMessages.gender}
+          </label>
+        </div>
+        <div className={styles.field}>
+          <label htmlFor="birthdate" className={styles.label}>
+            （オプション）生年月日
+          </label>
+          <input
+            type="date"
+            name="birthdate"
+            className={styles.input}
+            onChange={changeFormHandler}
+          />
+          <label className={styles.errorLabel} htmlFor="birthdate">
+            {validatonMessages.birthdate}
+          </label>
+        </div>
+        <div className={[styles.field, styles.buttonWrapper].join(" ")}>
           <button
             disabled={isUnableToSend(form)}
             className={styles.button}
