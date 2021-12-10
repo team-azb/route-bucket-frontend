@@ -7,6 +7,7 @@ import {
   onAuthStateChanged as onFirebaseAuthStateChanged,
   getAuth,
   User as FirebaseUser,
+  sendEmailVerification as sendEmailVerificationViaFirebase,
 } from "firebase/auth";
 import { hasAxiosResponseMessage } from "./helpers";
 
@@ -48,12 +49,21 @@ export const signInWithEmailAndPassword = async (
   password: string
 ) => {
   const auth = getAuth();
-  await signInWithEmailAndPasswordToFirebaseAuth(auth, email, password);
+  const { user } = await signInWithEmailAndPasswordToFirebaseAuth(
+    auth,
+    email,
+    password
+  );
+  return user as User;
 };
 
 export const onAuthStateChanged = (callback: NextOrObserver<FirebaseUser>) => {
   const auth = getAuth();
   return onFirebaseAuthStateChanged(auth, callback);
+};
+
+export const sendEmailVerification = async (user: User) => {
+  await sendEmailVerificationViaFirebase(user);
 };
 
 export const signUp = async (payload: CreateUserRequestBody) => {

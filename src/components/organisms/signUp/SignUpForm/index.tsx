@@ -5,7 +5,7 @@ import GenderRadioGroup from "../GenderRadioGroup";
 import InputWithError from "../../../molecules/InputWithError";
 import FormField from "../../../atoms/FormField";
 import SubmitButton from "../SubmitButton";
-import { signUp, signInWithEmailAndPassword } from "../../../../api/auth";
+import { signUp, signInWithEmailAndPassword, sendEmailVerification, } from "../../../../api/auth";
 import { pagePaths } from "../../../../consts/uriComponents";
 import {
   Form,
@@ -51,7 +51,8 @@ const SignUpForm = () => {
       }
     }
     try {
-      await signInWithEmailAndPassword(form.email, form.password);
+      const user = await signInWithEmailAndPassword(form.email, form.password);
+      await sendEmailVerification(user);
       toast.success("サインイン成功");
       history.push(pagePaths.ROUTE_INDEX);
     } catch (error) {
