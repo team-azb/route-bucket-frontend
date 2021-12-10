@@ -10,12 +10,12 @@ import "leaflet/dist/leaflet.css";
 import "leaflet.locatecontrol/dist/L.Control.Locate.min.css";
 import "font-awesome/css/font-awesome.min.css";
 import { pagePaths } from "./consts/uriComponents";
-import { SignedInUserProvider } from "./contexts/signedInUserContext";
+import { SignedInUserInfoProvider } from "./contexts/signedInUserContext";
 
 function App() {
   return (
     <Router>
-      <SignedInUserProvider>
+      <SignedInUserInfoProvider>
         <Header />
         <Switch>
           <Route exact path={pagePaths.TOP} children={<Top />} />
@@ -29,7 +29,7 @@ function App() {
             children={<PasswordReset />}
           />
         </Switch>
-      </SignedInUserProvider>
+      </SignedInUserInfoProvider>
     </Router>
   );
 }
