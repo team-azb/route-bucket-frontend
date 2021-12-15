@@ -43,6 +43,10 @@ export const initialFormValue: Form = {
   birthdate: "",
 };
 
+const emptyOrMessage = (judge: boolean, message: string) => {
+  return judge ? "" : message;
+};
+
 const mergeValidationMessageForm = (
   prevValidationMessage: Form,
   newMessages: { [field in RequiredFields | OptionalFields]?: string }
@@ -59,48 +63,52 @@ export const updateValidationMessages = (
   switch (fieldName) {
     case RequiredFields.ID:
       return mergeValidationMessageForm(prevValidationMessage, {
-        [RequiredFields.ID]: isValidUserId(value)
-          ? ""
-          : "ユーザーIDのパターンと不一致",
+        [RequiredFields.ID]: emptyOrMessage(
+          isValidUserId(value),
+          "ユーザーIDのパターンと不一致"
+        ),
       });
     case RequiredFields.NAME:
       return mergeValidationMessageForm(prevValidationMessage, {
-        [RequiredFields.NAME]: isValidUserName(value)
-          ? ""
-          : "ニックネームは1文字以上50文字以下",
+        [RequiredFields.NAME]: emptyOrMessage(
+          isValidUserName(value),
+          "ニックネームは1文字以上50文字以下"
+        ),
       });
     case RequiredFields.EMAIL:
       return mergeValidationMessageForm(prevValidationMessage, {
-        [RequiredFields.EMAIL]: isValidEmail(value)
-          ? ""
-          : "不適切なemailの形式",
+        [RequiredFields.EMAIL]: emptyOrMessage(
+          isValidEmail(value),
+          "不適切なemailの形式"
+        ),
       });
     case RequiredFields.PASSWORD:
       return mergeValidationMessageForm(prevValidationMessage, {
-        [RequiredFields.PASSWORD]: isValidPassword(value)
-          ? ""
-          : "パスワードは6文字以上",
-        [RequiredFields.PASSWORD_CONFIRMATION]: isValidPasswordConfirmation(
-          value,
-          form[RequiredFields.PASSWORD_CONFIRMATION]
-        )
-          ? ""
-          : "パスワードと不一致",
+        [RequiredFields.PASSWORD]: emptyOrMessage(
+          isValidPassword(value),
+          "パスワードは6文字以上"
+        ),
+        [RequiredFields.PASSWORD_CONFIRMATION]: emptyOrMessage(
+          isValidPasswordConfirmation(
+            value,
+            form[RequiredFields.PASSWORD_CONFIRMATION]
+          ),
+          "パスワードと不一致"
+        ),
       });
     case RequiredFields.PASSWORD_CONFIRMATION:
       return mergeValidationMessageForm(prevValidationMessage, {
-        [RequiredFields.PASSWORD_CONFIRMATION]: isValidPasswordConfirmation(
-          value,
-          form[RequiredFields.PASSWORD]
-        )
-          ? ""
-          : "パスワードと不一致",
+        [RequiredFields.PASSWORD_CONFIRMATION]: emptyOrMessage(
+          isValidPasswordConfirmation(value, form[RequiredFields.PASSWORD]),
+          "パスワードと不一致"
+        ),
       });
     case OptionalFields.BRITHDATE:
       return mergeValidationMessageForm(prevValidationMessage, {
-        [OptionalFields.BRITHDATE]: optionFieldWrapper(value, isValidBrithdate)
-          ? ""
-          : "生年月日が不適切です",
+        [OptionalFields.BRITHDATE]: emptyOrMessage(
+          optionFieldWrapper(value, isValidBrithdate),
+          "生年月日が不適切です"
+        ),
       });
     default:
       return prevValidationMessage;
