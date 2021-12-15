@@ -1,134 +1,30 @@
 import React, { ChangeEvent, useState } from "react";
 import { useHistory } from "react-router";
 import { toast } from "react-toastify";
-import {
-  signUp,
-  CreateUserRequestBody,
-  signInWithEmailAndPassword,
-} from "../../../api/auth";
+import { signUp, signInWithEmailAndPassword } from "../../../api/auth";
 import { pagePaths } from "../../../consts/uriComponents";
 import {
-  isValidEmail,
-  isValidUserId,
-  isValidUserName,
-  isValidPassword,
-  isValidPasswordConfirmation,
-  isValidBrithdate,
-  optionFieldWrapper,
+  Form,
+  updateValidationMessages,
+  RequiredFields,
+  OptionalFields,
+  form2payload,
+  initialFormValue,
+  isUnableToSend,
 } from "./helper";
 import styles from "./style.module.css";
 
-enum Gender {
-  MALE = "male",
-  FEMALE = "female",
-  OTHERS = "others",
-}
-
-enum FormFields {
-  ID = "id",
-  NAME = "name",
-  EMAIL = "email",
-  PASSWORD = "password",
-  PASSWORD_CONFIRMATION = "password_confirmation",
-  GENDER = "gender",
-  BRITHDATE = "birthdate",
-}
-
-type Form = {
-  [FormFields.ID]: string;
-  [FormFields.NAME]: string;
-  [FormFields.EMAIL]: string;
-  [FormFields.PASSWORD]: string;
-  [FormFields.PASSWORD_CONFIRMATION]: string;
-  [FormFields.GENDER]?: Gender | "na";
-  [FormFields.BRITHDATE]?: Date;
-};
-
-const mergeValidationMessageForm = (
-  prevValidationMessage: Form,
-  newMessages: { [field in FormFields]?: string }
-) => {
-  return { ...prevValidationMessage, ...newMessages } as Form;
-};
-
-const updateValidationMessages = (
-  fieldName: FormFields,
-  value: string,
-  form: Form,
-  prevValidationMessage: Form
-) => {
-  switch (fieldName) {
-    case FormFields.ID:
-      return mergeValidationMessageForm(prevValidationMessage, {
-        [FormFields.ID]: isValidUserId(value)
-          ? ""
-          : "ユーザーIDのパターンと不一致",
-      });
-    case FormFields.NAME:
-      return mergeValidationMessageForm(prevValidationMessage, {
-        [FormFields.NAME]: isValidUserName(value)
-          ? ""
-          : "ニックネームは1文字以上50文字以下",
-      });
-    case FormFields.EMAIL:
-      return mergeValidationMessageForm(prevValidationMessage, {
-        [FormFields.EMAIL]: isValidEmail(value) ? "" : "不適切なemailの形式",
-      });
-    case FormFields.PASSWORD:
-      return mergeValidationMessageForm(prevValidationMessage, {
-        [FormFields.PASSWORD]: isValidPassword(value)
-          ? ""
-          : "パスワードは6文字以上",
-        [FormFields.PASSWORD_CONFIRMATION]: isValidPasswordConfirmation(
-          value,
-          form[FormFields.PASSWORD_CONFIRMATION]
-        )
-          ? ""
-          : "パスワードと不一致",
-      });
-    case FormFields.PASSWORD_CONFIRMATION:
-      return mergeValidationMessageForm(prevValidationMessage, {
-        [FormFields.PASSWORD_CONFIRMATION]: isValidPasswordConfirmation(
-          value,
-          form[FormFields.PASSWORD]
-        )
-          ? ""
-          : "パスワードと不一致",
-      });
-    case FormFields.BRITHDATE:
-      return mergeValidationMessageForm(prevValidationMessage, {
-        [FormFields.BRITHDATE]: optionFieldWrapper(value, isValidBrithdate)
-          ? ""
-          : "生年月日が不適切です",
-      });
-    default:
-      return prevValidationMessage;
-  }
-};
-
 const SignUpForm = () => {
-  const [form, setForm] = useState<Form>({
-    id: "",
-    name: "",
-    email: "",
-    password: "",
-    password_confirmation: "",
-    gender: "na",
-  });
-  const [validatonMessages, setValidatonMessages] = useState<Form>({
-    id: "",
-    name: "",
-    email: "",
-    password: "",
-    password_confirmation: "",
-  });
+  const [form, setForm] = useState<Form>(initialFormValue);
+  const [validatonMessages, setValidatonMessages] =
+    useState<Form>(initialFormValue);
   const history = useHistory();
 
   const changeFormHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setForm((prevForm) => {
       setValidatonMessages((prevValidationMessages) => {
         return updateValidationMessages(
-          event.target.name as FormFields,
+          event.target.name as RequiredFields | OptionalFields,
           event.target.value,
           prevForm,
           prevValidationMessages
@@ -143,7 +39,8 @@ const SignUpForm = () => {
 
   const sendFormHandler = async () => {
     try {
-      await signUp(form as CreateUserRequestBody);
+      const payload = form2payload(form);
+      await signUp(payload);
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
@@ -156,20 +53,6 @@ const SignUpForm = () => {
       history.push(pagePaths.ROUTE_INDEX);
     } catch (error) {
       toast.error("サインイン失敗");
-    }
-  };
-
-  const isUnableToSend = (form: Form) => {
-    const hasEmptyField = Object.keys(form).some((key) => {
-      return form[key as FormFields] === "";
-    });
-
-    if (!hasEmptyField) {
-      return Object.keys(validatonMessages).some((key) => {
-        return validatonMessages[key as FormFields] !== "";
-      });
-    } else {
-      return true;
     }
   };
 
@@ -298,8 +181,8 @@ const SignUpForm = () => {
               id="na"
               type="radio"
               name="gender"
-              value="na"
-              checked={form.gender === "na"}
+              value=""
+              checked={form.gender === ""}
               onChange={changeFormHandler}
             />
             <label className={styles.radioGroupLabel} htmlFor="na">
@@ -326,7 +209,7 @@ const SignUpForm = () => {
         </div>
         <div className={[styles.field, styles.buttonWrapper].join(" ")}>
           <button
-            disabled={isUnableToSend(form)}
+            disabled={isUnableToSend(form, validatonMessages)}
             className={styles.button}
             onClick={sendFormHandler}
           >

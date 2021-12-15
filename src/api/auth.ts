@@ -21,7 +21,7 @@ export type CreateUserRequestBody = {
   name: string;
   email: string;
   gender?: Gender;
-  birthdate?: Date;
+  birthdate?: string;
   icon_url?: string;
   password: string;
   password_confirmation: string;
