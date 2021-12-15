@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import L from "leaflet";
 import {
@@ -7,6 +7,7 @@ import {
 } from "../../../reducers/routeReducer";
 import EditableNameDisplay from "../EditableNameDisplay";
 import ElevationGraph from "../ElevationGraph";
+import DrawingModeRadio from "../DrawingModeRadio";
 import { config } from "../../../config";
 import { Route, FocusedMarkerInfo, DrawingMode } from "../../../types";
 import { meters2kilometers } from "../../../utils";
@@ -61,11 +62,12 @@ function RouteEditControllerDisplay(props: RouteEditControllerProps) {
     history.push(pagePaths.ROUTE_INDEX);
   };
 
-  const changeDrawingModeHandler = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    props.setDrawingMode(event.target.value as DrawingMode);
-  };
+  const changeDrawingModeHandler = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      props.setDrawingMode(event.target.value as DrawingMode);
+    },
+    [props]
+  );
   return (
     <div style={{ background: "#fff", opacity: 0.85 }}>
       <div style={{ padding: props.isInsideMap ? 20 : 5 }}>
@@ -85,30 +87,22 @@ function RouteEditControllerDisplay(props: RouteEditControllerProps) {
         <hr />
         <p className={styles.radioGroupTitle}>ルート作成モード</p>
         <div className={styles.radioGroupContainer}>
-          <input
-            className={styles.radioGroupRadio}
-            type="radio"
+          <DrawingModeRadio
             id="followRoad"
-            name="drawingMode"
             value={DrawingMode.FOLLOW_ROAD}
             onChange={changeDrawingModeHandler}
             checked={props.drawingMode === DrawingMode.FOLLOW_ROAD}
-          />
-          <label className={styles.radioGroupLabel} htmlFor="followRoad">
+          >
             自動補間
-          </label>
-          <input
-            className={styles.radioGroupRadio}
-            type="radio"
+          </DrawingModeRadio>
+          <DrawingModeRadio
             id="freehand"
-            name="drawingMode"
             value={DrawingMode.FREEHAND}
             onChange={changeDrawingModeHandler}
             checked={props.drawingMode === DrawingMode.FREEHAND}
-          />
-          <label className={styles.radioGroupLabel} htmlFor="freehand">
+          >
             フリーハンド
-          </label>
+          </DrawingModeRadio>
         </div>
         <button className={styles.operationBtn} onClick={undoHandler}>
           undo

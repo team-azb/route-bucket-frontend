@@ -30,13 +30,3 @@
   align-items: center;
   margin-bottom: 10px;
 }
-
-.radio-group-label {
-  font-size: 1.3rem;
-  margin-right: 10px;
-}
-
-.radio-group-radio {
-  height: 1.2rem;
-  margin: 0;
-}
