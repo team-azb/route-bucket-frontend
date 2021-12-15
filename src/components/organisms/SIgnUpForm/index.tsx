@@ -64,7 +64,7 @@ const SignUpForm = () => {
             ID
             <br />
             <span className={styles.span}>
-              ※ユーザーの識別のために使用されます。後から変更不可することはできません。
+              ※ユーザーの識別のために使用されます。後から変更することはできません。
             </span>
           </label>
           <input
