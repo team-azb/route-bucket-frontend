@@ -8,6 +8,7 @@ import {
 import EditableNameDisplay from "../EditableNameDisplay";
 import ElevationGraph from "../ElevationGraph";
 import DrawingModeRadio from "../DrawingModeRadio";
+import OperationButton from "../../atoms/OperationButton";
 import { config } from "../../../config";
 import { Route, FocusedMarkerInfo, DrawingMode } from "../../../types";
 import { meters2kilometers } from "../../../utils";
@@ -104,18 +105,12 @@ function RouteEditControllerDisplay(props: RouteEditControllerProps) {
             フリーハンド
           </DrawingModeRadio>
         </div>
-        <button className={styles.operationBtn} onClick={undoHandler}>
-          undo
-        </button>
-        <button className={styles.operationBtn} onClick={redoHandler}>
-          redo
-        </button>
-        <button className={styles.operationBtn} onClick={clearHandler}>
-          clear
-        </button>
-        <button className={styles.operationBtn} onClick={exportGpxHandler}>
+        <OperationButton onClick={undoHandler}>undo</OperationButton>
+        <OperationButton onClick={redoHandler}>redo</OperationButton>
+        <OperationButton onClick={clearHandler}>clear</OperationButton>
+        <OperationButton onClick={exportGpxHandler}>
           export as gpx
-        </button>
+        </OperationButton>
       </div>
       <ElevationGraph
         segments={props.route.segments}
