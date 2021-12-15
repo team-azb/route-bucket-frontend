@@ -1,6 +1,8 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useCallback, useState } from "react";
 import { useHistory } from "react-router";
+import Dialog from "@mui/material/Dialog";
 import { toast } from "react-toastify";
+import EmailVerificationDialogContent from "../../atoms/EmailVerificationDialogContent";
 import {
   signUp,
   signInWithEmailAndPassword,
@@ -22,7 +24,9 @@ const SignUpForm = () => {
   const [form, setForm] = useState<Form>(initialFormValue);
   const [validatonMessages, setValidatonMessages] =
     useState<Form>(initialFormValue);
+  const [open, setOpen] = useState(true);
   const history = useHistory();
+  
 
   const changeFormHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setForm((prevForm) => {
@@ -54,12 +58,17 @@ const SignUpForm = () => {
     try {
       const user = await signInWithEmailAndPassword(form.email, form.password);
       await sendEmailVerification(user);
+      setOpen(true);
       toast.success("サインイン成功");
       history.push(pagePaths.ROUTE_INDEX);
     } catch (error) {
       toast.error("サインイン失敗");
     }
   };
+
+  const handleClose = useCallback(() => {
+    setOpen(false);
+  }, []);
 
   return (
     <div className={styles.wrapper}>
@@ -222,6 +231,12 @@ const SignUpForm = () => {
           </button>
         </div>
       </div>
+      <Dialog open={open} onClose={handleClose}>
+        <EmailVerificationDialogContent
+          email={form.email}
+          handleClose={handleClose}
+        />
+      </Dialog>
     </div>
   );
 };
