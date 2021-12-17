@@ -1,13 +1,8 @@
 import * as EmailValidator from "email-validator";
-import { CreateUserRequestBody } from "../../../api/auth";
+import { CreateUserRequestBody } from "../../../../api/auth";
+import { Gender } from "../../../../types";
 
 const USER_ID_REGEX = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i;
-
-enum Gender {
-  MALE = "male",
-  FEMALE = "female",
-  OTHERS = "others",
-}
 
 export enum RequiredFields {
   ID = "id",

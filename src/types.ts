@@ -43,3 +43,9 @@ export enum DrawingMode {
   FOLLOW_ROAD = "follow_road",
   FREEHAND = "freehand",
 }
+
+export enum Gender {
+  MALE = "male",
+  FEMALE = "female",
+  OTHERS = "others",
+}
