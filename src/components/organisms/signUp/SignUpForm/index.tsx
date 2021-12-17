@@ -5,7 +5,11 @@ import GenderRadioGroup from "../GenderRadioGroup";
 import InputWithError from "../../../molecules/InputWithError";
 import FormField from "../../../atoms/FormField";
 import SubmitButton from "../SubmitButton";
-import { signUp, signInWithEmailAndPassword, sendEmailVerification, } from "../../../../api/auth";
+import {
+  signUp,
+  signInWithEmailAndPassword,
+  sendEmailVerification,
+} from "../../../../api/auth";
 import { pagePaths } from "../../../../consts/uriComponents";
 import {
   Form,
