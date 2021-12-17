@@ -4,6 +4,7 @@ import SignIn from "./components/pages/SignIn";
 import SignUp from "./components/pages/SignUp";
 import Top from "./components/pages/Top";
 import PasswordReset from "./components/pages/PasswordReset";
+import Mypage from "./components/pages/Mypage";
 import Header from "./components/organisms/Header";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "leaflet/dist/leaflet.css";
@@ -28,6 +29,7 @@ function App() {
             path={pagePaths.PASSWORD_RESET}
             children={<PasswordReset />}
           />
+          <Route path={pagePaths.MYPAGE} children={<Mypage />} />
         </Switch>
       </SignedInUserInfoProvider>
     </Router>

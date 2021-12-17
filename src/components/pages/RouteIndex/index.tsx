@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { getRoutes, postRoutes, deleteRoute } from "../../../api/routes";
 import { Route } from "../../../types";
 import SignInRequiredTemplate from "../../organisms/SignInRequiredTemplate";
-import { pagePaths } from "../../../consts/uriComponents";
+import { dynamicPathGenerator } from "../../../consts/uriComponents";
 
 function RouteIndex() {
   const [inputValue, setInputValue] = useState<string>("");
@@ -51,7 +51,7 @@ function RouteIndex() {
       return (
         <li key={route.id}>
           <h3>{route.name}</h3>
-          <Link to={pagePaths.routeEditorPath(route.id)}>
+          <Link to={dynamicPathGenerator.routeEditor(route.id)}>
             <button>ルートを編集</button>
           </Link>
           <button
