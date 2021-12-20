@@ -1,5 +1,5 @@
 import React from "react";
-import SignUpForm from "../../organisms/SignUpForm";
+import SignUpForm from "../../organisms/signUp/SignUpForm";
 import styles from "./style.module.css";
 
 const SignUp = () => {
