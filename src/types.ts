@@ -49,3 +49,11 @@ export enum Gender {
   FEMALE = "female",
   OTHERS = "others",
 }
+
+export type UserInfo = {
+  id: string;
+  name: string;
+  gender: Gender | null;
+  birthdate: Date | null;
+  icon_url: string | null;
+};
