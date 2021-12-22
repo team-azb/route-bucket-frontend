@@ -1,5 +1,6 @@
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import { Route, RouteGeometry, Coorinate, DrawingMode } from "../types";
+import { hasAxiosResponseMessage } from "./helpers";
 
 //axiosからのレスポンスのデータのインターフェース
 interface PatchResponseBody extends RouteGeometry {}
@@ -23,16 +24,6 @@ interface RouteRemoveRequestBody {
 
 interface RenameRequestBody {
   name: string;
-}
-
-function hasAxiosResponseMessage(
-  error: unknown
-): error is { response: AxiosResponse<{ message: string }> } {
-  return axios.isAxiosError(error) &&
-    error.response &&
-    error.response.data.message
-    ? true
-    : false;
 }
 
 export async function getRoute(routeId: string) {

@@ -1,0 +1,9 @@
+.radio {
+  height: 1.2rem;
+  margin: 0;
+}
+
+.label {
+  font-size: 1.3rem;
+  margin-right: 10px;
+}

@@ -1,0 +1,12 @@
+.input {
+  font-size: 1.2rem;
+}
+
+.btn {
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: #20746a;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
