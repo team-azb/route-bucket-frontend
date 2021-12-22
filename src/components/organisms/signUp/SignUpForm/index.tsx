@@ -10,11 +10,10 @@ import { pagePaths } from "../../../../consts/uriComponents";
 import {
   Form,
   updateValidationMessages,
-  RequiredFields,
-  OptionalFields,
   form2payload,
   initialFormValue,
   isUnableToSend,
+  Fields,
 } from "./helper";
 import styles from "./style.module.css";
 
@@ -28,7 +27,7 @@ const SignUpForm = () => {
     setForm((prevForm) => {
       setValidatonMessages((prevValidationMessages) => {
         return updateValidationMessages(
-          event.target.name as RequiredFields | OptionalFields,
+          event.target.name as Fields,
           event.target.value,
           prevForm,
           prevValidationMessages

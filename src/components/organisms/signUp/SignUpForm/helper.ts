@@ -4,7 +4,7 @@ import { Gender } from "../../../../types";
 
 const USER_ID_REGEX = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i;
 
-export enum RequiredFields {
+enum RequiredFields {
   ID = "id",
   NAME = "name",
   EMAIL = "email",
@@ -12,10 +12,12 @@ export enum RequiredFields {
   PASSWORD_CONFIRMATION = "password_confirmation",
 }
 
-export enum OptionalFields {
+enum OptionalFields {
   GENDER = "gender",
   BRITHDATE = "birthdate",
 }
+
+export type Fields = RequiredFields | OptionalFields;
 
 type RequiredForm = {
   [field in RequiredFields]: string;
@@ -44,7 +46,7 @@ const emptyOrMessage = (judge: boolean, message: string) => {
 
 const mergeValidationMessageForm = (
   prevValidationMessage: Form,
-  fieldName: RequiredFields | OptionalFields,
+  fieldName: Fields,
   isValid: boolean,
   errorMessage: string
 ) => {
@@ -55,7 +57,7 @@ const mergeValidationMessageForm = (
 };
 
 export const updateValidationMessages = (
-  fieldName: RequiredFields | OptionalFields,
+  fieldName: Fields,
   value: string,
   form: Form,
   prevValidationMessage: Form
