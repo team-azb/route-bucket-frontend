@@ -2,6 +2,7 @@ import React from "react";
 import { UserInfo } from "../../../types";
 import BasicInformationField from "../BasicInformationField";
 import { useSignedInUserInfoContext } from "../../../contexts/signedInUserContext";
+import styles from "./style.module.css";
 
 type BasicInformationTableProps = {
   userInfo: UserInfo;
@@ -10,7 +11,7 @@ type BasicInformationTableProps = {
 const BasicInformationTable = ({ userInfo }: BasicInformationTableProps) => {
   const { signedInUser } = useSignedInUserInfoContext();
   return (
-    <>
+    <div className={styles.container}>
       <BasicInformationField
         id="name"
         labelName="ニックネーム"
@@ -26,7 +27,7 @@ const BasicInformationTable = ({ userInfo }: BasicInformationTableProps) => {
         labelName="生年月日"
         fieldValue={userInfo.birthdate?.toDateString()}
       />
-    </>
+    </div>
   );
 };
 
