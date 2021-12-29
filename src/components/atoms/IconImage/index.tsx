@@ -3,7 +3,7 @@ import { pagePaths } from "../../../consts/uriComponents";
 import styles from "./style.module.css";
 
 type IconImageProps = {
-  src?: string;
+  src?: string | null;
 };
 
 const IconImage = ({ src }: IconImageProps) => {
