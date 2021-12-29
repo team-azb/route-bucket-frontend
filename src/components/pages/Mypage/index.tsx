@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { getUser } from "../../../api/users";
 import { UserInfo } from "../../../types";
 import SigninRequiredTemplate from "../../organisms/SignInRequiredTemplate";
-import BasicInfomation from "../../organisms/BasicInfomation";
+import BasicInformation from "../../organisms/BasicInformation";
 import styles from "./style.module.css";
 
 interface MypageParams {
@@ -32,7 +32,7 @@ const Mypage = () => {
       <div className={styles.container}>
         <h2 className={styles.title}>基本情報</h2>
         <hr />
-        <BasicInfomation userInfo={userInfo} />
+        <BasicInformation userInfo={userInfo} />
         <h2 className={styles.title}>公開ルート</h2>
         <hr />
       </div>
