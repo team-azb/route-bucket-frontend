@@ -11,7 +11,7 @@ type BasicInformationProps = {
 const BasicInformation = ({ userInfo }: BasicInformationProps) => {
   return (
     <div className={styles.container}>
-      <IconImage />
+      <IconImage src={userInfo.icon_url}/>
       <BasicInformationTable userInfo={userInfo} />
     </div>
   );
