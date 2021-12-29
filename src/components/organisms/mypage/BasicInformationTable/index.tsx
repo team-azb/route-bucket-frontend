@@ -1,7 +1,7 @@
 import React from "react";
-import { UserInfo } from "../../../types";
+import { UserInfo } from "../../../../types";
 import BasicInformationField from "../BasicInformationField";
-import { useSignedInUserInfoContext } from "../../../contexts/signedInUserContext";
+import { useSignedInUserInfoContext } from "../../../../contexts/signedInUserContext";
 import styles from "./style.module.css";
 
 type BasicInformationTableProps = {

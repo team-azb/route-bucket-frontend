@@ -1,5 +1,5 @@
 import React from "react";
-import { pagePaths } from "../../../consts/uriComponents";
+import { pagePaths } from "../../../../consts/uriComponents";
 import styles from "./style.module.css";
 
 type IconImageProps = {

@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { getUser } from "../../../api/users";
 import { UserInfo } from "../../../types";
 import SigninRequiredTemplate from "../../organisms/SignInRequiredTemplate";
-import BasicInformation from "../../organisms/BasicInformation";
+import BasicInformation from "../../organisms/mypage/BasicInformation";
 import styles from "./style.module.css";
 
 interface MypageParams {
