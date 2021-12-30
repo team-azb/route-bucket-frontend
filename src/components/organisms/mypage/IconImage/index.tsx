@@ -9,7 +9,11 @@ type IconImageProps = {
 const IconImage = ({ src }: IconImageProps) => {
   return (
     <div className={styles.container}>
-      <img src={src ? src : pagePaths.USER_ICON} alt="userIcon" />
+      <img
+        className={styles.image}
+        src={src ? src : pagePaths.USER_ICON}
+        alt="userIcon"
+      />
     </div>
   );
 };
