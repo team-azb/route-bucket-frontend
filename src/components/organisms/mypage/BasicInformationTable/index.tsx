@@ -25,7 +25,7 @@ const BasicInformationTable = ({ userInfo }: BasicInformationTableProps) => {
       <BasicInformationField
         id="birthdate"
         labelName="生年月日"
-        fieldValue={userInfo.birthdate?.toDateString()}
+        fieldValue={userInfo.birthdate}
       />
     </div>
   );
