@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { UserInfo } from "../../../../types";
 import { getUser } from "../../../../api/users";
 import LoadingDisplay from "../../../atoms/LoadingDisplay";
+import NotFoundContent from "../NotFoundContent";
 
 type UserInfoProviderProps = {
   children?: React.ReactNode;
@@ -47,7 +48,7 @@ const UserInfoProvider = ({ children, userId }: UserInfoProviderProps) => {
       case "LOADING":
         return <LoadingDisplay message="読み込み中です" />;
       case "NOT_FOUND":
-        return <p>not found</p>;
+        return <NotFoundContent />;
       case "FOUND":
         return childrenWithProps;
     }
