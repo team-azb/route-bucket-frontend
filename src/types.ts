@@ -54,6 +54,6 @@ export type UserInfo = {
   id: string;
   name: string;
   gender: Gender | null;
-  birthdate: Date | null;
+  birthdate: string | null;
   icon_url: string | null;
 };
