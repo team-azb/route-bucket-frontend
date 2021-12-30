@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { UserInfo } from "../../../../types";
 import { getUser } from "../../../../api/users";
+import LoadingDisplay from "../../../atoms/LoadingDisplay";
 
 type UserInfoProviderProps = {
   children?: React.ReactNode;
@@ -32,17 +33,19 @@ const UserInfoProvider = ({ children, userId }: UserInfoProviderProps) => {
     })();
   }, [userId]);
 
-  const childrenWithProps = React.Children.map(children, (child) => {
-    if (React.isValidElement(child)) {
-      return React.cloneElement(child, { userInfo: userInfo });
-    }
-    return child;
-  });
+  const childrenWithProps = useMemo(() => {
+    return React.Children.map(children, (child) => {
+      if (React.isValidElement(child)) {
+        return React.cloneElement(child, { userInfo: userInfo });
+      }
+      return child;
+    });
+  }, [children, userInfo]);
 
   const displayedElem = useMemo(() => {
     switch (status) {
       case "LOADING":
-        return <p>loading</p>;
+        return <LoadingDisplay message="読み込み中です" />;
       case "NOT_FOUND":
         return <p>not found</p>;
       case "FOUND":
