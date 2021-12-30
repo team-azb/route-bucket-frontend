@@ -4,7 +4,7 @@ import BasicInformationField from "../BasicInformationField";
 import styles from "./style.module.css";
 
 type BasicInformationTableProps = {
-  userInfo: UserInfo;
+  userInfo?: UserInfo;
   email?: string | null;
 };
 
@@ -17,7 +17,7 @@ const BasicInformationTable = ({
       <BasicInformationField
         id="name"
         labelName="ニックネーム"
-        fieldValue={userInfo.name}
+        fieldValue={userInfo?.name}
       />
       {email && (
         <BasicInformationField
@@ -29,7 +29,7 @@ const BasicInformationTable = ({
       <BasicInformationField
         id="birthdate"
         labelName="生年月日"
-        fieldValue={userInfo.birthdate}
+        fieldValue={userInfo?.birthdate}
       />
     </div>
   );
