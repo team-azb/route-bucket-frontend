@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import SigninRequiredTemplate from "../../organisms/SignInRequiredTemplate";
 import MypageContent from "../../organisms/mypage/MypageContent";
 import ProfileContent from "../../organisms/mypage/ProfileContent";
+import UserInfoProvider from "../../organisms/mypage/UserInfoProvider";
 import { useSignedInUserInfoContext } from "../../../contexts/signedInUserContext";
 
 interface MypageParams {
@@ -19,11 +20,9 @@ const Mypage = () => {
 
   return (
     <SigninRequiredTemplate>
-      {isMyOwnPage ? (
-        <MypageContent userId={userId} />
-      ) : (
-        <ProfileContent userId={userId} />
-      )}
+      <UserInfoProvider userId={userId}>
+        {isMyOwnPage ? <MypageContent /> : <ProfileContent />}
+      </UserInfoProvider>
     </SigninRequiredTemplate>
   );
 };

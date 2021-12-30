@@ -1,20 +1,18 @@
 import React from "react";
+import { UserInfo } from "../../../../types";
 import BasicInformation from "../BasicInformation";
-import UserInfoProvider from "../UserInfoProvider";
 import styles from "./style.module.css";
 
 type ProfileContentProps = {
-  userId: string;
+  userInfo?: UserInfo;
 };
 
-const ProfileContent = ({ userId }: ProfileContentProps) => {
+const ProfileContent = ({ userInfo }: ProfileContentProps) => {
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>基本情報</h2>
       <hr />
-      <UserInfoProvider userId={userId}>
-        <BasicInformation />
-      </UserInfoProvider>
+      <BasicInformation userInfo={userInfo} />
       <h2 className={styles.title}>公開ルート</h2>
       <hr />
     </div>
