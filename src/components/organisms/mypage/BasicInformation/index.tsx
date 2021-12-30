@@ -6,13 +6,14 @@ import styles from "./style.module.css";
 
 type BasicInformationProps = {
   userInfo: UserInfo;
+  email?: string | null;
 };
 
-const BasicInformation = ({ userInfo }: BasicInformationProps) => {
+const BasicInformation = ({ userInfo, email }: BasicInformationProps) => {
   return (
     <div className={styles.container}>
       <IconImage src={userInfo.icon_url} />
-      <BasicInformationTable userInfo={userInfo} />
+      <BasicInformationTable userInfo={userInfo} email={email} />
     </div>
   );
 };

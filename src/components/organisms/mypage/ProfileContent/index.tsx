@@ -1,16 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import BasicInformation from "../BasicInformation";
 import { getUser } from "../../../../api/users";
 import { UserInfo } from "../../../../types";
-import BasicInformation from "../BasicInformation";
-import { useSignedInUserInfoContext } from "../../../../contexts/signedInUserContext";
 import styles from "./style.module.css";
 
-type MypageContentProps = {
+type ProfileContentProps = {
   userId: string;
 };
 
-const MypageContent = ({ userId }: MypageContentProps) => {
-  const { signedInUser } = useSignedInUserInfoContext();
+const ProfileContent = ({ userId }: ProfileContentProps) => {
   const [userInfo, setUserInfo] = useState<UserInfo>({
     id: "",
     name: "",
@@ -30,11 +28,11 @@ const MypageContent = ({ userId }: MypageContentProps) => {
     <div className={styles.container}>
       <h2 className={styles.title}>基本情報</h2>
       <hr />
-      <BasicInformation userInfo={userInfo} email={signedInUser?.email} />
+      <BasicInformation userInfo={userInfo} />
       <h2 className={styles.title}>公開ルート</h2>
       <hr />
     </div>
   );
 };
 
-export default MypageContent;
+export default ProfileContent;

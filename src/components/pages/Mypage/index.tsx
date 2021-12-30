@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import { useParams } from "react-router-dom";
 import SigninRequiredTemplate from "../../organisms/SignInRequiredTemplate";
 import MypageContent from "../../organisms/mypage/MypageContent";
+import ProfileContent from "../../organisms/mypage/ProfileContent";
 import { useSignedInUserInfoContext } from "../../../contexts/signedInUserContext";
 
 interface MypageParams {
@@ -18,7 +19,11 @@ const Mypage = () => {
 
   return (
     <SigninRequiredTemplate>
-      {isMyOwnPage ? <MypageContent userId={userId} /> : <p>誰かのページ</p>}
+      {isMyOwnPage ? (
+        <MypageContent userId={userId} />
+      ) : (
+        <ProfileContent userId={userId} />
+      )}
     </SigninRequiredTemplate>
   );
 };
