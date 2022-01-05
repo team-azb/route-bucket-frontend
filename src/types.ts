@@ -53,7 +53,7 @@ export enum Gender {
 export type UserInfo = {
   id: string;
   name: string;
-  gender: Gender | null;
-  birthdate: string | null;
-  icon_url: string | null;
+  gender?: Gender;
+  birthdate?: string;
+  icon_url?: string;
 };

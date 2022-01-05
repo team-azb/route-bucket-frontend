@@ -14,18 +14,12 @@ type Status = "LOADING" | "NOT_FOUND" | "FOUND";
 export const UserInfoContext = createContext<UserInfo>({
   id: "",
   name: "",
-  gender: null,
-  birthdate: null,
-  icon_url: null,
 });
 
 const UserInfoProvider = ({ children, userId }: UserInfoProviderProps) => {
   const [userInfo, setUserInfo] = useState<UserInfo>({
     id: "",
     name: "",
-    gender: null,
-    birthdate: null,
-    icon_url: null,
   });
   const [status, setStatus] = useState<Status>("LOADING");
 

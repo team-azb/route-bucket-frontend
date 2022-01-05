@@ -5,6 +5,7 @@ type InputWithErrorProps = {
   id?: string;
   name?: string;
   type?: string;
+  value?: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
   errorMessage?: string;
 };
@@ -13,6 +14,7 @@ const InputWithError = ({
   id,
   name,
   type,
+  value,
   onChange,
   errorMessage,
 }: InputWithErrorProps) => {
@@ -23,6 +25,7 @@ const InputWithError = ({
         type={type}
         name={name}
         className={styles.input}
+        value={value}
         onChange={onChange}
       />
       <label className={styles.errorLabel} htmlFor={id}>
