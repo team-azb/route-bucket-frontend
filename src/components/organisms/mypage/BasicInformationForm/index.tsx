@@ -32,7 +32,7 @@ const BasicInformationForm = ({
       <div className={styles.row}>
         <IconImage src={userInfoForm.icon_url} />
         <div className={styles.fieldContainer}>
-          <FormField>
+          <FormField className={styles.field}>
             <label className={styles.label}>ニックネーム</label>
             <InputWithError
               id="name"
@@ -43,7 +43,7 @@ const BasicInformationForm = ({
               errorMessage=""
             />
           </FormField>
-          <FormField>
+          <FormField className={styles.field}>
             <label className={styles.label}>生年月日</label>
             <InputWithError
               id="birthdate"
