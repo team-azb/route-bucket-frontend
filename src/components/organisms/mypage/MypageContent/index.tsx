@@ -1,20 +1,43 @@
-import React from "react";
+import React, { useCallback, useContext, useState } from "react";
 import BasicInformation from "../BasicInformation";
 import { useSignedInUserInfoContext } from "../../../../contexts/signedInUserContext";
 import styles from "./style.module.css";
-import { UserInfo } from "../../../../types";
+import { UserInfoContext } from "../UserInfoProvider";
+import BasicInformationForm from "../BasicInformationForm";
 
-type MypageContentProps = {
-  userInfo?: UserInfo;
-};
-
-const MypageContent = ({ userInfo }: MypageContentProps) => {
+const MypageContent = () => {
+  const userInfo = useContext(UserInfoContext);
   const { signedInUser } = useSignedInUserInfoContext();
+  const [isEditMode, setIsEditMode] = useState(false);
+
+  const changeEditModeHandler = useCallback((isActive: boolean) => {
+    return () => {
+      setIsEditMode(isActive);
+    };
+  }, []);
+
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>基本情報</h2>
+      <div className={styles.row}>
+        <h2 className={styles.title}>基本情報</h2>
+        {isEditMode || (
+          <button
+            className={styles.button}
+            onClick={changeEditModeHandler(true)}
+          >
+            編集
+          </button>
+        )}
+      </div>
       <hr />
-      <BasicInformation userInfo={userInfo} email={signedInUser?.email} />
+      {isEditMode ? (
+        <BasicInformationForm
+          userInfo={userInfo}
+          exitEditModeHandler={changeEditModeHandler(false)}
+        />
+      ) : (
+        <BasicInformation userInfo={userInfo} email={signedInUser?.email} />
+      )}
       <h2 className={styles.title}>公開ルート</h2>
       <hr />
     </div>

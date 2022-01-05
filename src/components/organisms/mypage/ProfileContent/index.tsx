@@ -1,13 +1,10 @@
-import React from "react";
-import { UserInfo } from "../../../../types";
+import React, { useContext } from "react";
 import BasicInformation from "../BasicInformation";
+import { UserInfoContext } from "../UserInfoProvider";
 import styles from "./style.module.css";
 
-type ProfileContentProps = {
-  userInfo?: UserInfo;
-};
-
-const ProfileContent = ({ userInfo }: ProfileContentProps) => {
+const ProfileContent = () => {
+  const userInfo = useContext(UserInfoContext);
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>基本情報</h2>
