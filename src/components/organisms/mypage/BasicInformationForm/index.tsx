@@ -54,13 +54,11 @@ const BasicInformationForm = ({
               errorMessage=""
             />
           </FormField>
+          <button className={styles.submitButton}>更新</button>
+          <button className={styles.button} onClick={exitEditModeHandler}>
+            キャンセル
+          </button>
         </div>
-      </div>
-      <div className={[styles.row, styles.buttonWrapper].join(" ")}>
-        <button className={styles.button}>更新</button>
-        <button className={styles.button} onClick={exitEditModeHandler}>
-          キャンセル
-        </button>
       </div>
     </div>
   );
