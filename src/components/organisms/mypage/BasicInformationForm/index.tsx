@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useCallback, useState } from "react";
 import { UserInfo } from "../../../../types";
-import BasicInformationField from "../BasicInformationField";
 import IconImage from "../IconImage";
+import FormField from "../../../atoms/FormField";
+import InputWithError from "../../../molecules/InputWithError";
 import styles from "./style.module.css";
 
 type BasicInformationFormProps = {
@@ -14,21 +15,45 @@ const BasicInformationForm = ({
   userInfo,
 }: BasicInformationFormProps) => {
   const [userInfoForm, setUserInfoForm] = useState<UserInfo>(userInfo);
+  const changeFormHandler = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      setUserInfoForm((prevForm) => {
+        return {
+          ...prevForm,
+          [event.target.name]: event.target.value,
+        };
+      });
+    },
+    []
+  );
+
   return (
     <div className={styles.container}>
       <div className={styles.row}>
         <IconImage src={userInfoForm.icon_url} />
         <div className={styles.fieldContainer}>
-          <BasicInformationField
-            id="name"
-            labelName="ニックネーム"
-            fieldValue={userInfoForm.name}
-          />
-          <BasicInformationField
-            id="birthdate"
-            labelName="生年月日"
-            fieldValue={userInfoForm.birthdate}
-          />
+          <FormField>
+            <label className={styles.label}>ニックネーム</label>
+            <InputWithError
+              id="name"
+              name="name"
+              type="text"
+              value={userInfoForm.name}
+              onChange={changeFormHandler}
+              errorMessage=""
+            />
+          </FormField>
+          <FormField>
+            <label className={styles.label}>生年月日</label>
+            <InputWithError
+              id="birthdate"
+              name="birthdate"
+              type="date"
+              value={userInfoForm.birthdate}
+              onChange={changeFormHandler}
+              errorMessage=""
+            />
+          </FormField>
         </div>
       </div>
       <div className={[styles.row, styles.buttonWrapper].join(" ")}>
