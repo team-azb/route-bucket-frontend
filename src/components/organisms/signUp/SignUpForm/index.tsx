@@ -57,20 +57,20 @@ const SignUpForm = () => {
         return;
       }
     }
+    const user = await signInWithEmailAndPassword(form.email, form.password);
+    await sendEmailVerification(user);
     setDialogFlag(true);
   };
 
   const handleClose = useCallback(async () => {
     try {
-      const user = await signInWithEmailAndPassword(form.email, form.password);
-      await sendEmailVerification(user);
       setDialogFlag(false);
       toast.success("サインイン成功");
       history.push(pagePaths.ROUTE_INDEX);
     } catch (error) {
       toast.error("サインイン失敗");
     }
-  }, [form.email, form.password, history]);
+  }, [history]);
 
   return (
     <div className={styles.wrapper}>
