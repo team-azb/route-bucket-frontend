@@ -12,13 +12,22 @@
   flex: 3;
 }
 
-.button-wrapper {
-  margin-left: 50px;
-  flex: 1;
+.submit-button {
+  margin-right: 10px;
+  margin-bottom: 0.5rem;
+  height: 2.5rem;
+  cursor: pointer;
+  border: solid;
+  border-width: 2px;
+  border-radius: 5px;
+  border-color: #20746a;
+  color: #fff;
+  font-weight: 600;
+  background: #20746a;
 }
 
 .button {
-  margin-left: 10px;
+  margin-right: 10px;
   margin-bottom: 0.5rem;
   height: 2.5rem;
   cursor: pointer;
