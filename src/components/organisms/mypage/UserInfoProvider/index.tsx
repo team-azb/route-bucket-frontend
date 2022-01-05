@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { createContext, useEffect, useMemo, useState } from "react";
 import { UserInfo } from "../../../../types";
 import { getUser } from "../../../../api/users";
 import LoadingDisplay from "../../../atoms/LoadingDisplay";
@@ -10,6 +10,14 @@ type UserInfoProviderProps = {
 };
 
 type Status = "LOADING" | "NOT_FOUND" | "FOUND";
+
+export const UserInfoContext = createContext<UserInfo>({
+  id: "",
+  name: "",
+  gender: null,
+  birthdate: null,
+  icon_url: null,
+});
 
 const UserInfoProvider = ({ children, userId }: UserInfoProviderProps) => {
   const [userInfo, setUserInfo] = useState<UserInfo>({
@@ -34,15 +42,6 @@ const UserInfoProvider = ({ children, userId }: UserInfoProviderProps) => {
     })();
   }, [userId]);
 
-  const childrenWithProps = useMemo(() => {
-    return React.Children.map(children, (child) => {
-      if (React.isValidElement(child)) {
-        return React.cloneElement(child, { userInfo: userInfo });
-      }
-      return child;
-    });
-  }, [children, userInfo]);
-
   const displayedElem = useMemo(() => {
     switch (status) {
       case "LOADING":
@@ -50,9 +49,13 @@ const UserInfoProvider = ({ children, userId }: UserInfoProviderProps) => {
       case "NOT_FOUND":
         return <NotFoundContent />;
       case "FOUND":
-        return childrenWithProps;
+        return (
+          <UserInfoContext.Provider value={userInfo}>
+            {children}
+          </UserInfoContext.Provider>
+        );
     }
-  }, [childrenWithProps, status]);
+  }, [children, status, userInfo]);
 
   return <>{displayedElem}</>;
 };
