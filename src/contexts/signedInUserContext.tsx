@@ -3,26 +3,26 @@ import { onAuthStateChanged, User } from "../api/auth";
 
 type signedInUserInfo = {
   signedInUser: User | null;
-  isCheckedAuth: boolean;
+  hasCheckedAuth: boolean;
 };
 
 const SignedInUserInfoContext = createContext<signedInUserInfo>({
   signedInUser: null,
-  isCheckedAuth: false,
+  hasCheckedAuth: false,
 });
 
 export const SignedInUserInfoProvider: React.FC = ({ children }) => {
   const [signedInUser, setSignedInUser] = useState<User | null>(null);
-  const [isCheckedAuth, setIsCheckedAuth] = useState<boolean>(false);
+  const [hasCheckedAuth, setHasCheckedAuth] = useState<boolean>(false);
   useEffect(() => {
     const unsubscribeWhenUnmounted = onAuthStateChanged((signedInUser) => {
-      setIsCheckedAuth(true);
+      setHasCheckedAuth(true);
       setSignedInUser(signedInUser);
     });
     return unsubscribeWhenUnmounted;
   }, []);
   return (
-    <SignedInUserInfoContext.Provider value={{ signedInUser, isCheckedAuth }}>
+    <SignedInUserInfoContext.Provider value={{ signedInUser, hasCheckedAuth }}>
       {children}
     </SignedInUserInfoContext.Provider>
   );

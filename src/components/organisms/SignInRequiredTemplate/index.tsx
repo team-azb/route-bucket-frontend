@@ -24,17 +24,17 @@ const loadingDisplay = (
 );
 
 const SignInRequiredTemplate: React.FC = ({ children }) => {
-  const { signedInUser, isCheckedAuth } = useSignedInUserInfoContext();
+  const { signedInUser, hasCheckedAuth } = useSignedInUserInfoContext();
 
   const displayedContent = useMemo(() => {
-    if (!isCheckedAuth) {
+    if (!hasCheckedAuth) {
       return loadingDisplay;
     } else if (!signedInUser) {
       return redirectMessage;
     } else {
       return children;
     }
-  }, [isCheckedAuth, signedInUser, children]);
+  }, [hasCheckedAuth, signedInUser, children]);
 
   return <>{displayedContent}</>;
 };
