@@ -5,6 +5,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
+import { useLocation } from "react-router-dom";
 import { UserInfo } from "../../types";
 import { getUser } from "../../api/users";
 import LoadingDisplay from "../../components/atoms/LoadingDisplay";
@@ -28,6 +29,7 @@ const UserInfoProvider = ({ children, userId }: UserInfoProviderProps) => {
     name: "",
   });
   const [status, setStatus] = useState<Status>("LOADING");
+  const location = useLocation();
 
   useEffect(() => {
     setStatus("LOADING");
@@ -40,7 +42,7 @@ const UserInfoProvider = ({ children, userId }: UserInfoProviderProps) => {
         setStatus("NOT_FOUND");
       }
     })();
-  }, [userId]);
+  }, [userId, location]);
 
   const displayedElem = useMemo(() => {
     switch (status) {

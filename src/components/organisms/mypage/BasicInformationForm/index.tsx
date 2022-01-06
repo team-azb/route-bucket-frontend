@@ -1,4 +1,5 @@
 import React, { ChangeEvent, useCallback, useMemo, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { UserInfo, ValidationMessages } from "../../../../types";
 import IconImageUpload from "../IconImageUpload";
 import FormField from "../../../atoms/FormField";
@@ -8,6 +9,7 @@ import { Fields, Form, isUnableToSend, validateAndGetMessages } from "./helper";
 import { updateUser } from "../../../../api/users";
 import styles from "./style.module.css";
 import { toast } from "react-toastify";
+import { dynamicPathGenerator } from "../../../../consts/uriComponents";
 
 type BasicInformationFormProps = {
   exitEditModeHandler: () => void;
@@ -26,6 +28,7 @@ const BasicInformationForm = ({
     return previewFile ? URL.createObjectURL(previewFile) : userInfo.icon_url;
   }, [previewFile, userInfo.icon_url]);
   const { authenticatedUser } = useSignedInUserInfoContext();
+  const history = useHistory();
 
   const asyncUpdatgeValidationMessages = async (
     fieldName: Fields,
@@ -68,14 +71,14 @@ const BasicInformationForm = ({
       try {
         await updateUser(userInfo.id, token, userInfoForm);
         toast.success("ユーザー情報の更新に成功");
-        exitEditModeHandler();
+        history.push(dynamicPathGenerator.mypage(userInfo.id));
       } catch (error) {
         toast.error("ユーザー情報の更新に失敗");
       }
     } else {
       toast.error("ユーザートークンの取得に失敗");
     }
-  }, [exitEditModeHandler, authenticatedUser, userInfo.id, userInfoForm]);
+  }, [authenticatedUser, userInfo.id, userInfoForm, history]);
 
   return (
     <div className={styles.container}>
