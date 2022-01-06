@@ -15,37 +15,52 @@ import {
 import { pagePaths } from "../../../../consts/uriComponents";
 import {
   Form,
-  updateValidationMessages,
   form2payload,
   initialFormValue,
   isUnableToSend,
   Fields,
+  validateAndGetMessages,
 } from "./helper";
 import styles from "./style.module.css";
+import { ValidationMessages } from "../../../../types";
 
 const SignUpForm = () => {
   const [form, setForm] = useState<Form>(initialFormValue);
   const [validatonMessages, setValidatonMessages] =
-    useState<Form>(initialFormValue);
+    useState<ValidationMessages>(initialFormValue);
   const [dialogFlag, setDialogFlag] = useState(false);
   const history = useHistory();
 
-  const changeFormHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    setForm((prevForm) => {
-      setValidatonMessages((prevValidationMessages) => {
-        return updateValidationMessages(
-          event.target.name as Fields,
-          event.target.value,
-          prevForm,
-          prevValidationMessages
-        );
-      });
+  const asyncUpdatgeValidationMessages = async (
+    fieldName: Fields,
+    value: string,
+    prevForm: Form
+  ) => {
+    const result = await validateAndGetMessages(fieldName, value, prevForm);
+    setValidatonMessages((prevState) => {
       return {
-        ...prevForm,
-        [event.target.name]: event.target.value,
+        ...prevState,
+        ...result,
       };
     });
   };
+
+  const changeFormHandler = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      setForm((prevForm) => {
+        asyncUpdatgeValidationMessages(
+          event.target.name as Fields,
+          event.target.value,
+          prevForm
+        );
+        return {
+          ...prevForm,
+          [event.target.name]: event.target.value,
+        };
+      });
+    },
+    []
+  );
 
   const sendFormHandler = async () => {
     try {
