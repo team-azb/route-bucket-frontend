@@ -1,8 +1,6 @@
-import * as EmailValidator from "email-validator";
 import { CreateUserRequestBody } from "../../../../api/auth";
-import { Gender } from "../../../../types";
-
-const USER_ID_REGEX = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i;
+import { validateUserInfo } from "../../../../api/users";
+import { Gender, ValidationMessages } from "../../../../types";
 
 enum RequiredFields {
   ID = "id",
@@ -40,118 +38,72 @@ export const initialFormValue: Form = {
   birthdate: "",
 };
 
-const emptyOrMessage = (judge: boolean, message: string) => {
-  return judge ? "" : message;
-};
-
-const mergeValidationMessageForm = (
-  prevValidationMessage: Form,
-  fieldName: Fields,
-  isValid: boolean,
-  errorMessage: string
-) => {
-  return {
-    ...prevValidationMessage,
-    [fieldName]: emptyOrMessage(isValid, errorMessage),
-  } as Form;
-};
-
-export const updateValidationMessages = (
+export const validateAndGetMessages = async (
   fieldName: Fields,
   value: string,
-  form: Form,
-  prevValidationMessage: Form
-) => {
+  prevForm: Form
+): Promise<ValidationMessages> => {
   switch (fieldName) {
     case RequiredFields.ID:
-      return mergeValidationMessageForm(
-        prevValidationMessage,
-        RequiredFields.ID,
-        isValidUserId(value),
-        "ユーザーIDのパターンと不一致"
-      );
+      const { id } = await validateUserInfo({ [fieldName]: value });
+      if (id === "INVALID_FORMAT") {
+        return { [RequiredFields.ID]: "ユーザーIDのパターンと不一致" };
+      } else if (id === "ALREADY_EXISTS") {
+        return { [RequiredFields.ID]: "すでに登録されているid" };
+      } else {
+        return { [RequiredFields.ID]: "" };
+      }
     case RequiredFields.NAME:
-      return mergeValidationMessageForm(
-        prevValidationMessage,
-        RequiredFields.NAME,
-        isValidUserName(value),
-        "ニックネームは1文字以上50文字以下"
-      );
+      const { name } = await validateUserInfo({ [fieldName]: value });
+      if (name === "INVALID_FORMAT") {
+        return { [RequiredFields.NAME]: "ニックネームは1文字以上50文字以下" };
+      } else {
+        return { [RequiredFields.NAME]: "" };
+      }
     case RequiredFields.EMAIL:
-      return mergeValidationMessageForm(
-        prevValidationMessage,
-        RequiredFields.EMAIL,
-        isValidEmail(value),
-        "不適切なemailの形式"
-      );
+      const { email } = await validateUserInfo({ [fieldName]: value });
+      if (email === "INVALID_FORMAT") {
+        return { [RequiredFields.EMAIL]: "不適切なemailの形式" };
+      } else if (email === "ALREADY_EXISTS") {
+        return { [RequiredFields.EMAIL]: "すでに登録されているemail" };
+      } else {
+        return { [RequiredFields.EMAIL]: "" };
+      }
     case RequiredFields.PASSWORD:
-      const tempMessageForm = mergeValidationMessageForm(
-        prevValidationMessage,
-        RequiredFields.PASSWORD,
-        isValidPassword(value),
-        "パスワードは6文字以上"
-      );
-      return mergeValidationMessageForm(
-        tempMessageForm,
-        RequiredFields.PASSWORD_CONFIRMATION,
-        isValidPasswordConfirmation(
-          value,
-          form[RequiredFields.PASSWORD_CONFIRMATION]
-        ),
-        "パスワードと不一致"
-      );
+      const { password } = await validateUserInfo({ [fieldName]: value });
+      let result: ValidationMessages;
+      if (value !== prevForm.password) {
+        result = {
+          [RequiredFields.PASSWORD_CONFIRMATION]: "パスワードと不一致",
+        };
+      } else {
+        result = { [RequiredFields.PASSWORD_CONFIRMATION]: "" };
+      }
+      if (password === "INVALID_FORMAT") {
+        result = {
+          ...result,
+          [RequiredFields.PASSWORD]: "パスワードは6文字以上",
+        };
+      } else {
+        result = { ...result, [RequiredFields.PASSWORD]: "" };
+      }
+      return result;
     case RequiredFields.PASSWORD_CONFIRMATION:
-      return mergeValidationMessageForm(
-        prevValidationMessage,
-        RequiredFields.PASSWORD_CONFIRMATION,
-        isValidPasswordConfirmation(value, form[RequiredFields.PASSWORD]),
-        "パスワードと不一致"
-      );
+      if (value !== prevForm.password) {
+        return { [RequiredFields.PASSWORD_CONFIRMATION]: "パスワードと不一致" };
+      } else {
+        return { [RequiredFields.PASSWORD_CONFIRMATION]: "" };
+      }
     case OptionalFields.BRITHDATE:
-      return mergeValidationMessageForm(
-        prevValidationMessage,
-        OptionalFields.BRITHDATE,
-        optionFieldWrapper(value, isValidBrithdate),
-        "生年月日が不適切です"
-      );
+      const { birthdate } = await validateUserInfo({ [fieldName]: value });
+      if (birthdate === "INVALID_FORMAT") {
+        return { [OptionalFields.BRITHDATE]: "生年月日が不適切です" };
+      } else {
+        return { [OptionalFields.BRITHDATE]: "" };
+      }
     default:
-      return prevValidationMessage;
+      return {};
   }
-};
-
-const isValidUserId = (value: string) => {
-  return USER_ID_REGEX.test(value);
-};
-
-const isValidUserName = (value: string) => {
-  return value.length > 0 && value.length < 51;
-};
-
-const isValidEmail = (value: string) => {
-  return EmailValidator.validate(value);
-};
-
-const isValidPassword = (value: string) => {
-  return value.length > 5;
-};
-
-const isValidPasswordConfirmation = (
-  password: string,
-  confirmation: string
-) => {
-  return password === confirmation;
-};
-
-const isValidBrithdate = (date: string) => {
-  const now = new Date();
-  return new Date(date) < now;
-};
-
-const optionFieldWrapper = (
-  value: string,
-  callback: (value: string) => boolean
-) => {
-  return value === "" ? true : callback(value);
 };
 
 export const form2payload = (form: Form) => {
@@ -168,7 +120,10 @@ export const form2payload = (form: Form) => {
   return payload as CreateUserRequestBody;
 };
 
-export const isUnableToSend = (form: Form, validatonMessages: Form) => {
+export const isUnableToSend = (
+  form: Form,
+  validatonMessages: ValidationMessages
+) => {
   const hasEmptyField = Object.values(RequiredFields).some((key) => {
     return form[key] === "";
   });
