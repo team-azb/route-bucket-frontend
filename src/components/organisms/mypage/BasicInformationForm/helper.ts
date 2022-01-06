@@ -13,8 +13,7 @@ export type Form = {
 
 export const validateAndGetMessages = async (
   fieldName: Fields,
-  value: string,
-  prevForm: Form
+  value: string
 ): Promise<ValidationMessages> => {
   switch (fieldName) {
     case Fields.NAME:
@@ -35,5 +34,22 @@ export const validateAndGetMessages = async (
       };
     default:
       return {};
+  }
+};
+
+export const isUnableToSend = (
+  form: Form,
+  validatonMessages: ValidationMessages
+) => {
+  const hasEmptyField = Object.values(Fields).some((key) => {
+    return form[key] === "";
+  });
+
+  if (!hasEmptyField) {
+    return Object.keys(validatonMessages).some((key) => {
+      return validatonMessages[key as Fields] !== "";
+    });
+  } else {
+    return true;
   }
 };
