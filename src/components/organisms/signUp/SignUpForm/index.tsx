@@ -81,7 +81,7 @@ const SignUpForm = () => {
     try {
       setDialogFlag(false);
       toast.success("サインイン成功");
-      history.push(pagePaths.routeIndex());
+      history.push(pagePaths.mypage(user.uid));
     } catch (error) {
       toast.error("サインイン失敗");
     }
