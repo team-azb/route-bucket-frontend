@@ -3,8 +3,10 @@ import { UserInfo, ValidationMessages } from "../../../../types";
 import IconImageUpload from "../IconImageUpload";
 import FormField from "../../../atoms/FormField";
 import InputWithError from "../../../molecules/InputWithError";
+import { useSignedInUserInfoContext } from "../../../../contexts/signedInUserContext";
+import { Fields, Form, isUnableToSend, validateAndGetMessages } from "./helper";
+import { updateUser } from "../../../../api/users";
 import styles from "./style.module.css";
-import { Fields, Form, validateAndGetMessages } from "./helper";
 
 type BasicInformationUpdateFormProps = {
   exitEditingModeHandler: () => void;
@@ -17,18 +19,18 @@ const BasicInformationUpdateForm = ({
 }: BasicInformationUpdateFormProps) => {
   const [userInfoForm, setUserInfoForm] = useState<Form>(userInfo as Form);
   const [validatonMessages, setValidatonMessages] =
-    useState<ValidationMessages>();
+    useState<ValidationMessages>({});
   const [previewFile, setPreviewFile] = useState<File>();
   const previewUrl = useMemo(() => {
     return previewFile ? URL.createObjectURL(previewFile) : userInfo.icon_url;
   }, [previewFile, userInfo.icon_url]);
+  const { signedInUser } = useSignedInUserInfoContext();
 
   const asyncUpdatgeValidationMessages = async (
     fieldName: Fields,
-    value: string,
-    prevForm: Form
+    value: string
   ) => {
-    const result = await validateAndGetMessages(fieldName, value, prevForm);
+    const result = await validateAndGetMessages(fieldName, value);
     setValidatonMessages((prevState) => {
       return {
         ...prevState,
@@ -42,8 +44,7 @@ const BasicInformationUpdateForm = ({
       setUserInfoForm((prevForm) => {
         asyncUpdatgeValidationMessages(
           event.target.name as Fields,
-          event.target.value,
-          prevForm
+          event.target.value
         );
         return {
           ...prevForm,
@@ -59,6 +60,13 @@ const BasicInformationUpdateForm = ({
       setPreviewFile(event.target.files[0]);
     }
   };
+
+  const submitFormHandler = useCallback(async () => {
+    const token = await signedInUser?.getIdToken();
+    if (token) {
+      await updateUser(userInfo.id, token, userInfoForm);
+    }
+  }, [signedInUser, userInfo.id, userInfoForm]);
 
   return (
     <div className={styles.container}>
@@ -87,7 +95,13 @@ const BasicInformationUpdateForm = ({
               errorMessage={validatonMessages?.birthdate}
             />
           </FormField>
-          <button className={styles.submitButton}>更新</button>
+          <button
+            disabled={isUnableToSend(userInfoForm, validatonMessages)}
+            className={styles.submitButton}
+            onClick={submitFormHandler}
+          >
+            更新
+          </button>
           <button className={styles.button} onClick={exitEditingModeHandler}>
             キャンセル
           </button>
