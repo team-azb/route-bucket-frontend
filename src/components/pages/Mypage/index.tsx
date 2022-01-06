@@ -3,8 +3,8 @@ import { useParams } from "react-router-dom";
 import SigninRequiredTemplate from "../../organisms/SignInRequiredTemplate";
 import MypageContent from "../../organisms/mypage/MypageContent";
 import ProfileContent from "../../organisms/mypage/ProfileContent";
-import UserInfoProvider from "../../organisms/mypage/UserInfoProvider";
-import { useSignedInUserInfoContext } from "../../../contexts/signedInUserContext";
+import UserInfoProvider from "../../../contexts/UserInfoProvider";
+import { useSignedInUserInfoContext } from "../../../contexts/AuthenticationProvider";
 
 interface MypageParams {
   userId: string;
@@ -12,11 +12,11 @@ interface MypageParams {
 
 const Mypage = () => {
   const { userId } = useParams<MypageParams>();
-  const { signedInUser } = useSignedInUserInfoContext();
+  const { authenticatedUser } = useSignedInUserInfoContext();
 
   const isMyOwnPage = useMemo(() => {
-    return signedInUser ? signedInUser?.uid === userId : false;
-  }, [signedInUser, userId]);
+    return authenticatedUser ? authenticatedUser?.uid === userId : false;
+  }, [authenticatedUser, userId]);
 
   return (
     <SigninRequiredTemplate>
