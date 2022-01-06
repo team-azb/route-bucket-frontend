@@ -10,6 +10,7 @@ import { updateUser } from "../../../../api/users";
 import styles from "./style.module.css";
 import { toast } from "react-toastify";
 import { dynamicPathGenerator } from "../../../../consts/uriComponents";
+import { uploadUserIconAndGetUrl } from "../../../../api/storage";
 
 type BasicInformationFormProps = {
   exitEditModeHandler: () => void;
@@ -69,7 +70,13 @@ const BasicInformationForm = ({
     const token = await authenticatedUser?.getIdToken();
     if (token) {
       try {
-        await updateUser(userInfo.id, token, userInfoForm);
+        const iconUrl =
+          previewFile &&
+          (await uploadUserIconAndGetUrl(userInfo.id, previewFile));
+        await updateUser(userInfo.id, token, {
+          ...userInfoForm,
+          icon_url: iconUrl,
+        });
         toast.success("ユーザー情報の更新に成功");
         history.push(dynamicPathGenerator.mypage(userInfo.id));
       } catch (error) {
@@ -78,7 +85,7 @@ const BasicInformationForm = ({
     } else {
       toast.error("ユーザートークンの取得に失敗");
     }
-  }, [authenticatedUser, userInfo.id, userInfoForm, history]);
+  }, [authenticatedUser, previewFile, userInfo.id, userInfoForm, history]);
 
   return (
     <div className={styles.container}>
