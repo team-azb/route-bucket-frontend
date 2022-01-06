@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router";
 import { toast } from "react-toastify";
-import { pagePaths } from "../../../consts/uriComponents";
+import { dynamicPathGenerator, pagePaths } from "../../../consts/uriComponents";
 import { Link } from "react-router-dom";
 import { signInWithEmailAndPassword } from "../../../api/auth";
 import styles from "./style.module.css";
@@ -15,9 +15,12 @@ const SignIn = () => {
   ) => {
     event.preventDefault();
     try {
-      await signInWithEmailAndPassword(emailInput, passwordInput);
+      const { uid } = await signInWithEmailAndPassword(
+        emailInput,
+        passwordInput
+      );
       toast.success("サインイン成功");
-      history.push(pagePaths.ROUTE_INDEX);
+      history.push(dynamicPathGenerator.mypage(uid));
     } catch (error) {
       toast.error("サインイン失敗");
     }
