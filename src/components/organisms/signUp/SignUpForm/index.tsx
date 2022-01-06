@@ -12,7 +12,7 @@ import {
   signInWithEmailAndPassword,
   sendEmailVerification,
 } from "../../../../api/auth";
-import { pagePaths } from "../../../../consts/uriComponents";
+import { dynamicPathGenerator } from "../../../../consts/uriComponents";
 import {
   Form,
   form2payload,
@@ -81,7 +81,7 @@ const SignUpForm = () => {
     try {
       setDialogFlag(false);
       toast.success("サインイン成功");
-      history.push(pagePaths.ROUTE_INDEX);
+      history.push(dynamicPathGenerator.mypage(user.uid));
     } catch (error) {
       toast.error("サインイン失敗");
     }
