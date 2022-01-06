@@ -68,7 +68,10 @@ export type ValidationFields = {
   password?: string;
 };
 
-type ValidatonErrorCode = "INVALID_FORMAT" | "ALREADY_EXISTS" | "RESERVED_WORD";
+export type ValidationErrorCode =
+  | "INVALID_FORMAT"
+  | "ALREADY_EXISTS"
+  | "RESERVED_WORD";
 
 export type ValidationMessages = {
   id?: string;
@@ -82,11 +85,11 @@ export type ValidationMessages = {
 };
 
 export type ValidationResponse = {
-  id?: ValidatonErrorCode;
-  name?: ValidatonErrorCode;
-  email?: ValidatonErrorCode;
-  gender?: ValidatonErrorCode;
-  birthdate?: ValidatonErrorCode;
-  icon_url?: ValidatonErrorCode;
-  password?: ValidatonErrorCode;
+  id?: ValidationErrorCode;
+  name?: ValidationErrorCode;
+  email?: ValidationErrorCode;
+  gender?: ValidationErrorCode;
+  birthdate?: ValidationErrorCode;
+  icon_url?: ValidationErrorCode;
+  password?: ValidationErrorCode;
 };
