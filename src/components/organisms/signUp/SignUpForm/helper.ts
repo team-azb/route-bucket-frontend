@@ -1,6 +1,10 @@
 import { CreateUserRequestBody } from "../../../../api/auth";
 import { validateUserInfo } from "../../../../api/users";
-import { Gender, ValidationMessages } from "../../../../types";
+import {
+  Gender,
+  ValidationErrorCode,
+  ValidationMessages,
+} from "../../../../types";
 
 enum RequiredFields {
   ID = "id",
@@ -38,6 +42,31 @@ export const initialFormValue: Form = {
   birthdate: "",
 };
 
+const errorCode2ErrorMessage = (
+  code: ValidationErrorCode | undefined,
+  invalidFormatMsg: string,
+  alreadyExistsMsg: string = "",
+  reservedWordMsg: string = ""
+): string => {
+  switch (code) {
+    case "INVALID_FORMAT":
+      return invalidFormatMsg;
+    case "ALREADY_EXISTS":
+      return alreadyExistsMsg;
+    case "RESERVED_WORD":
+      return reservedWordMsg;
+    default:
+      return "";
+  }
+};
+
+const passwordConfimationErrorMessage = (
+  password: string,
+  confirmation: string
+) => {
+  return password === confirmation ? "" : "パスワードと不一致";
+};
+
 export const validateAndGetMessages = async (
   fieldName: Fields,
   value: string,
@@ -46,61 +75,58 @@ export const validateAndGetMessages = async (
   switch (fieldName) {
     case RequiredFields.ID:
       const { id } = await validateUserInfo({ [fieldName]: value });
-      if (id === "INVALID_FORMAT") {
-        return { [RequiredFields.ID]: "ユーザーIDのパターンと不一致" };
-      } else if (id === "ALREADY_EXISTS") {
-        return { [RequiredFields.ID]: "すでに登録されているid" };
-      } else {
-        return { [RequiredFields.ID]: "" };
-      }
+      return {
+        [RequiredFields.ID]: errorCode2ErrorMessage(
+          id,
+          "ユーザーIDのパターンと不一致",
+          "すでに登録されているid",
+          "そのidは使用できない文字列です"
+        ),
+      };
     case RequiredFields.NAME:
       const { name } = await validateUserInfo({ [fieldName]: value });
-      if (name === "INVALID_FORMAT") {
-        return { [RequiredFields.NAME]: "ニックネームは1文字以上50文字以下" };
-      } else {
-        return { [RequiredFields.NAME]: "" };
-      }
+      return {
+        [RequiredFields.NAME]: errorCode2ErrorMessage(
+          name,
+          "ニックネームは1文字以上50文字以下"
+        ),
+      };
     case RequiredFields.EMAIL:
       const { email } = await validateUserInfo({ [fieldName]: value });
-      if (email === "INVALID_FORMAT") {
-        return { [RequiredFields.EMAIL]: "不適切なemailの形式" };
-      } else if (email === "ALREADY_EXISTS") {
-        return { [RequiredFields.EMAIL]: "すでに登録されているemail" };
-      } else {
-        return { [RequiredFields.EMAIL]: "" };
-      }
+      return {
+        [RequiredFields.EMAIL]: errorCode2ErrorMessage(
+          email,
+          "不適切なemailの形式",
+          "すでに登録されているemail"
+        ),
+      };
     case RequiredFields.PASSWORD:
       const { password } = await validateUserInfo({ [fieldName]: value });
-      let result: ValidationMessages;
-      if (value !== prevForm.password) {
-        result = {
-          [RequiredFields.PASSWORD_CONFIRMATION]: "パスワードと不一致",
-        };
-      } else {
-        result = { [RequiredFields.PASSWORD_CONFIRMATION]: "" };
-      }
-      if (password === "INVALID_FORMAT") {
-        result = {
-          ...result,
-          [RequiredFields.PASSWORD]: "パスワードは6文字以上",
-        };
-      } else {
-        result = { ...result, [RequiredFields.PASSWORD]: "" };
-      }
-      return result;
+      return {
+        [RequiredFields.PASSWORD]: errorCode2ErrorMessage(
+          password,
+          "パスワードは6文字以上"
+        ),
+        [RequiredFields.PASSWORD_CONFIRMATION]: passwordConfimationErrorMessage(
+          value,
+          prevForm.password_confirmation
+        ),
+      };
     case RequiredFields.PASSWORD_CONFIRMATION:
-      if (value !== prevForm.password) {
-        return { [RequiredFields.PASSWORD_CONFIRMATION]: "パスワードと不一致" };
-      } else {
-        return { [RequiredFields.PASSWORD_CONFIRMATION]: "" };
-      }
+      return {
+        [RequiredFields.PASSWORD_CONFIRMATION]: passwordConfimationErrorMessage(
+          prevForm.password,
+          value
+        ),
+      };
     case OptionalFields.BRITHDATE:
       const { birthdate } = await validateUserInfo({ [fieldName]: value });
-      if (birthdate === "INVALID_FORMAT") {
-        return { [OptionalFields.BRITHDATE]: "生年月日が不適切です" };
-      } else {
-        return { [OptionalFields.BRITHDATE]: "" };
-      }
+      return {
+        [OptionalFields.BRITHDATE]: errorCode2ErrorMessage(
+          birthdate,
+          "生年月日が不適切です"
+        ),
+      };
     default:
       return {};
   }
