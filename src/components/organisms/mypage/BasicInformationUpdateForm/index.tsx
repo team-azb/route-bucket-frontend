@@ -3,7 +3,7 @@ import { UserInfo, ValidationMessages } from "../../../../types";
 import IconImageUpload from "../IconImageUpload";
 import FormField from "../../../atoms/FormField";
 import InputWithError from "../../../molecules/InputWithError";
-import { useSignedInUserInfoContext } from "../../../../contexts/signedInUserContext";
+import { useSignedInUserInfoContext } from "../../../../contexts/AuthenticationProvider";
 import { Fields, Form, isUnableToSend, validateAndGetMessages } from "./helper";
 import { updateUser } from "../../../../api/users";
 import styles from "./style.module.css";
@@ -25,7 +25,7 @@ const BasicInformationUpdateForm = ({
   const previewUrl = useMemo(() => {
     return previewFile ? URL.createObjectURL(previewFile) : userInfo.icon_url;
   }, [previewFile, userInfo.icon_url]);
-  const { signedInUser } = useSignedInUserInfoContext();
+  const { authenticatedUser } = useSignedInUserInfoContext();
 
   const asyncUpdatgeValidationMessages = async (
     fieldName: Fields,
@@ -63,18 +63,19 @@ const BasicInformationUpdateForm = ({
   };
 
   const submitFormHandler = useCallback(async () => {
-    const token = await signedInUser?.getIdToken();
+    const token = await authenticatedUser?.getIdToken();
     if (token) {
       try {
         await updateUser(userInfo.id, token, userInfoForm);
         toast.success("ユーザー情報の更新に成功");
+        exitEditingModeHandler();
       } catch (error) {
         toast.error("ユーザー情報の更新に失敗");
       }
     } else {
       toast.error("ユーザートークンの取得に失敗");
     }
-  }, [signedInUser, userInfo.id, userInfoForm]);
+  }, [exitEditingModeHandler, authenticatedUser, userInfo.id, userInfoForm]);
 
   return (
     <div className={styles.container}>
