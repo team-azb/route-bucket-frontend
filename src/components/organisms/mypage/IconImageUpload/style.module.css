@@ -3,11 +3,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 
-.image {
-  height: 160px;
-  width: 160px;
-  object-fit: cover;
-  border-radius: 50%;
+.file-upload {
+  display: none;
 }

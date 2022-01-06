@@ -1,6 +1,7 @@
-import React, { ChangeEvent, useCallback, useState } from "react";
+import React, { ChangeEvent, useCallback, useMemo, useState } from "react";
 import { UserInfo } from "../../../../types";
-import IconImage from "../IconImage";
+// import IconImage from "../IconImage";
+import IconImageUpload from "../IconImageUpload";
 import FormField from "../../../atoms/FormField";
 import InputWithError from "../../../molecules/InputWithError";
 import styles from "./style.module.css";
@@ -15,6 +16,12 @@ const BasicInformationForm = ({
   userInfo,
 }: BasicInformationFormProps) => {
   const [userInfoForm, setUserInfoForm] = useState<UserInfo>(userInfo);
+  const [previewFile, setPreviewFile] = useState<File>();
+  const previewUrl = useMemo(() => {
+    return previewFile
+      ? URL.createObjectURL(previewFile)
+      : userInfoForm.icon_url;
+  }, [previewFile, userInfoForm.icon_url]);
   const changeFormHandler = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       setUserInfoForm((prevForm) => {
@@ -27,10 +34,16 @@ const BasicInformationForm = ({
     []
   );
 
+  const changeImageHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      setPreviewFile(event.target.files[0]);
+    }
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.row}>
-        <IconImage src={userInfoForm.icon_url} />
+        <IconImageUpload src={previewUrl} onChange={changeImageHandler} />
         <div className={styles.fieldContainer}>
           <FormField className={styles.field}>
             <label className={styles.label}>ニックネーム</label>
