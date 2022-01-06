@@ -1,13 +1,13 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { useCallback, useState } from "react";
 import BasicInformation from "../BasicInformation";
-import { useSignedInUserInfoContext } from "../../../../contexts/signedInUserContext";
+import { useSignedInUserInfoContext } from "../../../../contexts/AuthenticationProvider";
 import styles from "./style.module.css";
-import { UserInfoContext } from "../UserInfoProvider";
+import { useUserInfo } from "../../../../contexts/UserInfoProvider";
 import BasicInformationForm from "../BasicInformationForm";
 
 const MypageContent = () => {
-  const userInfo = useContext(UserInfoContext);
-  const { signedInUser } = useSignedInUserInfoContext();
+  const userInfo = useUserInfo();
+  const { authenticatedUser } = useSignedInUserInfoContext();
   const [isEditMode, setIsEditMode] = useState(false);
 
   const changeEditModeHandler = useCallback((isActive: boolean) => {
@@ -36,7 +36,10 @@ const MypageContent = () => {
           exitEditModeHandler={changeEditModeHandler(false)}
         />
       ) : (
-        <BasicInformation userInfo={userInfo} email={signedInUser?.email} />
+        <BasicInformation
+          userInfo={userInfo}
+          email={authenticatedUser?.email}
+        />
       )}
       <h2 className={styles.title}>公開ルート</h2>
       <hr />

@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { useSignedInUserInfoContext } from "../../../contexts/signedInUserContext";
+import { useSignedInUserInfoContext } from "../../../contexts/AuthenticationProvider";
 import { Link } from "react-router-dom";
 import LoadingDisplay from "../../atoms/LoadingDisplay";
 import { pagePaths } from "../../../consts/uriComponents";
@@ -24,17 +24,17 @@ const redirectMessage = (
 // );
 
 const SignInRequiredTemplate: React.FC = ({ children }) => {
-  const { signedInUser, isCheckedAuth } = useSignedInUserInfoContext();
+  const { authenticatedUser, isCheckedAuth } = useSignedInUserInfoContext();
 
   const displayedContent = useMemo(() => {
     if (!isCheckedAuth) {
       return <LoadingDisplay message="認証中です" />;
-    } else if (!signedInUser) {
+    } else if (!authenticatedUser) {
       return redirectMessage;
     } else {
       return children;
     }
-  }, [isCheckedAuth, signedInUser, children]);
+  }, [isCheckedAuth, authenticatedUser, children]);
 
   return <>{displayedContent}</>;
 };
