@@ -5,6 +5,10 @@ import LoadingDisplay from "../../atoms/LoadingDisplay";
 import { pagePaths } from "../../../consts/uriComponents";
 import styles from "./style.module.css";
 
+type SignInRequiredTemplateProps = {
+  children?: React.ReactNode;
+};
+
 const redirectMessage = (
   <div className={styles.container}>
     <p className={styles.message}>
@@ -16,14 +20,7 @@ const redirectMessage = (
   </div>
 );
 
-// const loadingDisplay = (
-//   <div className={styles.container}>
-//     <p className={styles.message}>認証中です</p>
-//     <CircularProgress />
-//   </div>
-// );
-
-const SignInRequiredTemplate: React.FC = ({ children }) => {
+const SignInRequiredTemplate = ({ children }: SignInRequiredTemplateProps) => {
   const { authenticatedUser, isCheckedAuth } = useSignedInUserInfoContext();
 
   const displayedContent = useMemo(() => {
