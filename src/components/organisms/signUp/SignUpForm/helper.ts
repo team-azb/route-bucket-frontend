@@ -1,10 +1,7 @@
 import { CreateUserRequestBody } from "../../../../api/auth";
 import { validateUserInfo } from "../../../../api/users";
-import {
-  Gender,
-  ValidationErrorCode,
-  ValidationMessages,
-} from "../../../../types";
+import { errorCode2ErrorMessage } from "../../../../helpers/form";
+import { Gender, ValidationMessages } from "../../../../types";
 
 enum RequiredFields {
   ID = "id",
@@ -16,7 +13,7 @@ enum RequiredFields {
 
 enum OptionalFields {
   GENDER = "gender",
-  BRITHDATE = "birthdate",
+  BIRTHDATE = "birthdate",
 }
 
 export type Fields = RequiredFields | OptionalFields;
@@ -27,7 +24,7 @@ type RequiredForm = {
 
 type OptionalForm = {
   [OptionalFields.GENDER]: Gender | "";
-  [OptionalFields.BRITHDATE]: string;
+  [OptionalFields.BIRTHDATE]: string;
 };
 
 export type Form = RequiredForm & OptionalForm;
@@ -40,24 +37,6 @@ export const initialFormValue: Form = {
   password_confirmation: "",
   gender: "",
   birthdate: "",
-};
-
-const errorCode2ErrorMessage = (
-  code: ValidationErrorCode | undefined,
-  invalidFormatMsg: string,
-  alreadyExistsMsg: string = "",
-  reservedWordMsg: string = ""
-): string => {
-  switch (code) {
-    case "INVALID_FORMAT":
-      return invalidFormatMsg;
-    case "ALREADY_EXISTS":
-      return alreadyExistsMsg;
-    case "RESERVED_WORD":
-      return reservedWordMsg;
-    default:
-      return "";
-  }
 };
 
 const passwordConfimationErrorMessage = (
@@ -119,10 +98,10 @@ export const validateAndGetMessages = async (
           value
         ),
       };
-    case OptionalFields.BRITHDATE:
+    case OptionalFields.BIRTHDATE:
       const { birthdate } = await validateUserInfo({ [fieldName]: value });
       return {
-        [OptionalFields.BRITHDATE]: errorCode2ErrorMessage(
+        [OptionalFields.BIRTHDATE]: errorCode2ErrorMessage(
           birthdate,
           "生年月日が不適切です"
         ),
