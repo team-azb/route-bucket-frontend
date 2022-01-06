@@ -7,6 +7,7 @@ import { useSignedInUserInfoContext } from "../../../../contexts/signedInUserCon
 import { Fields, Form, isUnableToSend, validateAndGetMessages } from "./helper";
 import { updateUser } from "../../../../api/users";
 import styles from "./style.module.css";
+import { toast } from "react-toastify";
 
 type BasicInformationUpdateFormProps = {
   exitEditingModeHandler: () => void;
@@ -64,7 +65,14 @@ const BasicInformationUpdateForm = ({
   const submitFormHandler = useCallback(async () => {
     const token = await signedInUser?.getIdToken();
     if (token) {
-      await updateUser(userInfo.id, token, userInfoForm);
+      try {
+        await updateUser(userInfo.id, token, userInfoForm);
+        toast.success("ユーザー情報の更新に成功");
+      } catch (error) {
+        toast.error("ユーザー情報の更新に失敗");
+      }
+    } else {
+      toast.error("ユーザートークンの取得に失敗");
     }
   }, [signedInUser, userInfo.id, userInfoForm]);
 
