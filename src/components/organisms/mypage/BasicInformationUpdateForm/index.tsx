@@ -10,6 +10,7 @@ import { updateUser } from "../../../../api/users";
 import styles from "./style.module.css";
 import { toast } from "react-toastify";
 import { pagePaths } from "../../../../consts/uriComponents";
+import { uploadUserIconAndGetUrl } from "../../../../api/storage";
 
 type BasicInformationUpdateFormProps = {
   exitEditingModeHandler: () => void;
@@ -69,7 +70,13 @@ const BasicInformationUpdateForm = ({
     const token = await authenticatedUser?.getIdToken();
     if (token) {
       try {
-        await updateUser(userInfo.id, token, userInfoForm);
+        const iconUrl =
+          previewFile &&
+          (await uploadUserIconAndGetUrl(userInfo.id, previewFile));
+        await updateUser(userInfo.id, token, {
+          ...userInfoForm,
+          icon_url: iconUrl,
+        });
         toast.success("ユーザー情報の更新に成功");
         exitEditingModeHandler();
         history.push(pagePaths.mypage(userInfo.id));
@@ -81,6 +88,7 @@ const BasicInformationUpdateForm = ({
     }
   }, [
     authenticatedUser,
+    previewFile,
     userInfo.id,
     userInfoForm,
     exitEditingModeHandler,
