@@ -6,6 +6,7 @@ import GenderRadioGroup from "../GenderRadioGroup";
 import InputWithError from "../../../molecules/InputWithError";
 import FormField from "../../../atoms/form/FormField";
 import FormContainer from "../../../atoms/form/FormContainer";
+import SingleFormWrapper from "../../../atoms/form/SingleFormWrapper";
 import SubmitButton from "../SubmitButton";
 import EmailVerificationDialogContent from "../../../atoms/EmailVerificationDialogContent";
 import {
@@ -89,7 +90,7 @@ const SignUpForm = () => {
   }, [form.email, form.password, history]);
 
   return (
-    <div className={styles.wrapper}>
+    <SingleFormWrapper>
       <FormContainer className={styles.container} isPureForm={false}>
         <FormField className={styles.field}>
           <label className={styles.label}>
@@ -176,7 +177,7 @@ const SignUpForm = () => {
           handleClose={handleClose}
         />
       </Dialog>
-    </div>
+    </SingleFormWrapper>
   );
 };
 

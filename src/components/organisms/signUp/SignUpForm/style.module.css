@@ -1,9 +1,3 @@
-.wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .container {
   align-items: unset;
 }

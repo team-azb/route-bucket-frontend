@@ -5,6 +5,7 @@ import PageContainer from "../../atoms/PageContainer";
 import PageTitle from "../../atoms/PageTitle";
 import FormField from "../../atoms/form/FormField";
 import FormContainer from "../../atoms/form/FormContainer";
+import SingleFormWrapper from "../../atoms/form/SingleFormWrapper";
 import styles from "./style.module.css";
 
 const PasswordReset = () => {
@@ -24,7 +25,7 @@ const PasswordReset = () => {
   return (
     <PageContainer>
       <PageTitle title="パスワード再設定" />
-      <div className={styles.formWrapper}>
+      <SingleFormWrapper>
         <FormContainer>
           <h2>
             登録したメールアドレスにパスワード再設定用のリンクを送信します。
@@ -46,7 +47,7 @@ const PasswordReset = () => {
             送信
           </button>
         </FormContainer>
-      </div>
+      </SingleFormWrapper>
     </PageContainer>
   );
 };

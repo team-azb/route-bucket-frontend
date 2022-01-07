@@ -8,6 +8,7 @@ import PageContainer from "../../atoms/PageContainer";
 import PageTitle from "../../atoms/PageTitle";
 import FormField from "../../atoms/form/FormField";
 import FormContainer from "../../atoms/form/FormContainer";
+import SingleFormWrapper from "../../atoms/form/SingleFormWrapper";
 import styles from "./style.module.css";
 
 const SignIn = () => {
@@ -33,7 +34,7 @@ const SignIn = () => {
   return (
     <PageContainer>
       <PageTitle title="サインイン" />
-      <div className={styles.formWrapper}>
+      <SingleFormWrapper>
         <FormContainer>
           <FormField className={styles.formField}>
             <label className={styles.formLabel} htmlFor="email">
@@ -72,7 +73,7 @@ const SignIn = () => {
             </Link>
           </FormField>
         </FormContainer>
-      </div>
+      </SingleFormWrapper>
     </PageContainer>
   );
 };
