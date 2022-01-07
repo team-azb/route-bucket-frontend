@@ -5,6 +5,7 @@ import {
   ValidationFields,
   ValidationResponse,
 } from "../types";
+import { generateAxiosHeaderWithBearer } from "./helpers";
 
 type UpdateUserRequestBody = {
   name?: string;
@@ -23,11 +24,11 @@ export const updateUser = async (
   token: string,
   payload: UpdateUserRequestBody
 ) => {
-  const res = await axios.patch<UserInfo>(`/users/${userId}`, payload, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const res = await axios.patch<UserInfo>(
+    `/users/${userId}`,
+    payload,
+    generateAxiosHeaderWithBearer(token)
+  );
   return res;
 };
 
