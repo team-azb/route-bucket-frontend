@@ -2,7 +2,7 @@ import React, { ChangeEvent, useCallback, useMemo, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { UserInfo, ValidationMessages } from "../../../../types";
 import IconImageUpload from "../IconImageUpload";
-import FormField from "../../../atoms/FormField";
+import FormField from "../../../atoms/form/FormField";
 import InputWithError from "../../../molecules/InputWithError";
 import { useSignedInUserInfoContext } from "../../../../contexts/AuthenticationProvider";
 import { Fields, Form, isUnableToSend, validateAndGetMessages } from "./helper";

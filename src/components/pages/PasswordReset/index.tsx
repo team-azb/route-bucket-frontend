@@ -3,12 +3,16 @@ import { toast } from "react-toastify";
 import { sendPasswordResetEmail } from "../../../api/auth";
 import PageContainer from "../../atoms/PageContainer";
 import PageTitle from "../../atoms/PageTitle";
-import FormField from "../../atoms/FormField";
+import FormField from "../../atoms/form/FormField";
+import FormContainer from "../../atoms/form/FormContainer";
 import styles from "./style.module.css";
 
 const PasswordReset = () => {
   const [emailInput, setEmailInput] = useState<string>("");
-  const sendHandler = async () => {
+  const sendHandler: React.MouseEventHandler<HTMLButtonElement> = async (
+    event
+  ) => {
+    event.preventDefault();
     try {
       await sendPasswordResetEmail(emailInput);
       toast.success("メールを送信しました。");
@@ -21,7 +25,7 @@ const PasswordReset = () => {
     <PageContainer>
       <PageTitle title="パスワード再設定" />
       <div className={styles.formWrapper}>
-        <div className={styles.formContainer}>
+        <FormContainer>
           <h2>
             登録したメールアドレスにパスワード再設定用のリンクを送信します。
           </h2>
@@ -41,7 +45,7 @@ const PasswordReset = () => {
           <button className={styles.formButton} onClick={sendHandler}>
             送信
           </button>
-        </div>
+        </FormContainer>
       </div>
     </PageContainer>
   );

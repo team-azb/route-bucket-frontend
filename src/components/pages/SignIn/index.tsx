@@ -6,7 +6,8 @@ import { Link } from "react-router-dom";
 import { signInWithEmailAndPassword } from "../../../api/auth";
 import PageContainer from "../../atoms/PageContainer";
 import PageTitle from "../../atoms/PageTitle";
-import FormField from "../../atoms/FormField";
+import FormField from "../../atoms/form/FormField";
+import FormContainer from "../../atoms/form/FormContainer";
 import styles from "./style.module.css";
 
 const SignIn = () => {
@@ -33,7 +34,7 @@ const SignIn = () => {
     <PageContainer>
       <PageTitle title="サインイン" />
       <div className={styles.formWrapper}>
-        <form className={styles.formContainer}>
+        <FormContainer>
           <FormField className={styles.formField}>
             <label className={styles.formLabel} htmlFor="email">
               メールアドレス
@@ -70,7 +71,7 @@ const SignIn = () => {
               パスワードを忘れた場合
             </Link>
           </FormField>
-        </form>
+        </FormContainer>
       </div>
     </PageContainer>
   );

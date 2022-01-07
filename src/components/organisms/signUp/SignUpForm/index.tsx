@@ -4,7 +4,8 @@ import Dialog from "@mui/material/Dialog";
 import { toast } from "react-toastify";
 import GenderRadioGroup from "../GenderRadioGroup";
 import InputWithError from "../../../molecules/InputWithError";
-import FormField from "../../../atoms/FormField";
+import FormField from "../../../atoms/form/FormField";
+import FormContainer from "../../../atoms/form/FormContainer";
 import SubmitButton from "../SubmitButton";
 import EmailVerificationDialogContent from "../../../atoms/EmailVerificationDialogContent";
 import {
@@ -89,7 +90,7 @@ const SignUpForm = () => {
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.container}>
+      <FormContainer className={styles.container} isPureForm={false}>
         <FormField className={styles.field}>
           <label className={styles.label}>
             ID
@@ -168,7 +169,7 @@ const SignUpForm = () => {
             サインアップ
           </SubmitButton>
         </FormField>
-      </div>
+      </FormContainer>
       <Dialog open={dialogFlag} onClose={handleClose}>
         <EmailVerificationDialogContent
           email={form.email}
