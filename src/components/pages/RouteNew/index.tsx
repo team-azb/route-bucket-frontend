@@ -5,6 +5,7 @@ import PageTitle from "../../atoms/PageTitle";
 import FormContainer from "../../atoms/form/FormContainer";
 import FormField from "../../atoms/form/FormField";
 import SingleFormWrapper from "../../atoms/form/SingleFormWrapper";
+import FormLabel from "../../atoms/form/FormLabel";
 
 const RouteNew = () => {
   return (
@@ -14,7 +15,9 @@ const RouteNew = () => {
         <SingleFormWrapper>
           <FormContainer>
             <h2>ルート名を入力してルートを作成します</h2>
-            <FormField></FormField>
+            <FormField>
+              <FormLabel htmlFor="name">ルート名</FormLabel>
+            </FormField>
           </FormContainer>
         </SingleFormWrapper>
       </PageContainer>

@@ -4,11 +4,12 @@ import styles from "./style.module.css";
 type FormLabelProps = {
   children?: React.ReactNode;
   htmlFor?: string;
+  className?: string;
 };
 
-const FormLabel = ({ children, htmlFor }: FormLabelProps) => {
+const FormLabel = ({ children, htmlFor, className }: FormLabelProps) => {
   return (
-    <label className={styles.label} htmlFor={htmlFor}>
+    <label className={[styles.label, className].join(" ")} htmlFor={htmlFor}>
       {children}
     </label>
   );

@@ -7,6 +7,8 @@ import FormField from "../../atoms/form/FormField";
 import FormContainer from "../../atoms/form/FormContainer";
 import SingleFormWrapper from "../../atoms/form/SingleFormWrapper";
 import FormLabel from "../../atoms/form/FormLabel";
+import FormInput from "../../atoms/form/FormInput";
+import SubmitButton from "../../atoms/form/SubmitButton";
 import styles from "./style.module.css";
 
 const PasswordReset = () => {
@@ -33,8 +35,7 @@ const PasswordReset = () => {
           </h2>
           <FormField className={styles.formField}>
             <FormLabel htmlFor="email">メールアドレス</FormLabel>
-            <input
-              className={styles.formInput}
+            <FormInput
               value={emailInput}
               onChange={(event) => {
                 setEmailInput(event.target.value);
@@ -42,9 +43,7 @@ const PasswordReset = () => {
               type="email"
             />
           </FormField>
-          <button className={styles.formButton} onClick={sendHandler}>
-            送信
-          </button>
+          <SubmitButton onClick={sendHandler}>送信</SubmitButton>
         </FormContainer>
       </SingleFormWrapper>
     </PageContainer>

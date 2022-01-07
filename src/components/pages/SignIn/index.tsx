@@ -10,6 +10,8 @@ import FormField from "../../atoms/form/FormField";
 import FormContainer from "../../atoms/form/FormContainer";
 import SingleFormWrapper from "../../atoms/form/SingleFormWrapper";
 import FormLabel from "../../atoms/form/FormLabel";
+import FormInput from "../../atoms/form/FormInput";
+import SubmitButton from "../../atoms/form/SubmitButton";
 import styles from "./style.module.css";
 
 const SignIn = () => {
@@ -39,8 +41,7 @@ const SignIn = () => {
         <FormContainer>
           <FormField className={styles.formField}>
             <FormLabel htmlFor="email">メールアドレス</FormLabel>
-            <input
-              className={styles.formInput}
+            <FormInput
               value={emailInput}
               onChange={(event) => {
                 setEmailInput(event.target.value);
@@ -51,8 +52,7 @@ const SignIn = () => {
           </FormField>
           <FormField className={styles.formField}>
             <FormLabel htmlFor="password">パスワード</FormLabel>
-            <input
-              className={styles.formInput}
+            <FormInput
               value={passwordInput}
               onChange={(event) => {
                 setPasswordInput(event.target.value);
@@ -62,9 +62,7 @@ const SignIn = () => {
             />
           </FormField>
           <FormField className={styles.formField}>
-            <button className={styles.formButton} onClick={signInHandler}>
-              サインイン
-            </button>
+            <SubmitButton onClick={signInHandler}>サインイン</SubmitButton>
             <Link className={styles.formAnchor} to={pagePaths.PASSWORD_RESET}>
               パスワードを忘れた場合
             </Link>

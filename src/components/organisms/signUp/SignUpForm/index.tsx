@@ -8,7 +8,7 @@ import FormField from "../../../atoms/form/FormField";
 import FormContainer from "../../../atoms/form/FormContainer";
 import SingleFormWrapper from "../../../atoms/form/SingleFormWrapper";
 import FormLabel from "../../../atoms/form/FormLabel";
-import SubmitButton from "../SubmitButton";
+import SubmitButton from "../../../atoms/form/SubmitButton";
 import EmailVerificationDialogContent from "../../../atoms/EmailVerificationDialogContent";
 import {
   signUp,
