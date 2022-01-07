@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { pagePaths } from "../../../consts/uriComponents";
+import { pagePaths, dynamicPathGenerator } from "../../../consts/uriComponents";
 import { useAuthenticationInfoContext } from "../../../contexts/AuthenticationProvider";
 import styles from "./style.module.css";
 
@@ -22,9 +22,20 @@ const Header = () => {
 
         {hasCheckedAuth &&
           (authenticatedUser ? (
-            <Link className={styles.rightSectionLink} to={pagePaths.ROUTE_NEW}>
-              ルート作成
-            </Link>
+            <>
+              <Link
+                className={styles.rightSectionLink}
+                to={pagePaths.ROUTE_NEW}
+              >
+                ルート作成
+              </Link>
+              <Link
+                className={styles.rightSectionLink}
+                to={dynamicPathGenerator.mypage(authenticatedUser.uid)}
+              >
+                マイページ
+              </Link>
+            </>
           ) : (
             <Link className={styles.rightSectionLink} to={pagePaths.SIGN_IN}>
               サインイン
