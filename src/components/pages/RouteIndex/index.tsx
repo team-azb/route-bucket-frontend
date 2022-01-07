@@ -1,15 +1,12 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { getRoutes, postRoute, deleteRoute } from "../../../api/routes";
+import { getRoutes, deleteRoute } from "../../../api/routes";
 import { Route } from "../../../types";
 import SignInRequiredTemplate from "../../organisms/SignInRequiredTemplate";
 import { dynamicPathGenerator } from "../../../consts/uriComponents";
-import { useAuthenticationInfoContext } from "../../../contexts/AuthenticationProvider";
 
 function RouteIndex() {
-  const [inputValue, setInputValue] = useState<string>("");
   const [routes, setRoutes] = useState<Route[]>([]);
-  const { authenticatedUser } = useAuthenticationInfoContext();
 
   useEffect(() => {
     let unmounted = false;
@@ -23,22 +20,6 @@ function RouteIndex() {
       unmounted = true;
     };
   }, []);
-
-  async function createRouteHandler() {
-    try {
-      const token = await authenticatedUser?.getIdToken();
-      if (!token) {
-        throw new Error("failed to get access token");
-      }
-      await postRoute(inputValue, token);
-      const getRes = await getRoutes();
-      if (getRes) {
-        setRoutes(getRes.data.routes);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
 
   async function deleteRouteHandler(id: string) {
     try {
@@ -77,12 +58,6 @@ function RouteIndex() {
   return (
     <SignInRequiredTemplate>
       <div>
-        <h2>ルートの作成</h2>
-        <input
-          type="text"
-          onChange={(event) => setInputValue(event.target.value)}
-        />
-        <button onClick={createRouteHandler}>create route</button>
         <h2>ルートの一覧</h2>
         <Routes />
       </div>
