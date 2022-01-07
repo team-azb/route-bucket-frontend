@@ -29,11 +29,15 @@ const RouteNew = () => {
     useCallback(
       async (event) => {
         event.preventDefault();
-        const token = await authenticatedUser?.getIdToken();
-        if (token) {
-          const { id } = await postRoute(nameInput, token);
-          toast.success("ルートを作成しました。");
-          history.push(dynamicPathGenerator.routeEditor(id));
+        try {
+          const token = await authenticatedUser?.getIdToken();
+          if (token) {
+            const { id } = await postRoute(nameInput, token);
+            toast.success("ルートを作成しました。");
+            history.push(dynamicPathGenerator.routeEditor(id));
+          }
+        } catch (error) {
+          toast.success("ルートの作成に失敗しました。");
         }
       },
       [authenticatedUser, history, nameInput]
