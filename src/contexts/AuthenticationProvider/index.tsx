@@ -1,23 +1,23 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { onAuthStateChanged, User } from "../../api/auth";
 
-type AuthenticationProviderProps = {
+type AuthenticationInfoProviderProps = {
   children?: React.ReactNode;
 };
 
-type authenticatedUserInfo = {
+type AuthenticationInfo = {
   authenticatedUser: User | null;
   isCheckedAuth: boolean;
 };
 
-const AuthenticationContext = createContext<authenticatedUserInfo>({
+const AuthenticationInfoContext = createContext<AuthenticationInfo>({
   authenticatedUser: null,
   isCheckedAuth: false,
 });
 
-export const AuthenticationProvider = ({
+export const AuthenticationInfoProvider = ({
   children,
-}: AuthenticationProviderProps) => {
+}: AuthenticationInfoProviderProps) => {
   const [authenticatedUser, setAuthenticatedUser] = useState<User | null>(null);
   const [isCheckedAuth, setIsCheckedAuth] = useState<boolean>(false);
   useEffect(() => {
@@ -28,15 +28,15 @@ export const AuthenticationProvider = ({
     return unsubscribeWhenUnmounted;
   }, []);
   return (
-    <AuthenticationContext.Provider
+    <AuthenticationInfoContext.Provider
       value={{ authenticatedUser, isCheckedAuth }}
     >
       {children}
-    </AuthenticationContext.Provider>
+    </AuthenticationInfoContext.Provider>
   );
 };
 
-export const useSignedInUserInfoContext = () => {
-  const signedInUser = useContext(AuthenticationContext);
+export const useAuthenticationInfoContext = () => {
+  const signedInUser = useContext(AuthenticationInfoContext);
   return signedInUser;
 };

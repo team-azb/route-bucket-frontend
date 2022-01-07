@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import BasicInformation from "../BasicInformation";
-import { useSignedInUserInfoContext } from "../../../../contexts/AuthenticationProvider";
+import { useAuthenticationInfoContext } from "../../../../contexts/AuthenticationProvider";
 import styles from "./style.module.css";
 import { useUserInfo } from "../../../../contexts/UserInfoProvider";
 import BasicInformationForm from "../BasicInformationForm";
@@ -9,7 +9,7 @@ import PageTitle from "../../../atoms/PageTitle";
 
 const MypageContent = () => {
   const userInfo = useUserInfo();
-  const { authenticatedUser } = useSignedInUserInfoContext();
+  const { authenticatedUser } = useAuthenticationInfoContext();
   const [isEditMode, setIsEditMode] = useState(false);
 
   const changeEditModeHandler = useCallback((isActive: boolean) => {
