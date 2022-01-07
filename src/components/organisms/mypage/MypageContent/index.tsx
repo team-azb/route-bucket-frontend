@@ -6,6 +6,7 @@ import { useUserInfo } from "../../../../contexts/UserInfoProvider";
 import BasicInformationForm from "../BasicInformationForm";
 import PageContainer from "../../../atoms/PageContainer";
 import PageTitle from "../../../atoms/PageTitle";
+import EditableRouteCardList from "../../card/EditableRouteCardList";
 
 const MypageContent = () => {
   const userInfo = useUserInfo();
@@ -44,6 +45,7 @@ const MypageContent = () => {
         />
       )}
       <PageTitle title="公開ルート" />
+      <EditableRouteCardList userId={userInfo.id} />
     </PageContainer>
   );
 };

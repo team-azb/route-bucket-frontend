@@ -217,7 +217,7 @@ export async function deleteRoute(id: string, token?: string) {
 }
 
 export const searchRoutes = async (userId: string) => {
-  const { data } = await axios.get<RouteResponseBody>(`/routes/search`, {
+  const { data } = await axios.get<RoutesResponseBody>(`/routes/search`, {
     params: {
       owner_id: userId,
     },
