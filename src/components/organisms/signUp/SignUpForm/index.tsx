@@ -7,6 +7,7 @@ import InputWithError from "../../../molecules/InputWithError";
 import FormField from "../../../atoms/form/FormField";
 import FormContainer from "../../../atoms/form/FormContainer";
 import SingleFormWrapper from "../../../atoms/form/SingleFormWrapper";
+import FormLabel from "../../../atoms/form/FormLabel";
 import SubmitButton from "../SubmitButton";
 import EmailVerificationDialogContent from "../../../atoms/EmailVerificationDialogContent";
 import {
@@ -93,13 +94,13 @@ const SignUpForm = () => {
     <SingleFormWrapper>
       <FormContainer className={styles.container} isPureForm={false}>
         <FormField className={styles.field}>
-          <label className={styles.label}>
+          <FormLabel>
             ID
             <br />
             <span className={styles.span}>
               ※ユーザーの識別のために使用されます。後から変更することはできません。
             </span>
-          </label>
+          </FormLabel>
           <InputWithError
             id="id"
             name="id"
@@ -109,7 +110,7 @@ const SignUpForm = () => {
           />
         </FormField>
         <FormField className={styles.field}>
-          <label className={styles.label}>ニックネーム</label>
+          <FormLabel>ニックネーム</FormLabel>
           <InputWithError
             id="name"
             name="name"
@@ -119,7 +120,7 @@ const SignUpForm = () => {
           />
         </FormField>
         <FormField className={styles.field}>
-          <label className={styles.label}>メールアドレス</label>
+          <FormLabel>メールアドレス</FormLabel>
           <InputWithError
             id="enamil"
             name="email"
@@ -129,7 +130,7 @@ const SignUpForm = () => {
           />
         </FormField>
         <FormField className={styles.field}>
-          <label className={styles.label}>パスワード</label>
+          <FormLabel>パスワード</FormLabel>
           <InputWithError
             id="password"
             name="password"
@@ -139,7 +140,7 @@ const SignUpForm = () => {
           />
         </FormField>
         <FormField className={styles.field}>
-          <label className={styles.label}>パスワード(確認用)</label>
+          <FormLabel>パスワード(確認用)</FormLabel>
           <InputWithError
             id="password_confirmation"
             name="password_confirmation"
@@ -149,11 +150,11 @@ const SignUpForm = () => {
           />
         </FormField>
         <FormField className={styles.field}>
-          <label className={styles.label}>（オプション）性別</label>
+          <FormLabel>（オプション）性別</FormLabel>
           <GenderRadioGroup gender={form.gender} onChange={changeFormHandler} />
         </FormField>
         <FormField className={styles.field}>
-          <label className={styles.label}>（オプション）生年月日</label>
+          <FormLabel>（オプション）生年月日</FormLabel>
           <InputWithError
             id="birthdate"
             name="birthdate"

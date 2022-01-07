@@ -2,11 +2,6 @@
   margin: 15px 0;
 }
 
-.form--label {
-  font-size: 1.5rem;
-  font-weight: 600;
-}
-
 .form--input {
   font-size: 1.5rem;
   min-width: 400px;

@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import { UserInfo, ValidationMessages } from "../../../../types";
 import IconImageUpload from "../IconImageUpload";
 import FormField from "../../../atoms/form/FormField";
+import FormLabel from "../../../atoms/form/FormLabel";
 import InputWithError from "../../../molecules/InputWithError";
 import { useSignedInUserInfoContext } from "../../../../contexts/AuthenticationProvider";
 import { Fields, Form, isUnableToSend, validateAndGetMessages } from "./helper";
@@ -93,7 +94,7 @@ const BasicInformationForm = ({
         <IconImageUpload src={previewUrl} onChange={changeImageHandler} />
         <div className={styles.fieldContainer}>
           <FormField className={styles.field}>
-            <label className={styles.label}>ニックネーム</label>
+            <FormLabel>ニックネーム</FormLabel>
             <InputWithError
               id="name"
               name="name"
@@ -104,7 +105,7 @@ const BasicInformationForm = ({
             />
           </FormField>
           <FormField className={styles.field}>
-            <label className={styles.label}>生年月日</label>
+            <FormLabel>生年月日</FormLabel>
             <InputWithError
               id="birthdate"
               name="birthdate"

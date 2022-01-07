@@ -9,6 +9,7 @@ import PageTitle from "../../atoms/PageTitle";
 import FormField from "../../atoms/form/FormField";
 import FormContainer from "../../atoms/form/FormContainer";
 import SingleFormWrapper from "../../atoms/form/SingleFormWrapper";
+import FormLabel from "../../atoms/form/FormLabel";
 import styles from "./style.module.css";
 
 const SignIn = () => {
@@ -37,9 +38,7 @@ const SignIn = () => {
       <SingleFormWrapper>
         <FormContainer>
           <FormField className={styles.formField}>
-            <label className={styles.formLabel} htmlFor="email">
-              メールアドレス
-            </label>
+            <FormLabel htmlFor="email">メールアドレス</FormLabel>
             <input
               className={styles.formInput}
               value={emailInput}
@@ -51,9 +50,7 @@ const SignIn = () => {
             />
           </FormField>
           <FormField className={styles.formField}>
-            <label className={styles.formLabel} htmlFor="password">
-              パスワード
-            </label>
+            <FormLabel htmlFor="password">パスワード</FormLabel>
             <input
               className={styles.formInput}
               value={passwordInput}

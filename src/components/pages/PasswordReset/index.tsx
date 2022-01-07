@@ -6,6 +6,7 @@ import PageTitle from "../../atoms/PageTitle";
 import FormField from "../../atoms/form/FormField";
 import FormContainer from "../../atoms/form/FormContainer";
 import SingleFormWrapper from "../../atoms/form/SingleFormWrapper";
+import FormLabel from "../../atoms/form/FormLabel";
 import styles from "./style.module.css";
 
 const PasswordReset = () => {
@@ -31,9 +32,7 @@ const PasswordReset = () => {
             登録したメールアドレスにパスワード再設定用のリンクを送信します。
           </h2>
           <FormField className={styles.formField}>
-            <label className={styles.formLabel} htmlFor="email">
-              メールアドレス
-            </label>
+            <FormLabel htmlFor="email">メールアドレス</FormLabel>
             <input
               className={styles.formInput}
               value={emailInput}
