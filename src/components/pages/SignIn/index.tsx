@@ -4,6 +4,8 @@ import { toast } from "react-toastify";
 import { dynamicPathGenerator, pagePaths } from "../../../consts/uriComponents";
 import { Link } from "react-router-dom";
 import { signInWithEmailAndPassword } from "../../../api/auth";
+import PageContainer from "../../atoms/PageContainer";
+import PageTitle from "../../atoms/PageTitle";
 import styles from "./style.module.css";
 
 const SignIn = () => {
@@ -27,11 +29,10 @@ const SignIn = () => {
   };
 
   return (
-    <form className={styles.container}>
-      <h1 className={styles.title}>サインイン</h1>
-      <hr />
+    <PageContainer>
+      <PageTitle title="サインイン" />
       <div className={styles.formWrapper}>
-        <div className={styles.formContainer}>
+        <form className={styles.formContainer}>
           <div className={styles.formField}>
             <label className={styles.formLabel} htmlFor="email">
               メールアドレス
@@ -68,9 +69,9 @@ const SignIn = () => {
               パスワードを忘れた場合
             </Link>
           </div>
-        </div>
+        </form>
       </div>
-    </form>
+    </PageContainer>
   );
 };
 

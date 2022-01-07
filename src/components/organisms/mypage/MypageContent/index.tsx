@@ -4,6 +4,8 @@ import { useSignedInUserInfoContext } from "../../../../contexts/AuthenticationP
 import styles from "./style.module.css";
 import { useUserInfo } from "../../../../contexts/UserInfoProvider";
 import BasicInformationForm from "../BasicInformationForm";
+import PageContainer from "../../../atoms/PageContainer";
+import PageTitle from "../../../atoms/PageTitle";
 
 const MypageContent = () => {
   const userInfo = useUserInfo();
@@ -17,7 +19,7 @@ const MypageContent = () => {
   }, []);
 
   return (
-    <div className={styles.container}>
+    <PageContainer>
       <div className={styles.row}>
         <h2 className={styles.title}>基本情報</h2>
         {isEditMode || (
@@ -41,9 +43,8 @@ const MypageContent = () => {
           email={authenticatedUser?.email}
         />
       )}
-      <h2 className={styles.title}>公開ルート</h2>
-      <hr />
-    </div>
+      <PageTitle title="公開ルート" />
+    </PageContainer>
   );
 };
 

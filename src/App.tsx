@@ -5,6 +5,7 @@ import SignUp from "./components/pages/SignUp";
 import Top from "./components/pages/Top";
 import PasswordReset from "./components/pages/PasswordReset";
 import Mypage from "./components/pages/Mypage";
+import RouteNew from "./components/pages/RouteNew";
 import Header from "./components/organisms/Header";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "leaflet/dist/leaflet.css";
@@ -23,6 +24,7 @@ function App() {
           <Route exact path={pagePaths.ROUTE_INDEX} children={<RouteIndex />} />
           <Route exact path={pagePaths.SIGN_IN} children={<SignIn />} />
           <Route exact path={pagePaths.SIGN_UP} children={<SignUp />} />
+          <Route exact path={pagePaths.ROUTE_NEW} children={<RouteNew />} />
           <Route path={pagePaths.ROUTE_EDITOR} children={<RouteEditor />} />
           <Route
             exact

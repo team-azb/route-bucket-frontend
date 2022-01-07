@@ -3,6 +3,7 @@ export const pagePaths = {
   MYPAGE: "/:userId",
   ROUTE_INDEX: "/routes",
   ROUTE_EDITOR: "/routes/:routeId",
+  ROUTE_NEW: "/routes/new",
   SIGN_IN: "/signin",
   SIGN_UP: "/signup",
   PASSWORD_RESET: "/password_reset",

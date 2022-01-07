@@ -7,7 +7,7 @@ import styles from "./style.module.css";
 export const HEADER_HEIGHT_PX = 64;
 
 const Header = () => {
-  const { authenticatedUser } = useSignedInUserInfoContext();
+  const { authenticatedUser, isCheckedAuth } = useSignedInUserInfoContext();
   return (
     <div className={styles.container} style={{ height: HEADER_HEIGHT_PX }}>
       <div className={styles.leftSection}>
@@ -19,11 +19,17 @@ const Header = () => {
         <Link className={styles.rightSectionLink} to={pagePaths.ROUTE_INDEX}>
           ルート検索
         </Link>
-        {authenticatedUser ? null : (
-          <Link className={styles.rightSectionLink} to={pagePaths.SIGN_IN}>
-            サインイン
-          </Link>
-        )}
+
+        {isCheckedAuth &&
+          (authenticatedUser ? (
+            <Link className={styles.rightSectionLink} to={pagePaths.ROUTE_NEW}>
+              ルート作成
+            </Link>
+          ) : (
+            <Link className={styles.rightSectionLink} to={pagePaths.SIGN_IN}>
+              サインイン
+            </Link>
+          ))}
       </div>
     </div>
   );

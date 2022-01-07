@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { sendPasswordResetEmail } from "../../../api/auth";
+import PageContainer from "../../atoms/PageContainer";
+import PageTitle from "../../atoms/PageTitle";
 import styles from "./style.module.css";
 
 const PasswordReset = () => {
@@ -15,9 +17,8 @@ const PasswordReset = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>パスワード再設定</h1>
-      <hr />
+    <PageContainer>
+      <PageTitle title="パスワード再設定" />
       <div className={styles.formWrapper}>
         <div className={styles.formContainer}>
           <h2>
@@ -41,7 +42,7 @@ const PasswordReset = () => {
           </button>
         </div>
       </div>
-    </div>
+    </PageContainer>
   );
 };
 
