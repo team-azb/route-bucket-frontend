@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getRoutes, deleteRoute } from "../../../api/routes";
-import { Route } from "../../../types";
+import { RouteInfo } from "../../../types";
 import SignInRequiredTemplate from "../../organisms/SignInRequiredTemplate";
 import { dynamicPathGenerator } from "../../../consts/uriComponents";
 
 function RouteIndex() {
-  const [routes, setRoutes] = useState<Route[]>([]);
+  const [routes, setRoutes] = useState<RouteInfo[]>([]);
 
   useEffect(() => {
     let unmounted = false;

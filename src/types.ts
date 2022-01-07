@@ -13,6 +13,7 @@ export type RouteInfo = {
   name: string;
   isLoaded: boolean;
   bounding_box?: BoundingBox;
+  owner_id: string;
 };
 
 export type RouteGeometry = {

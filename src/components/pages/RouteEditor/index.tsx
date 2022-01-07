@@ -99,6 +99,7 @@ const RouteEditor: FunctionComponent = () => {
     {
       id: routeId,
       name: "",
+      owner_id: "",
       waypoints: [],
       segments: [],
       total_distance: 0,

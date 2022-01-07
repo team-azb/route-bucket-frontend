@@ -1,5 +1,11 @@
 import axios from "axios";
-import { Route, RouteGeometry, Coorinate, DrawingMode } from "../types";
+import {
+  Route,
+  RouteGeometry,
+  Coorinate,
+  DrawingMode,
+  RouteInfo,
+} from "../types";
 import {
   hasAxiosResponseMessage,
   generateAxiosHeaderWithBearer,
@@ -9,7 +15,7 @@ import {
 interface PatchResponseBody extends RouteGeometry {}
 
 interface RoutesResponseBody {
-  routes: Route[];
+  routes: RouteInfo[];
 }
 
 interface RouteResponseBody extends Route {}
@@ -209,3 +215,12 @@ export async function deleteRoute(id: string, token?: string) {
     }
   }
 }
+
+export const searchRoutes = async (userId: string) => {
+  const { data } = await axios.get<RouteResponseBody>(`/routes/search`, {
+    params: {
+      owner_id: userId,
+    },
+  });
+  return data;
+};
