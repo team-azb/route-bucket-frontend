@@ -90,7 +90,7 @@ const SignUpForm = () => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.container}>
-        <FormField>
+        <FormField className={styles.field}>
           <label className={styles.label}>
             ID
             <br />
@@ -106,7 +106,7 @@ const SignUpForm = () => {
             errorMessage={validatonMessages.id}
           />
         </FormField>
-        <FormField>
+        <FormField className={styles.field}>
           <label className={styles.label}>ニックネーム</label>
           <InputWithError
             id="name"
@@ -116,7 +116,7 @@ const SignUpForm = () => {
             errorMessage={validatonMessages.name}
           />
         </FormField>
-        <FormField>
+        <FormField className={styles.field}>
           <label className={styles.label}>メールアドレス</label>
           <InputWithError
             id="enamil"
@@ -126,7 +126,7 @@ const SignUpForm = () => {
             errorMessage={validatonMessages.email}
           />
         </FormField>
-        <FormField>
+        <FormField className={styles.field}>
           <label className={styles.label}>パスワード</label>
           <InputWithError
             id="password"
@@ -136,7 +136,7 @@ const SignUpForm = () => {
             errorMessage={validatonMessages.password}
           />
         </FormField>
-        <FormField>
+        <FormField className={styles.field}>
           <label className={styles.label}>パスワード(確認用)</label>
           <InputWithError
             id="password_confirmation"
@@ -146,11 +146,11 @@ const SignUpForm = () => {
             errorMessage={validatonMessages.password_confirmation}
           />
         </FormField>
-        <FormField>
+        <FormField className={styles.field}>
           <label className={styles.label}>（オプション）性別</label>
           <GenderRadioGroup gender={form.gender} onChange={changeFormHandler} />
         </FormField>
-        <FormField>
+        <FormField className={styles.field}>
           <label className={styles.label}>（オプション）生年月日</label>
           <InputWithError
             id="birthdate"

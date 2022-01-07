@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import { sendPasswordResetEmail } from "../../../api/auth";
 import PageContainer from "../../atoms/PageContainer";
 import PageTitle from "../../atoms/PageTitle";
+import FormField from "../../atoms/FormField";
 import styles from "./style.module.css";
 
 const PasswordReset = () => {
@@ -24,7 +25,7 @@ const PasswordReset = () => {
           <h2>
             登録したメールアドレスにパスワード再設定用のリンクを送信します。
           </h2>
-          <div className={styles.formField}>
+          <FormField className={styles.formField}>
             <label className={styles.formLabel} htmlFor="email">
               メールアドレス
             </label>
@@ -36,7 +37,7 @@ const PasswordReset = () => {
               }}
               type="email"
             />
-          </div>
+          </FormField>
           <button className={styles.formButton} onClick={sendHandler}>
             送信
           </button>

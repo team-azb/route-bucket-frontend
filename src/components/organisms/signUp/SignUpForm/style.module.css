@@ -28,3 +28,7 @@
 .button-wrapper {
   align-items: center;
 }
+
+.field {
+  margin: 10px 0;
+}
