@@ -19,3 +19,10 @@ html {
 p {
   font-size: 1.2rem;
 }
+
+/* flexの中でhrが適切に描画されない問題を解決するために設定
+https://stackoverflow.com/questions/34365271/hr-inside-container-with-display-flex-become-corrupted */
+hr {
+  margin-left: 0;
+  margin-right: 0;
+}
