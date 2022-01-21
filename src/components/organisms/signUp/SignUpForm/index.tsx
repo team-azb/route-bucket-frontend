@@ -1,11 +1,17 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useState, useCallback } from "react";
 import { useHistory } from "react-router";
+import Dialog from "@mui/material/Dialog";
 import { toast } from "react-toastify";
 import GenderRadioGroup from "../GenderRadioGroup";
 import InputWithError from "../../../molecules/InputWithError";
 import FormField from "../../../atoms/FormField";
 import SubmitButton from "../SubmitButton";
-import { signUp, signInWithEmailAndPassword } from "../../../../api/auth";
+import EmailVerificationDialogContent from "../../../atoms/EmailVerificationDialogContent";
+import {
+  signUp,
+  signInWithEmailAndPassword,
+  sendEmailVerification,
+} from "../../../../api/auth";
 import { pagePaths } from "../../../../consts/uriComponents";
 import {
   Form,
@@ -21,6 +27,7 @@ const SignUpForm = () => {
   const [form, setForm] = useState<Form>(initialFormValue);
   const [validatonMessages, setValidatonMessages] =
     useState<Form>(initialFormValue);
+  const [dialogFlag, setDialogFlag] = useState(false);
   const history = useHistory();
 
   const changeFormHandler = (event: ChangeEvent<HTMLInputElement>) => {
@@ -50,14 +57,20 @@ const SignUpForm = () => {
         return;
       }
     }
+    const user = await signInWithEmailAndPassword(form.email, form.password);
+    await sendEmailVerification(user);
+    setDialogFlag(true);
+  };
+
+  const handleClose = useCallback(async () => {
     try {
-      await signInWithEmailAndPassword(form.email, form.password);
+      setDialogFlag(false);
       toast.success("サインイン成功");
       history.push(pagePaths.ROUTE_INDEX);
     } catch (error) {
       toast.error("サインイン失敗");
     }
-  };
+  }, [history]);
 
   return (
     <div className={styles.wrapper}>
@@ -141,6 +154,12 @@ const SignUpForm = () => {
           </SubmitButton>
         </FormField>
       </div>
+      <Dialog open={dialogFlag} onClose={handleClose}>
+        <EmailVerificationDialogContent
+          email={form.email}
+          handleClose={handleClose}
+        />
+      </Dialog>
     </div>
   );
 };

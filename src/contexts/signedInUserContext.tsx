@@ -1,24 +1,34 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { onAuthStateChanged, User } from "../api/auth";
 
-const SignedInUserUserContext = createContext<User | null>(null);
+type signedInUserInfo = {
+  signedInUser: User | null;
+  hasCheckedAuth: boolean;
+};
 
-export const SignedInUserProvider: React.FC = ({ children }) => {
+const SignedInUserInfoContext = createContext<signedInUserInfo>({
+  signedInUser: null,
+  hasCheckedAuth: false,
+});
+
+export const SignedInUserInfoProvider: React.FC = ({ children }) => {
   const [signedInUser, setSignedInUser] = useState<User | null>(null);
+  const [hasCheckedAuth, setHasCheckedAuth] = useState<boolean>(false);
   useEffect(() => {
     const unsubscribeWhenUnmounted = onAuthStateChanged((signedInUser) => {
+      setHasCheckedAuth(true);
       setSignedInUser(signedInUser);
     });
     return unsubscribeWhenUnmounted;
   }, []);
   return (
-    <SignedInUserUserContext.Provider value={signedInUser}>
+    <SignedInUserInfoContext.Provider value={{ signedInUser, hasCheckedAuth }}>
       {children}
-    </SignedInUserUserContext.Provider>
+    </SignedInUserInfoContext.Provider>
   );
 };
 
-export const useSignedInUserUserContext = () => {
-  const signedInUser = useContext(SignedInUserUserContext);
+export const useSignedInUserInfoContext = () => {
+  const signedInUser = useContext(SignedInUserInfoContext);
   return signedInUser;
 };

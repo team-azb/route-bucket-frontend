@@ -1,13 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { pagePaths } from "../../../consts/uriComponents";
-import { useSignedInUserUserContext } from "../../../contexts/signedInUserContext";
+import { useSignedInUserInfoContext } from "../../../contexts/signedInUserContext";
 import styles from "./style.module.css";
 
 export const HEADER_HEIGHT_PX = 64;
 
 const Header = () => {
-  const signedInUser = useSignedInUserUserContext();
+  const { signedInUser } = useSignedInUserInfoContext();
   return (
     <div className={styles.container} style={{ height: HEADER_HEIGHT_PX }}>
       <div className={styles.leftSection}>
