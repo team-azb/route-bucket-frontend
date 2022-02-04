@@ -10,7 +10,7 @@ export function hasAxiosResponseMessage(
     : false;
 }
 
-export const generateAxiosHeaderWithBearer = (token: string) => {
+export const generateAxiosHeaderWithBearer = (token?: string) => {
   return {
     headers: {
       Authorization: `Bearer ${token}`,
