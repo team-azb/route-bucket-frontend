@@ -13,6 +13,8 @@ import {
   routeReducerAction,
   routeAsyncAction,
 } from "../../../reducers/routeReducer";
+import { useAuthenticationInfoContext } from "../../../contexts/AuthenticationProvider";
+import { User } from "../../../api/auth";
 
 type MakersProps = {
   route: Route;
@@ -52,20 +54,24 @@ function markerGenerator(
   pos: RoutePoint,
   idx: number,
   markerRef: RefObject<MarkerType<any>>,
-  props: MakersProps
+  props: MakersProps,
+  user: User | null
 ) {
   const markerIcon = getMarkerIcon(idx, 0, props.route.waypoints.length - 1);
   markerRef = createRef<MarkerType>();
   async function clickMarkerHandler(idx: number) {
+    const token = await user?.getIdToken();
     props.setIsLoading(true);
     props.dispatchRoute({
       type: "REMOVE",
       targetIdx: idx,
       mode: props.drawingMode,
+      token: token,
     });
   }
 
   async function dragMarkerHandler(idx: number) {
+    const token = await user?.getIdToken();
     const newPoint = markerRef.current?.getLatLng();
     if (newPoint) {
       props.setIsLoading(true);
@@ -77,6 +83,7 @@ function markerGenerator(
           longitude: newPoint.lng,
         },
         mode: props.drawingMode,
+        token: token,
       });
     }
   }
@@ -109,6 +116,7 @@ export default function Markers(props: MakersProps) {
   const markerRefs = useRef<Array<RefObject<MarkerType>>>(
     Array(props.route.waypoints.length)
   );
+  const { authenticatedUser } = useAuthenticationInfoContext();
 
   useEffect(() => {
     if (changeCenterFlag && props.route.isLoaded) {
@@ -129,7 +137,13 @@ export default function Markers(props: MakersProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.route]);
   const markers = props.route.waypoints.map((pos: RoutePoint, idx: number) => {
-    return markerGenerator(pos, idx, markerRefs.current[idx], props);
+    return markerGenerator(
+      pos,
+      idx,
+      markerRefs.current[idx],
+      props,
+      authenticatedUser
+    );
   });
   return <>{markers}</>;
 }

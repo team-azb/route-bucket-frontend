@@ -21,6 +21,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import SignInRequiredTemplate from "../../organisms/SignInRequiredTemplate";
 import { HEADER_HEIGHT_PX } from "../../organisms/Header";
 import styles from "./style.module.css";
+import { useAuthenticationInfoContext } from "../../../contexts/AuthenticationProvider";
 
 //ClickLayerコンポーネントのpropsの型
 type ClickLayerProps = {
@@ -67,7 +68,9 @@ function LocateController() {
 }
 
 function ClickLayer(props: ClickLayerProps) {
+  const { authenticatedUser } = useAuthenticationInfoContext();
   useMapEvent("click", async (e: LeafletMouseEvent) => {
+    const token = await authenticatedUser?.getIdToken();
     props.isLoading || props.setIsLoading(true);
     props.dispatchRoute({
       type: "APPEND",
@@ -76,6 +79,7 @@ function ClickLayer(props: ClickLayerProps) {
         longitude: e.latlng.lng,
       },
       mode: props.drawingMode,
+      token: token,
     });
   });
   return <></>;
@@ -111,6 +115,7 @@ const RouteEditor: FunctionComponent = () => {
   const [drawingMode, setDrawingMode] = useState<DrawingMode>(
     DrawingMode.FOLLOW_ROAD
   );
+  const { authenticatedUser } = useAuthenticationInfoContext();
 
   useEffect(() => {
     setFocusedMarkerInfo(focusedMarkerInfoInitValue);
@@ -123,11 +128,15 @@ const RouteEditor: FunctionComponent = () => {
 
   //Mapのルート変更時にルートを取得してwaypointsを変更する
   useEffect(() => {
-    setIsLoading(true);
-    dispatchRoute({
-      type: "GET",
-      id: routeId,
-    });
+    (async () => {
+      const token = await authenticatedUser?.getIdToken();
+      setIsLoading(true);
+      dispatchRoute({
+        type: "GET",
+        id: routeId,
+        token: token,
+      });
+    })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [routeId]);
 

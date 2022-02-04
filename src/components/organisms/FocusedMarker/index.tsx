@@ -7,6 +7,7 @@ import {
   routeAsyncAction,
   routeReducerAction,
 } from "../../../reducers/routeReducer";
+import { useAuthenticationInfoContext } from "../../../contexts/AuthenticationProvider";
 
 type FocusedMarkerProps = {
   zoomSize: number;
@@ -19,8 +20,10 @@ type FocusedMarkerProps = {
 };
 
 export default function FocusedMarker(props: FocusedMarkerProps) {
+  const { authenticatedUser } = useAuthenticationInfoContext();
   const markerRef = useRef<MarkerType>(null);
-  function clickMarkerHandler(latlng: L.LatLng, idx: number) {
+  async function clickMarkerHandler(latlng: L.LatLng, idx: number) {
+    const token = await authenticatedUser?.getIdToken();
     props.setIsLoading(true);
     props.dispatchRoute({
       type: "INSERT",
@@ -30,10 +33,12 @@ export default function FocusedMarker(props: FocusedMarkerProps) {
         longitude: latlng.lng,
       },
       mode: props.drawingMode,
+      token: token,
     });
   }
 
   async function dragMarkerHandler() {
+    const token = await authenticatedUser?.getIdToken();
     const newPoint = markerRef.current?.getLatLng();
     if (newPoint && props.focusedMarkerInfo.idx !== null) {
       props.setIsLoading(true);
@@ -45,6 +50,7 @@ export default function FocusedMarker(props: FocusedMarkerProps) {
           longitude: newPoint.lng,
         },
         mode: props.drawingMode,
+        token: token,
       });
     }
   }

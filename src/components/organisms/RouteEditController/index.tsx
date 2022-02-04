@@ -14,6 +14,7 @@ import { Route, FocusedMarkerInfo, DrawingMode } from "../../../types";
 import { meters2kilometers } from "../../../utils";
 import { pagePaths } from "../../../consts/uriComponents";
 import styles from "./style.module.css";
+import { useAuthenticationInfoContext } from "../../../contexts/AuthenticationProvider";
 
 type RouteEditControllerProps = {
   isInsideMap: boolean;
@@ -29,29 +30,37 @@ type RouteEditControllerProps = {
 
 function RouteEditControllerDisplay(props: RouteEditControllerProps) {
   const history = useHistory();
-  const clearHandler = () => {
+  const { authenticatedUser } = useAuthenticationInfoContext();
+
+  const clearHandler = async () => {
     const approval = window.confirm(
       "経路をクリアします。(クリアの取り消しはできません)\nよろしいですか？"
     );
     if (approval) {
+      const token = await authenticatedUser?.getIdToken();
       props.setIsLoading(true);
       props.dispatchRoute({
         type: "CLEAR",
+        token: token,
       });
     }
   };
 
-  const undoHandler = () => {
+  const undoHandler = async () => {
+    const token = await authenticatedUser?.getIdToken();
     props.setIsLoading(true);
     props.dispatchRoute({
       type: "UNDO",
+      token: token,
     });
   };
 
-  const redoHandler = () => {
+  const redoHandler = async () => {
+    const token = await authenticatedUser?.getIdToken();
     props.setIsLoading(true);
     props.dispatchRoute({
       type: "REDO",
+      token: token,
     });
   };
 
