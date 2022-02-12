@@ -23,7 +23,7 @@ const EmailVerificationDialogContent = ({
         ※メールアドレスの証明を行わない場合、一部のサービス利用が制限されます。
         <DialogActions>
           <button className={styles.button} onClick={handleClose}>
-            agree
+            Close
           </button>
         </DialogActions>
       </DialogContent>

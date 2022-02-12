@@ -7,7 +7,7 @@ import styles from "./style.module.css";
 export const HEADER_HEIGHT_PX = 64;
 
 const Header = () => {
-  const { authenticatedUser, isCheckedAuth } = useAuthenticationInfoContext();
+  const { authenticatedUser, hasCheckedAuth } = useAuthenticationInfoContext();
   return (
     <div className={styles.container} style={{ height: HEADER_HEIGHT_PX }}>
       <div className={styles.leftSection}>
@@ -20,7 +20,7 @@ const Header = () => {
           ルート検索
         </Link>
 
-        {isCheckedAuth &&
+        {hasCheckedAuth &&
           (authenticatedUser ? (
             <Link className={styles.rightSectionLink} to={pagePaths.ROUTE_NEW}>
               ルート作成

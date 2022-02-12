@@ -5,31 +5,31 @@ type AuthenticationInfoProviderProps = {
   children?: React.ReactNode;
 };
 
-type AuthenticationInfo = {
+type authenticatedUserInfo = {
   authenticatedUser: User | null;
-  isCheckedAuth: boolean;
+  hasCheckedAuth: boolean;
 };
 
-const AuthenticationInfoContext = createContext<AuthenticationInfo>({
+const AuthenticationInfoContext = createContext<authenticatedUserInfo>({
   authenticatedUser: null,
-  isCheckedAuth: false,
+  hasCheckedAuth: false,
 });
 
 export const AuthenticationInfoProvider = ({
   children,
 }: AuthenticationInfoProviderProps) => {
   const [authenticatedUser, setAuthenticatedUser] = useState<User | null>(null);
-  const [isCheckedAuth, setIsCheckedAuth] = useState<boolean>(false);
+  const [hasCheckedAuth, sethasCheckedAuth] = useState<boolean>(false);
   useEffect(() => {
     const unsubscribeWhenUnmounted = onAuthStateChanged((authenticatedUser) => {
-      setIsCheckedAuth(true);
+      sethasCheckedAuth(true);
       setAuthenticatedUser(authenticatedUser);
     });
     return unsubscribeWhenUnmounted;
   }, []);
   return (
     <AuthenticationInfoContext.Provider
-      value={{ authenticatedUser, isCheckedAuth }}
+      value={{ authenticatedUser, hasCheckedAuth }}
     >
       {children}
     </AuthenticationInfoContext.Provider>

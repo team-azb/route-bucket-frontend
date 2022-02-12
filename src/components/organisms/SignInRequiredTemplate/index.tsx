@@ -21,17 +21,17 @@ const redirectMessage = (
 );
 
 const SignInRequiredTemplate = ({ children }: SignInRequiredTemplateProps) => {
-  const { authenticatedUser, isCheckedAuth } = useAuthenticationInfoContext();
+  const { authenticatedUser, hasCheckedAuth } = useAuthenticationInfoContext();
 
   const displayedContent = useMemo(() => {
-    if (!isCheckedAuth) {
+    if (!hasCheckedAuth) {
       return <LoadingDisplay message="認証中です" />;
     } else if (!authenticatedUser) {
       return redirectMessage;
     } else {
       return children;
     }
-  }, [isCheckedAuth, authenticatedUser, children]);
+  }, [hasCheckedAuth, authenticatedUser, children]);
 
   return <>{displayedContent}</>;
 };
