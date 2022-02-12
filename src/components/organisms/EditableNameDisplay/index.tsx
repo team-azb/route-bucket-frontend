@@ -25,10 +25,10 @@ type NameDisplayProps = {
 
 function NameInput(props: NameInputProps) {
   const [nameInput, setNameInput] = useState<string>(props.route.name);
-  const { authenticatedUser } = useAuthenticationInfoContext();
+  const { getIdToken } = useAuthenticationInfoContext();
 
   async function submitNameHandler() {
-    const token = await authenticatedUser?.getIdToken()
+    const token = await getIdToken();
     props.setIsEditable((prevState) => {
       return !prevState;
     });

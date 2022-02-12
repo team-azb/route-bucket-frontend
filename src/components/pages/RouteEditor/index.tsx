@@ -68,9 +68,9 @@ function LocateController() {
 }
 
 function ClickLayer(props: ClickLayerProps) {
-  const { authenticatedUser } = useAuthenticationInfoContext();
+  const { getIdToken } = useAuthenticationInfoContext();
   useMapEvent("click", async (e: LeafletMouseEvent) => {
-    const token = await authenticatedUser?.getIdToken();
+    const token = await getIdToken();
     props.isLoading || props.setIsLoading(true);
     props.dispatchRoute({
       type: "APPEND",
@@ -115,7 +115,7 @@ const RouteEditor: FunctionComponent = () => {
   const [drawingMode, setDrawingMode] = useState<DrawingMode>(
     DrawingMode.FOLLOW_ROAD
   );
-  const { authenticatedUser } = useAuthenticationInfoContext();
+  const { getIdToken } = useAuthenticationInfoContext();
 
   useEffect(() => {
     setFocusedMarkerInfo(focusedMarkerInfoInitValue);
@@ -129,7 +129,7 @@ const RouteEditor: FunctionComponent = () => {
   //Mapのルート変更時にルートを取得してwaypointsを変更する
   useEffect(() => {
     (async () => {
-      const token = await authenticatedUser?.getIdToken();
+      const token = await getIdToken();
       setIsLoading(true);
       dispatchRoute({
         type: "GET",

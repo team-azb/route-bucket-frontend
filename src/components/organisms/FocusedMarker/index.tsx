@@ -20,10 +20,10 @@ type FocusedMarkerProps = {
 };
 
 export default function FocusedMarker(props: FocusedMarkerProps) {
-  const { authenticatedUser } = useAuthenticationInfoContext();
+  const { getIdToken } = useAuthenticationInfoContext();
   const markerRef = useRef<MarkerType>(null);
   async function clickMarkerHandler(latlng: L.LatLng, idx: number) {
-    const token = await authenticatedUser?.getIdToken();
+    const token = await getIdToken();
     props.setIsLoading(true);
     props.dispatchRoute({
       type: "INSERT",
@@ -38,7 +38,7 @@ export default function FocusedMarker(props: FocusedMarkerProps) {
   }
 
   async function dragMarkerHandler() {
-    const token = await authenticatedUser?.getIdToken();
+    const token = await getIdToken();
     const newPoint = markerRef.current?.getLatLng();
     if (newPoint && props.focusedMarkerInfo.idx !== null) {
       props.setIsLoading(true);

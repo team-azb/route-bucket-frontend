@@ -14,7 +14,6 @@ import {
   routeAsyncAction,
 } from "../../../reducers/routeReducer";
 import { useAuthenticationInfoContext } from "../../../contexts/AuthenticationProvider";
-import { User } from "../../../api/auth";
 
 type MakersProps = {
   route: Route;
@@ -55,12 +54,12 @@ function markerGenerator(
   idx: number,
   markerRef: RefObject<MarkerType<any>>,
   props: MakersProps,
-  user: User | null
+  getIdToken: () => Promise<string> | undefined
 ) {
   const markerIcon = getMarkerIcon(idx, 0, props.route.waypoints.length - 1);
   markerRef = createRef<MarkerType>();
   async function clickMarkerHandler(idx: number) {
-    const token = await user?.getIdToken();
+    const token = await getIdToken();
     props.setIsLoading(true);
     props.dispatchRoute({
       type: "REMOVE",
@@ -71,7 +70,7 @@ function markerGenerator(
   }
 
   async function dragMarkerHandler(idx: number) {
-    const token = await user?.getIdToken();
+    const token = await getIdToken();
     const newPoint = markerRef.current?.getLatLng();
     if (newPoint) {
       props.setIsLoading(true);
@@ -116,7 +115,7 @@ export default function Markers(props: MakersProps) {
   const markerRefs = useRef<Array<RefObject<MarkerType>>>(
     Array(props.route.waypoints.length)
   );
-  const { authenticatedUser } = useAuthenticationInfoContext();
+  const { getIdToken } = useAuthenticationInfoContext();
 
   useEffect(() => {
     if (changeCenterFlag && props.route.isLoaded) {
@@ -142,7 +141,7 @@ export default function Markers(props: MakersProps) {
       idx,
       markerRefs.current[idx],
       props,
-      authenticatedUser
+      getIdToken
     );
   });
   return <>{markers}</>;

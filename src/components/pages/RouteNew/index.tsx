@@ -17,7 +17,7 @@ import { toast } from "react-toastify";
 
 const RouteNew = () => {
   const [nameInput, setNameInput] = useState<string>("");
-  const { authenticatedUser } = useAuthenticationInfoContext();
+  const { getIdToken } = useAuthenticationInfoContext();
   const history = useHistory();
 
   const changeNameHandler: React.ChangeEventHandler<HTMLInputElement> =
@@ -30,7 +30,7 @@ const RouteNew = () => {
       async (event) => {
         event.preventDefault();
         try {
-          const token = await authenticatedUser?.getIdToken();
+          const token = await getIdToken();
           if (token) {
             const { id } = await postRoute(nameInput, token);
             toast.success("ルートを作成しました。");
@@ -40,7 +40,7 @@ const RouteNew = () => {
           toast.success("ルートの作成に失敗しました。");
         }
       },
-      [authenticatedUser, history, nameInput]
+      [getIdToken, history, nameInput]
     );
 
   return (

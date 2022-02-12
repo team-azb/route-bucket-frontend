@@ -30,14 +30,14 @@ type RouteEditControllerProps = {
 
 function RouteEditControllerDisplay(props: RouteEditControllerProps) {
   const history = useHistory();
-  const { authenticatedUser } = useAuthenticationInfoContext();
+  const { getIdToken } = useAuthenticationInfoContext();
 
   const clearHandler = async () => {
     const approval = window.confirm(
       "経路をクリアします。(クリアの取り消しはできません)\nよろしいですか？"
     );
     if (approval) {
-      const token = await authenticatedUser?.getIdToken();
+      const token = await getIdToken();
       props.setIsLoading(true);
       props.dispatchRoute({
         type: "CLEAR",
@@ -47,7 +47,7 @@ function RouteEditControllerDisplay(props: RouteEditControllerProps) {
   };
 
   const undoHandler = async () => {
-    const token = await authenticatedUser?.getIdToken();
+    const token = await getIdToken();
     props.setIsLoading(true);
     props.dispatchRoute({
       type: "UNDO",
@@ -56,7 +56,7 @@ function RouteEditControllerDisplay(props: RouteEditControllerProps) {
   };
 
   const redoHandler = async () => {
-    const token = await authenticatedUser?.getIdToken();
+    const token = await getIdToken();
     props.setIsLoading(true);
     props.dispatchRoute({
       type: "REDO",

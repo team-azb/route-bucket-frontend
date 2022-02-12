@@ -1,4 +1,10 @@
-import React, { createContext, useState, useEffect, useContext } from "react";
+import React, {
+  createContext,
+  useState,
+  useEffect,
+  useContext,
+  useCallback,
+} from "react";
 import { onAuthStateChanged, User } from "../../api/auth";
 
 type AuthenticationInfoProviderProps = {
@@ -8,28 +14,40 @@ type AuthenticationInfoProviderProps = {
 type authenticatedUserInfo = {
   authenticatedUser: User | null;
   hasCheckedAuth: boolean;
+  getIdToken: () => Promise<string> | undefined;
 };
 
 const AuthenticationInfoContext = createContext<authenticatedUserInfo>({
   authenticatedUser: null,
   hasCheckedAuth: false,
+  getIdToken: async () => "",
 });
 
 export const AuthenticationInfoProvider = ({
   children,
 }: AuthenticationInfoProviderProps) => {
   const [authenticatedUser, setAuthenticatedUser] = useState<User | null>(null);
-  const [hasCheckedAuth, sethasCheckedAuth] = useState<boolean>(false);
+  const [hasCheckedAuth, setHasCheckedAuth] = useState<boolean>(false);
+
   useEffect(() => {
     const unsubscribeWhenUnmounted = onAuthStateChanged((authenticatedUser) => {
-      sethasCheckedAuth(true);
+      setHasCheckedAuth(true);
       setAuthenticatedUser(authenticatedUser);
     });
     return unsubscribeWhenUnmounted;
   }, []);
+
+  const getIdToken = useCallback(() => {
+    return authenticatedUser?.getIdToken();
+  }, [authenticatedUser]);
+  
   return (
     <AuthenticationInfoContext.Provider
-      value={{ authenticatedUser, hasCheckedAuth }}
+      value={{
+        authenticatedUser,
+        hasCheckedAuth,
+        getIdToken: getIdToken,
+      }}
     >
       {children}
     </AuthenticationInfoContext.Provider>
