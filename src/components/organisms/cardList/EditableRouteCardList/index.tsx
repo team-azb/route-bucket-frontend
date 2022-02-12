@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import EditableRouteCard from "../EditableRouteCard";
+import RouteCard from "../../RouteCard";
 import { RouteInfo } from "../../../../types";
 import { searchRoutes } from "../../../../api/routes";
 import styles from "./style.module.css";
@@ -21,7 +21,7 @@ const EditableRouteCardList = ({ userId }: EditableRouteCardListProps) => {
   return (
     <div className={styles.container}>
       {routes.map((route) => {
-        return <EditableRouteCard route={route} key={route.id} />;
+        return <RouteCard route={route} key={route.id} />;
       })}
     </div>
   );

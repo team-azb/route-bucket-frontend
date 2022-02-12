@@ -6,7 +6,7 @@ import { useUserInfo } from "../../../../contexts/UserInfoProvider";
 import BasicInformationForm from "../BasicInformationForm";
 import PageContainer from "../../../atoms/PageContainer";
 import PageTitle from "../../../atoms/PageTitle";
-import EditableRouteCardList from "../../card/EditableRouteCardList";
+import EditableRouteCardList from "../../cardList/EditableRouteCardList";
 
 const MypageContent = () => {
   const userInfo = useUserInfo();

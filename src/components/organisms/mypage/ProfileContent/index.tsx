@@ -3,7 +3,7 @@ import BasicInformation from "../BasicInformation";
 import { useUserInfo } from "../../../../contexts/UserInfoProvider";
 import PageContainer from "../../../atoms/PageContainer";
 import PageTitle from "../../../atoms/PageTitle";
-import RouteCardList from "../../card/RouteCardList";
+import RouteCardList from "../../cardList/RouteCardList";
 
 const ProfileContent = () => {
   const userInfo = useUserInfo();

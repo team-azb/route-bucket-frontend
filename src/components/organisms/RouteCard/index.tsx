@@ -1,16 +1,15 @@
 import React, { useCallback } from "react";
 import { useHistory } from "react-router-dom";
-import { dynamicPathGenerator } from "../../../../consts/uriComponents";
-import { RouteInfo } from "../../../../types";
+import { dynamicPathGenerator } from "../../../consts/uriComponents";
+import { RouteInfo } from "../../../types";
 import styles from "./style.module.css";
 
-type EditableRouteCardProps = {
+type RouteCardProps = {
   route: RouteInfo;
 };
 
-const EditableRouteCard = ({ route }: EditableRouteCardProps) => {
+const RouteCard = ({ route }: RouteCardProps) => {
   const history = useHistory();
-
   const moveToEditPageHandler = useCallback(() => {
     history.push(dynamicPathGenerator.routeEditor(route.id));
   }, [history, route.id]);
@@ -31,4 +30,4 @@ const EditableRouteCard = ({ route }: EditableRouteCardProps) => {
   );
 };
 
-export default EditableRouteCard;
+export default RouteCard;
