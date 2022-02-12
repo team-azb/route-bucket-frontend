@@ -72,20 +72,20 @@ const SignUpForm = () => {
         return;
       }
     }
-    const user = await signInWithEmailAndPassword(form.email, form.password);
-    await sendEmailVerification(user);
     setDialogFlag(true);
   };
 
   const handleClose = useCallback(async () => {
     try {
+      const user = await signInWithEmailAndPassword(form.email, form.password);
+      await sendEmailVerification(user);
       setDialogFlag(false);
       toast.success("サインイン成功");
       history.push(dynamicPathGenerator.mypage(user.uid));
     } catch (error) {
       toast.error("サインイン失敗");
     }
-  }, [history]);
+  }, [form.email, form.password, history]);
 
   return (
     <div className={styles.wrapper}>
