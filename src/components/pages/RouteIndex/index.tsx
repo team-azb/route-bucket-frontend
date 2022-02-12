@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { getRoutes, postRoutes, deleteRoute } from "../../../api/routes";
-import { Route } from "../../../types";
+import { getRoutes, deleteRoute } from "../../../api/routes";
+import { RouteInfo } from "../../../types";
 import SignInRequiredTemplate from "../../organisms/SignInRequiredTemplate";
-import { pagePaths } from "../../../consts/uriComponents";
+import { dynamicPathGenerator } from "../../../consts/uriComponents";
 
 function RouteIndex() {
-  const [inputValue, setInputValue] = useState<string>("");
-  const [routes, setRoutes] = useState<Route[]>([]);
+  const [routes, setRoutes] = useState<RouteInfo[]>([]);
 
   useEffect(() => {
     let unmounted = false;
@@ -21,18 +20,6 @@ function RouteIndex() {
       unmounted = true;
     };
   }, []);
-
-  async function createRouteHandler() {
-    try {
-      await postRoutes(inputValue);
-      const getRes = await getRoutes();
-      if (getRes) {
-        setRoutes(getRes.data.routes);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
 
   async function deleteRouteHandler(id: string) {
     try {
@@ -51,7 +38,7 @@ function RouteIndex() {
       return (
         <li key={route.id}>
           <h3>{route.name}</h3>
-          <Link to={pagePaths.routeEditorPath(route.id)}>
+          <Link to={dynamicPathGenerator.routeEditor(route.id)}>
             <button>ルートを編集</button>
           </Link>
           <button
@@ -71,12 +58,6 @@ function RouteIndex() {
   return (
     <SignInRequiredTemplate>
       <div>
-        <h2>ルートの作成</h2>
-        <input
-          type="text"
-          onChange={(event) => setInputValue(event.target.value)}
-        />
-        <button onClick={createRouteHandler}>create route</button>
         <h2>ルートの一覧</h2>
         <Routes />
       </div>

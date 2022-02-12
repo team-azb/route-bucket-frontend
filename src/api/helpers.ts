@@ -9,3 +9,11 @@ export function hasAxiosResponseMessage(
     ? true
     : false;
 }
+
+export const generateAxiosHeaderWithBearer = (token?: string) => {
+  return {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+};

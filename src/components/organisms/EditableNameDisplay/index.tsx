@@ -5,6 +5,7 @@ import {
   routeAsyncAction,
 } from "../../../reducers/routeReducer";
 import styles from "./style.module.css";
+import { useAuthenticationInfoContext } from "../../../contexts/AuthenticationProvider";
 
 type EditableNameDisplayProps = {
   route: Route;
@@ -24,12 +25,14 @@ type NameDisplayProps = {
 
 function NameInput(props: NameInputProps) {
   const [nameInput, setNameInput] = useState<string>(props.route.name);
+  const { getIdToken } = useAuthenticationInfoContext();
 
-  function submitNameHandler() {
+  async function submitNameHandler() {
+    const token = await getIdToken();
     props.setIsEditable((prevState) => {
       return !prevState;
     });
-    props.dispatchRoute({ type: "RENAME", name: nameInput });
+    props.dispatchRoute({ type: "RENAME", name: nameInput, token: token });
   }
 
   function quitEditingHandler() {

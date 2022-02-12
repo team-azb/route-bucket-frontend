@@ -1,8 +1,7 @@
-import * as EmailValidator from "email-validator";
 import { CreateUserRequestBody } from "../../../../api/auth";
-import { Gender } from "../../../../types";
-
-const USER_ID_REGEX = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i;
+import { validateUserInfo } from "../../../../api/users";
+import { errorCode2ErrorMessage } from "../../../../helpers/form";
+import { Gender, ValidationMessages } from "../../../../types";
 
 enum RequiredFields {
   ID = "id",
@@ -14,7 +13,7 @@ enum RequiredFields {
 
 enum OptionalFields {
   GENDER = "gender",
-  BRITHDATE = "birthdate",
+  BIRTHDATE = "birthdate",
 }
 
 export type Fields = RequiredFields | OptionalFields;
@@ -25,7 +24,7 @@ type RequiredForm = {
 
 type OptionalForm = {
   [OptionalFields.GENDER]: Gender | "";
-  [OptionalFields.BRITHDATE]: string;
+  [OptionalFields.BIRTHDATE]: string;
 };
 
 export type Form = RequiredForm & OptionalForm;
@@ -40,118 +39,76 @@ export const initialFormValue: Form = {
   birthdate: "",
 };
 
-const emptyOrMessage = (judge: boolean, message: string) => {
-  return judge ? "" : message;
-};
-
-const mergeValidationMessageForm = (
-  prevValidationMessage: Form,
-  fieldName: Fields,
-  isValid: boolean,
-  errorMessage: string
-) => {
-  return {
-    ...prevValidationMessage,
-    [fieldName]: emptyOrMessage(isValid, errorMessage),
-  } as Form;
-};
-
-export const updateValidationMessages = (
-  fieldName: Fields,
-  value: string,
-  form: Form,
-  prevValidationMessage: Form
-) => {
-  switch (fieldName) {
-    case RequiredFields.ID:
-      return mergeValidationMessageForm(
-        prevValidationMessage,
-        RequiredFields.ID,
-        isValidUserId(value),
-        "ユーザーIDのパターンと不一致"
-      );
-    case RequiredFields.NAME:
-      return mergeValidationMessageForm(
-        prevValidationMessage,
-        RequiredFields.NAME,
-        isValidUserName(value),
-        "ニックネームは1文字以上50文字以下"
-      );
-    case RequiredFields.EMAIL:
-      return mergeValidationMessageForm(
-        prevValidationMessage,
-        RequiredFields.EMAIL,
-        isValidEmail(value),
-        "不適切なemailの形式"
-      );
-    case RequiredFields.PASSWORD:
-      const tempMessageForm = mergeValidationMessageForm(
-        prevValidationMessage,
-        RequiredFields.PASSWORD,
-        isValidPassword(value),
-        "パスワードは6文字以上"
-      );
-      return mergeValidationMessageForm(
-        tempMessageForm,
-        RequiredFields.PASSWORD_CONFIRMATION,
-        isValidPasswordConfirmation(
-          value,
-          form[RequiredFields.PASSWORD_CONFIRMATION]
-        ),
-        "パスワードと不一致"
-      );
-    case RequiredFields.PASSWORD_CONFIRMATION:
-      return mergeValidationMessageForm(
-        prevValidationMessage,
-        RequiredFields.PASSWORD_CONFIRMATION,
-        isValidPasswordConfirmation(value, form[RequiredFields.PASSWORD]),
-        "パスワードと不一致"
-      );
-    case OptionalFields.BRITHDATE:
-      return mergeValidationMessageForm(
-        prevValidationMessage,
-        OptionalFields.BRITHDATE,
-        optionFieldWrapper(value, isValidBrithdate),
-        "生年月日が不適切です"
-      );
-    default:
-      return prevValidationMessage;
-  }
-};
-
-const isValidUserId = (value: string) => {
-  return USER_ID_REGEX.test(value);
-};
-
-const isValidUserName = (value: string) => {
-  return value.length > 0 && value.length < 51;
-};
-
-const isValidEmail = (value: string) => {
-  return EmailValidator.validate(value);
-};
-
-const isValidPassword = (value: string) => {
-  return value.length > 5;
-};
-
-const isValidPasswordConfirmation = (
+const passwordConfimationErrorMessage = (
   password: string,
   confirmation: string
 ) => {
-  return password === confirmation;
+  return password === confirmation ? "" : "パスワードと不一致";
 };
 
-const isValidBrithdate = (date: string) => {
-  const now = new Date();
-  return new Date(date) < now;
-};
-
-const optionFieldWrapper = (
+export const validateAndGetMessages = async (
+  fieldName: Fields,
   value: string,
-  callback: (value: string) => boolean
-) => {
-  return value === "" ? true : callback(value);
+  prevForm: Form
+): Promise<ValidationMessages> => {
+  switch (fieldName) {
+    case RequiredFields.ID:
+      const { id } = await validateUserInfo({ [fieldName]: value });
+      return {
+        [RequiredFields.ID]: errorCode2ErrorMessage(
+          id,
+          "ユーザーIDのパターンと不一致",
+          "すでに登録されているid",
+          "そのidは使用できない文字列です"
+        ),
+      };
+    case RequiredFields.NAME:
+      const { name } = await validateUserInfo({ [fieldName]: value });
+      return {
+        [RequiredFields.NAME]: errorCode2ErrorMessage(
+          name,
+          "ニックネームは1文字以上50文字以下"
+        ),
+      };
+    case RequiredFields.EMAIL:
+      const { email } = await validateUserInfo({ [fieldName]: value });
+      return {
+        [RequiredFields.EMAIL]: errorCode2ErrorMessage(
+          email,
+          "不適切なemailの形式",
+          "すでに登録されているemail"
+        ),
+      };
+    case RequiredFields.PASSWORD:
+      const { password } = await validateUserInfo({ [fieldName]: value });
+      return {
+        [RequiredFields.PASSWORD]: errorCode2ErrorMessage(
+          password,
+          "パスワードは6文字以上"
+        ),
+        [RequiredFields.PASSWORD_CONFIRMATION]: passwordConfimationErrorMessage(
+          value,
+          prevForm.password_confirmation
+        ),
+      };
+    case RequiredFields.PASSWORD_CONFIRMATION:
+      return {
+        [RequiredFields.PASSWORD_CONFIRMATION]: passwordConfimationErrorMessage(
+          prevForm.password,
+          value
+        ),
+      };
+    case OptionalFields.BIRTHDATE:
+      const { birthdate } = await validateUserInfo({ [fieldName]: value });
+      return {
+        [OptionalFields.BIRTHDATE]: errorCode2ErrorMessage(
+          birthdate,
+          "生年月日が不適切です"
+        ),
+      };
+    default:
+      return {};
+  }
 };
 
 export const form2payload = (form: Form) => {
@@ -168,7 +125,10 @@ export const form2payload = (form: Form) => {
   return payload as CreateUserRequestBody;
 };
 
-export const isUnableToSend = (form: Form, validatonMessages: Form) => {
+export const isUnableToSend = (
+  form: Form,
+  validatonMessages: ValidationMessages
+) => {
   const hasEmptyField = Object.values(RequiredFields).some((key) => {
     return form[key] === "";
   });
