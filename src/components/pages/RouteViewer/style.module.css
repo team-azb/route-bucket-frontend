@@ -1,0 +1,19 @@
+.loading-wrapper {
+  position: relative;
+}
+
+.loading-container {
+  z-index: 2000;
+  background: #fff;
+  opacity: 0.7;
+  position: absolute;
+  top: 0;
+  left: 0;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.loading-text {
+  font-weight: bold;
+}
