@@ -15,7 +15,7 @@ import {
 } from "../../../reducers/routeReducer";
 import { useAuthenticationInfoContext } from "../../../contexts/AuthenticationProvider";
 
-type MakersProps = {
+type EditableMakersProps = {
   route: Route;
   dispatchRoute: React.Dispatch<routeReducerAction | routeAsyncAction>;
   setFocusedMarkerInfo: React.Dispatch<React.SetStateAction<FocusedMarkerInfo>>;
@@ -53,7 +53,7 @@ function markerGenerator(
   pos: RoutePoint,
   idx: number,
   markerRef: RefObject<MarkerType<any>>,
-  props: MakersProps,
+  props: EditableMakersProps,
   getIdToken: () => Promise<string> | undefined
 ) {
   const markerIcon = getMarkerIcon(idx, 0, props.route.waypoints.length - 1);
@@ -109,7 +109,7 @@ function markerGenerator(
   );
 }
 
-export default function Markers(props: MakersProps) {
+export default function EditableMarkers(props: EditableMakersProps) {
   const [changeCenterFlag, setChangeCenterFlag] = useState<boolean>(true);
   const map = useMap();
   const markerRefs = useRef<Array<RefObject<MarkerType>>>(

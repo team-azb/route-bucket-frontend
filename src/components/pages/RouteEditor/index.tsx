@@ -5,7 +5,7 @@ import L, { LatLng, LeafletMouseEvent } from "leaflet";
 import "leaflet.locatecontrol";
 import { useReducerAsync } from "use-reducer-async";
 import { toast } from "react-toastify";
-import Markers from "../../organisms/Markers";
+import Markers from "../../organisms/EditableMarkers";
 import Polylines from "../../organisms/Polylines";
 import FocusedMarker from "../../organisms/FocusedMarker";
 import RouteEditController from "../../organisms/RouteEditController";
