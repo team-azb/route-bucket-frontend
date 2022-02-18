@@ -14,7 +14,7 @@ import {
 } from "../../../reducers/routeReducer";
 import FocusedMarker from "../../organisms/FocusedMarker";
 import { HEADER_HEIGHT_PX } from "../../organisms/Header";
-import Markers from "../../organisms/EditableMarkers";
+import Markers from "../../organisms/Markers";
 import Polylines from "../../organisms/EditablePolylines";
 import RouteEditController from "../../organisms/RouteEditingController";
 import SignInRequiredTemplate from "../../organisms/SignInRequiredTemplate";
@@ -151,10 +151,8 @@ const RouteViewer = () => {
           />
           <Markers
             route={route}
-            dispatchRoute={dispatchRoute}
             setIsLoading={setIsLoading}
             setFocusedMarkerInfo={setFocusedMarkerInfo}
-            drawingMode={drawingMode}
           />
           <Polylines
             setZoomSize={setZoomSize}
