@@ -12,7 +12,7 @@ import {
   routeAsyncActionHandlers,
   routeReducer,
 } from "../../../reducers/routeReducer";
-import FocusedMarker from "../../organisms/EditableFocusedMarker";
+import FocusedMarker from "../../organisms/FocusedMarker";
 import { HEADER_HEIGHT_PX } from "../../organisms/Header";
 import Markers from "../../organisms/Markers";
 import Polylines from "../../organisms/Polylines";
@@ -161,12 +161,9 @@ const RouteViewer = () => {
           />
           <FocusedMarker
             zoomSize={zoomSize}
-            route={route}
-            dispatchRoute={dispatchRoute}
             setIsLoading={setIsLoading}
             focusedMarkerInfo={focusedMarkerInfo}
             setFocusedMarkerInfo={setFocusedMarkerInfo}
-            drawingMode={drawingMode}
           />
           {!isMobile && (
             <RouteEditController
