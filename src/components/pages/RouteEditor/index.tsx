@@ -1,4 +1,4 @@
-import { useState, useEffect, FunctionComponent, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { MapContainer, TileLayer, useMapEvent, useMap } from "react-leaflet";
 import L, { LatLng, LeafletMouseEvent } from "leaflet";
@@ -85,7 +85,7 @@ function ClickLayer(props: ClickLayerProps) {
   return <></>;
 }
 
-const RouteEditor: FunctionComponent = () => {
+const RouteEditor = () => {
   const { width, height } = useWindowDimensions();
   const mapHeight = useMemo(() => {
     return height - HEADER_HEIGHT_PX;
