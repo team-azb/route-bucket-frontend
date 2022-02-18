@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import Markers from "../../organisms/EditableMarkers";
 import Polylines from "../../organisms/EditablePolylines";
 import FocusedMarker from "../../organisms/FocusedMarker";
-import RouteEditController from "../../organisms/RouteEditController";
+import RouteEditController from "../../organisms/RouteEditingController";
 import { FocusedMarkerInfo, DrawingMode } from "../../../types";
 import {
   routeReducer,
