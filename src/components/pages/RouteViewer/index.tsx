@@ -12,7 +12,7 @@ import {
   routeAsyncActionHandlers,
   routeReducer,
 } from "../../../reducers/routeReducer";
-import FocusedMarker from "../../organisms/FocusedMarker";
+import FocusedMarker from "../../organisms/EditableFocusedMarker";
 import { HEADER_HEIGHT_PX } from "../../organisms/Header";
 import Markers from "../../organisms/Markers";
 import Polylines from "../../organisms/Polylines";

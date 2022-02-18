@@ -5,10 +5,10 @@ import L, { LatLng, LeafletMouseEvent } from "leaflet";
 import "leaflet.locatecontrol";
 import { useReducerAsync } from "use-reducer-async";
 import { toast } from "react-toastify";
-import Markers from "../../organisms/EditableMarkers";
+import EditableMarkers from "../../organisms/EditableMarkers";
 import Polylines from "../../organisms/Polylines";
-import FocusedMarker from "../../organisms/FocusedMarker";
-import RouteEditController from "../../organisms/RouteEditingController";
+import EditableFocusedMarker from "../../organisms/EditableFocusedMarker";
+import RouteEditingController from "../../organisms/RouteEditingController";
 import { FocusedMarkerInfo, DrawingMode } from "../../../types";
 import {
   routeReducer,
@@ -176,7 +176,7 @@ const RouteEditor: FunctionComponent = () => {
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          <Markers
+          <EditableMarkers
             route={route}
             dispatchRoute={dispatchRoute}
             setIsLoading={setIsLoading}
@@ -188,7 +188,7 @@ const RouteEditor: FunctionComponent = () => {
             setFocusedMarkerInfo={setFocusedMarkerInfo}
             route={route}
           />
-          <FocusedMarker
+          <EditableFocusedMarker
             zoomSize={zoomSize}
             route={route}
             dispatchRoute={dispatchRoute}
@@ -204,7 +204,7 @@ const RouteEditor: FunctionComponent = () => {
             drawingMode={drawingMode}
           />
           {!isMobile && (
-            <RouteEditController
+            <RouteEditingController
               isInsideMap={true}
               routeId={routeId}
               route={route}
@@ -218,7 +218,7 @@ const RouteEditor: FunctionComponent = () => {
           )}
         </MapContainer>
         {isMobile && (
-          <RouteEditController
+          <RouteEditingController
             isInsideMap={false}
             routeId={routeId}
             route={route}

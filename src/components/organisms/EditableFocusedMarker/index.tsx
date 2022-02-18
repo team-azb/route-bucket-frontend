@@ -9,7 +9,7 @@ import {
 } from "../../../reducers/routeReducer";
 import { useAuthenticationInfoContext } from "../../../contexts/AuthenticationProvider";
 
-type FocusedMarkerProps = {
+type EditableFocusedMarkerProps = {
   zoomSize: number;
   route: Route;
   focusedMarkerInfo: FocusedMarkerInfo;
@@ -19,7 +19,9 @@ type FocusedMarkerProps = {
   drawingMode: DrawingMode;
 };
 
-export default function FocusedMarker(props: FocusedMarkerProps) {
+export default function EditableFocusedMarker(
+  props: EditableFocusedMarkerProps
+) {
   const { getIdToken } = useAuthenticationInfoContext();
   const markerRef = useRef<MarkerType>(null);
   async function clickMarkerHandler(latlng: L.LatLng, idx: number) {
