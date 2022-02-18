@@ -3,15 +3,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import L, { LatLng } from "leaflet";
 import "leaflet.locatecontrol";
-import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useReducerAsync } from "use-reducer-async";
-import { useAuthenticationInfoContext } from "../../../contexts/AuthenticationProvider";
 import { useWindowDimensions } from "../../../hooks/windowDimensions";
-import {
-  routeAsyncActionHandlers,
-  routeReducer,
-} from "../../../reducers/routeReducer";
 import FocusedMarker from "../../organisms/FocusedMarker";
 import { HEADER_HEIGHT_PX } from "../../organisms/Header";
 import Markers from "../../organisms/Markers";
@@ -19,12 +12,13 @@ import Polylines from "../../organisms/Polylines";
 import RouteViewingController from "../../organisms/RouteViewingController";
 import SignInRequiredTemplate from "../../organisms/SignInRequiredTemplate";
 import styles from "./style.module.css";
-import { FocusedMarkerInfo } from "../../../types";
+import { FocusedMarkerInfo, Route } from "../../../types";
 
-//URLのパラメータのinerface
-interface RouteEditorParams {
-  routeId: string;
-}
+type RouteViewerProps = {
+  route: Route;
+  isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
 const focusedMarkerInfoInitValue: FocusedMarkerInfo = {
   isDisplayed: false,
@@ -57,53 +51,20 @@ function LocateController() {
   return <></>;
 }
 
-const RouteViewer = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+const RouteViewer = (props: RouteViewerProps) => {
   const [zoomSize, setZoomSize] = useState<number>(13);
   const [focusedMarkerInfo, setFocusedMarkerInfo] = useState<FocusedMarkerInfo>(
     focusedMarkerInfoInitValue
   );
 
-  const { routeId } = useParams<RouteEditorParams>();
-  const [route, dispatchRoute] = useReducerAsync(
-    routeReducer,
-    {
-      id: routeId,
-      name: "",
-      owner_id: "",
-      waypoints: [],
-      segments: [],
-      total_distance: 0,
-      elevation_gain: 0,
-      isLoaded: false,
-    },
-    routeAsyncActionHandlers
-  );
-
-  const { getIdToken } = useAuthenticationInfoContext();
-
   useEffect(() => {
-    // setFocusedMarkerInfo(focusedMarkerInfoInitValue);
+    setFocusedMarkerInfo(focusedMarkerInfoInitValue);
     //routeに変更が見られたらrouteのローディングが完了したものとし、isLoadingをfalseにする
-    setIsLoading(false);
-    if (route.error) {
-      toast.error(route.error.message);
+    props.setIsLoading(false);
+    if (props.route.error) {
+      toast.error(props.route.error.message);
     }
-  }, [route]);
-
-  //Mapのルート変更時にルートを取得してwaypointsを変更する
-  useEffect(() => {
-    (async () => {
-      const token = await getIdToken();
-      setIsLoading(true);
-      dispatchRoute({
-        type: "GET",
-        id: routeId,
-        token: token,
-      });
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [routeId]);
+  }, [props]);
 
   const { width, height } = useWindowDimensions();
   const mapHeight = useMemo(() => {
@@ -116,7 +77,7 @@ const RouteViewer = () => {
   return (
     <SignInRequiredTemplate>
       <div className={styles.loadingWrapper}>
-        {isLoading && (
+        {props.isLoading && (
           <div
             className={styles.loadingContainer}
             style={{
@@ -147,26 +108,26 @@ const RouteViewer = () => {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           <Markers
-            route={route}
-            setIsLoading={setIsLoading}
+            route={props.route}
+            setIsLoading={props.setIsLoading}
             setFocusedMarkerInfo={setFocusedMarkerInfo}
           />
           <Polylines
             setZoomSize={setZoomSize}
             setFocusedMarkerInfo={setFocusedMarkerInfo}
-            route={route}
+            route={props.route}
           />
           <FocusedMarker
             zoomSize={zoomSize}
-            setIsLoading={setIsLoading}
+            setIsLoading={props.setIsLoading}
             focusedMarkerInfo={focusedMarkerInfo}
             setFocusedMarkerInfo={setFocusedMarkerInfo}
           />
           {!isMobile && (
             <RouteViewingController
               isInsideMap={true}
-              routeId={routeId}
-              route={route}
+              routeId={props.route.id}
+              route={props.route}
               focusedMarkerInfo={focusedMarkerInfo}
               setFocusedMarkerInfo={setFocusedMarkerInfo}
             />
@@ -175,8 +136,8 @@ const RouteViewer = () => {
         {isMobile && (
           <RouteViewingController
             isInsideMap={true}
-            routeId={routeId}
-            route={route}
+            routeId={props.route.id}
+            route={props.route}
             focusedMarkerInfo={focusedMarkerInfo}
             setFocusedMarkerInfo={setFocusedMarkerInfo}
           />
