@@ -16,10 +16,10 @@ import FocusedMarker from "../../organisms/FocusedMarker";
 import { HEADER_HEIGHT_PX } from "../../organisms/Header";
 import Markers from "../../organisms/Markers";
 import Polylines from "../../organisms/Polylines";
-import RouteEditController from "../../organisms/RouteEditingController";
+import RouteViewingController from "../../organisms/RouteViewingController";
 import SignInRequiredTemplate from "../../organisms/SignInRequiredTemplate";
 import styles from "./style.module.css";
-import { DrawingMode, FocusedMarkerInfo } from "../../../types";
+import { FocusedMarkerInfo } from "../../../types";
 
 //URLのパラメータのinerface
 interface RouteEditorParams {
@@ -62,9 +62,6 @@ const RouteViewer = () => {
   const [zoomSize, setZoomSize] = useState<number>(13);
   const [focusedMarkerInfo, setFocusedMarkerInfo] = useState<FocusedMarkerInfo>(
     focusedMarkerInfoInitValue
-  );
-  const [drawingMode, setDrawingMode] = useState<DrawingMode>(
-    DrawingMode.FOLLOW_ROAD
   );
 
   const { routeId } = useParams<RouteEditorParams>();
@@ -166,30 +163,22 @@ const RouteViewer = () => {
             setFocusedMarkerInfo={setFocusedMarkerInfo}
           />
           {!isMobile && (
-            <RouteEditController
+            <RouteViewingController
               isInsideMap={true}
               routeId={routeId}
               route={route}
-              dispatchRoute={dispatchRoute}
-              setIsLoading={setIsLoading}
               focusedMarkerInfo={focusedMarkerInfo}
               setFocusedMarkerInfo={setFocusedMarkerInfo}
-              drawingMode={drawingMode}
-              setDrawingMode={setDrawingMode}
             />
           )}
         </MapContainer>
         {isMobile && (
-          <RouteEditController
-            isInsideMap={false}
+          <RouteViewingController
+            isInsideMap={true}
             routeId={routeId}
             route={route}
-            dispatchRoute={dispatchRoute}
-            setIsLoading={setIsLoading}
             focusedMarkerInfo={focusedMarkerInfo}
             setFocusedMarkerInfo={setFocusedMarkerInfo}
-            drawingMode={drawingMode}
-            setDrawingMode={setDrawingMode}
           />
         )}
       </div>
