@@ -9,7 +9,7 @@ const pathOptions: PathOptions = {
 };
 
 //Polylineコンポーネントのpropsの型
-type EditablePolylinesProps = {
+type PolylineProps = {
   setFocusedMarkerInfo: React.Dispatch<React.SetStateAction<FocusedMarkerInfo>>;
   setZoomSize: React.Dispatch<React.SetStateAction<number>>;
   route: Route;
@@ -25,7 +25,7 @@ type EditablePolylinesProps = {
 function polylineGenerator(
   segment: Segment,
   idx: number,
-  props: EditablePolylinesProps
+  props: PolylineProps
 ) {
   return (
     <Polyline
@@ -51,7 +51,7 @@ function polylineGenerator(
   );
 }
 
-export default function EditablePolylines(props: EditablePolylinesProps) {
+export default function Polylines(props: PolylineProps) {
   useMapEvent("zoomend", (event) => {
     props.setZoomSize(event.target._zoom);
   });

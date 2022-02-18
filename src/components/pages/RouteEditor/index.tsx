@@ -6,7 +6,7 @@ import "leaflet.locatecontrol";
 import { useReducerAsync } from "use-reducer-async";
 import { toast } from "react-toastify";
 import Markers from "../../organisms/EditableMarkers";
-import Polylines from "../../organisms/EditablePolylines";
+import Polylines from "../../organisms/Polylines";
 import FocusedMarker from "../../organisms/FocusedMarker";
 import RouteEditController from "../../organisms/RouteEditingController";
 import { FocusedMarkerInfo, DrawingMode } from "../../../types";

@@ -15,7 +15,7 @@ import {
 import FocusedMarker from "../../organisms/FocusedMarker";
 import { HEADER_HEIGHT_PX } from "../../organisms/Header";
 import Markers from "../../organisms/Markers";
-import Polylines from "../../organisms/EditablePolylines";
+import Polylines from "../../organisms/Polylines";
 import RouteEditController from "../../organisms/RouteEditingController";
 import SignInRequiredTemplate from "../../organisms/SignInRequiredTemplate";
 import styles from "./style.module.css";
