@@ -41,13 +41,37 @@ const locateOption: L.Control.LocateOptions = {
   },
 };
 
+type LocateControllerProps = {
+  route: Route;
+};
+
 // Memo: 地図を切り替えるたびに読み込まれてしまう
 // Todo: 現在地の読み込みが遅い(ブラウザの組み込みapiの方が圧倒的に早い)のを改善
-function LocateController() {
+function LocateController(props: LocateControllerProps) {
   const map = useMap();
   useEffect(() => {
     L.control.locate(locateOption).addTo(map);
   }, [map]);
+
+  const [changeCenterFlag, setChangeCenterFlag] = useState<boolean>(true);
+  useEffect(() => {
+    if (changeCenterFlag && props.route.isLoaded) {
+      if (props.route.bounding_box) {
+        map.fitBounds([
+          [
+            props.route.bounding_box.min_coord.latitude,
+            props.route.bounding_box.min_coord.longitude,
+          ],
+          [
+            props.route.bounding_box.max_coord.latitude,
+            props.route.bounding_box.max_coord.longitude,
+          ],
+        ]);
+      }
+      setChangeCenterFlag(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.route]);
   return <></>;
 }
 
@@ -102,7 +126,7 @@ const RouteViewer = (props: RouteViewerProps) => {
           // 参考：https://github.com/Leaflet/Leaflet/issues/7255
           tap={false}
         >
-          <LocateController />
+          <LocateController route={props.route} />
           <TileLayer
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
