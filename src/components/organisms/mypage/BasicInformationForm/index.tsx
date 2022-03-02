@@ -1,6 +1,5 @@
 import React, { ChangeEvent, useCallback, useMemo, useState } from "react";
 import { UserInfo } from "../../../../types";
-// import IconImage from "../IconImage";
 import IconImageUpload from "../IconImageUpload";
 import FormField from "../../../atoms/FormField";
 import InputWithError from "../../../molecules/InputWithError";
