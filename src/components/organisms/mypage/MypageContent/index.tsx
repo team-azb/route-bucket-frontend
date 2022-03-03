@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { useCallback, useContext, useMemo, useState } from "react";
 import BasicInformation from "../BasicInformation";
 import { useSignedInUserInfoContext } from "../../../../contexts/signedInUserContext";
 import styles from "./style.module.css";
@@ -16,28 +16,42 @@ const MypageContent = () => {
     };
   }, []);
 
-  return (
-    <div className={styles.container}>
-      <div className={styles.row}>
-        <h2 className={styles.title}>基本情報</h2>
-        {isEditMode || (
+  const editModeContent = useMemo(() => {
+    return (
+      <>
+        <div className={styles.row}>
+          <h2 className={styles.title}>基本情報</h2>
+        </div>
+        <hr />
+        <BasicInformationUpdateForm
+          userInfo={userInfo}
+          exitEditModeHandler={changeEditModeHandler(false)}
+        />
+      </>
+    );
+  }, [userInfo, changeEditModeHandler]);
+
+  const viewModeContent = useMemo(() => {
+    return (
+      <>
+        <div className={styles.row}>
+          <h2 className={styles.title}>基本情報</h2>
           <button
             className={styles.button}
             onClick={changeEditModeHandler(true)}
           >
             編集
           </button>
-        )}
-      </div>
-      <hr />
-      {isEditMode ? (
-        <BasicInformationUpdateForm
-          userInfo={userInfo}
-          exitEditModeHandler={changeEditModeHandler(false)}
-        />
-      ) : (
+        </div>
+        <hr />
         <BasicInformation userInfo={userInfo} email={signedInUser?.email} />
-      )}
+      </>
+    );
+  }, [userInfo, changeEditModeHandler, signedInUser?.email]);
+
+  return (
+    <div className={styles.container}>
+      {isEditMode ? editModeContent : viewModeContent}
       <h2 className={styles.title}>公開ルート</h2>
       <hr />
     </div>
