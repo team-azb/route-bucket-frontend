@@ -5,15 +5,15 @@ import FormField from "../../../atoms/FormField";
 import InputWithError from "../../../molecules/InputWithError";
 import styles from "./style.module.css";
 
-type BasicInformationFormProps = {
+type BasicInformationUpdateFormProps = {
   exitEditModeHandler: () => void;
   userInfo: UserInfo;
 };
 
-const BasicInformationForm = ({
+const BasicInformationUpdateForm = ({
   exitEditModeHandler,
   userInfo,
-}: BasicInformationFormProps) => {
+}: BasicInformationUpdateFormProps) => {
   const [userInfoForm, setUserInfoForm] = useState<UserInfo>(userInfo);
   const [previewFile, setPreviewFile] = useState<File>();
   const previewUrl = useMemo(() => {
@@ -76,4 +76,4 @@ const BasicInformationForm = ({
   );
 };
 
-export default BasicInformationForm;
+export default BasicInformationUpdateForm;

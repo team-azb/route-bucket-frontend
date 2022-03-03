@@ -3,7 +3,7 @@ import BasicInformation from "../BasicInformation";
 import { useSignedInUserInfoContext } from "../../../../contexts/signedInUserContext";
 import styles from "./style.module.css";
 import { UserInfoContext } from "../UserInfoProvider";
-import BasicInformationForm from "../BasicInformationForm";
+import BasicInformationUpdateForm from "../BasicInformationUpdateForm";
 
 const MypageContent = () => {
   const userInfo = useContext(UserInfoContext);
@@ -31,7 +31,7 @@ const MypageContent = () => {
       </div>
       <hr />
       {isEditMode ? (
-        <BasicInformationForm
+        <BasicInformationUpdateForm
           userInfo={userInfo}
           exitEditModeHandler={changeEditModeHandler(false)}
         />
