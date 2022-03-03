@@ -10,7 +10,7 @@ const redirectMessage = (
     <p className={styles.message}>
       ページを閲覧するためにはサインインをしてください
     </p>
-    <Link className={styles.anchor} to={pagePaths.SIGN_IN}>
+    <Link className={styles.anchor} to={pagePaths.signIn()}>
       サインインページはこちら
     </Link>
   </div>

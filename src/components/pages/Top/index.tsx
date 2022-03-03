@@ -19,17 +19,17 @@ const Top = () => {
       <h1>トップページ</h1>
       <ul>
         <li>
-          <Link to={pagePaths.ROUTE_INDEX}>
+          <Link to={pagePaths.routeIndex()}>
             <button>ルート一覧</button>
           </Link>
         </li>
         <li>
-          <Link to={pagePaths.SIGN_IN}>
+          <Link to={pagePaths.signIn()}>
             <button>サインイン</button>
           </Link>
         </li>
         <li>
-          <Link to={pagePaths.SIGN_UP}>
+          <Link to={pagePaths.signUp()}>
             <button>サインアップ</button>
           </Link>
         </li>

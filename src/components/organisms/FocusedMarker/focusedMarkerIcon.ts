@@ -8,8 +8,8 @@ import { ORIGIN, pagePaths } from "../../../consts/uriComponents";
  */
 export const FocusedMarkerIcon = (size: number) => {
   return new L.Icon({
-    iconUrl: ORIGIN + pagePaths.FOCUSED_MARKER_ICON,
-    iconRetinaUrl: ORIGIN + pagePaths.FOCUSED_MARKER_ICON,
+    iconUrl: ORIGIN + pagePaths.focusedMarkerIcon(),
+    iconRetinaUrl: ORIGIN + pagePaths.focusedMarkerIcon(),
     iconSize: new L.Point(size, size),
   });
 };
