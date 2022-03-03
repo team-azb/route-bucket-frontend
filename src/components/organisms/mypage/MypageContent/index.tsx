@@ -8,15 +8,15 @@ import BasicInformationUpdateForm from "../BasicInformationUpdateForm";
 const MypageContent = () => {
   const userInfo = useContext(UserInfoContext);
   const { signedInUser } = useSignedInUserInfoContext();
-  const [isEditMode, setIsEditMode] = useState(false);
+  const [isEditingMode, setIsEditingMode] = useState(false);
 
-  const changeEditModeHandler = useCallback((isActive: boolean) => {
+  const changeEditingModeHandler = useCallback((isActive: boolean) => {
     return () => {
-      setIsEditMode(isActive);
+      setIsEditingMode(isActive);
     };
   }, []);
 
-  const editModeContent = useMemo(() => {
+  const editingModeContent = useMemo(() => {
     return (
       <>
         <div className={styles.row}>
@@ -25,20 +25,20 @@ const MypageContent = () => {
         <hr />
         <BasicInformationUpdateForm
           userInfo={userInfo}
-          exitEditModeHandler={changeEditModeHandler(false)}
+          exitEditingModeHandler={changeEditingModeHandler(false)}
         />
       </>
     );
-  }, [userInfo, changeEditModeHandler]);
+  }, [userInfo, changeEditingModeHandler]);
 
-  const viewModeContent = useMemo(() => {
+  const viewingModeContent = useMemo(() => {
     return (
       <>
         <div className={styles.row}>
           <h2 className={styles.title}>基本情報</h2>
           <button
             className={styles.button}
-            onClick={changeEditModeHandler(true)}
+            onClick={changeEditingModeHandler(true)}
           >
             編集
           </button>
@@ -47,11 +47,11 @@ const MypageContent = () => {
         <BasicInformation userInfo={userInfo} email={signedInUser?.email} />
       </>
     );
-  }, [userInfo, changeEditModeHandler, signedInUser?.email]);
+  }, [userInfo, changeEditingModeHandler, signedInUser?.email]);
 
   return (
     <div className={styles.container}>
-      {isEditMode ? editModeContent : viewModeContent}
+      {isEditingMode ? editingModeContent : viewingModeContent}
       <h2 className={styles.title}>公開ルート</h2>
       <hr />
     </div>

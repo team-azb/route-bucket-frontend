@@ -6,12 +6,12 @@ import InputWithError from "../../../molecules/InputWithError";
 import styles from "./style.module.css";
 
 type BasicInformationUpdateFormProps = {
-  exitEditModeHandler: () => void;
+  exitEditingModeHandler: () => void;
   userInfo: UserInfo;
 };
 
 const BasicInformationUpdateForm = ({
-  exitEditModeHandler,
+  exitEditingModeHandler,
   userInfo,
 }: BasicInformationUpdateFormProps) => {
   const [userInfoForm, setUserInfoForm] = useState<UserInfo>(userInfo);
@@ -67,7 +67,7 @@ const BasicInformationUpdateForm = ({
             />
           </FormField>
           <button className={styles.submitButton}>更新</button>
-          <button className={styles.button} onClick={exitEditModeHandler}>
+          <button className={styles.button} onClick={exitEditingModeHandler}>
             キャンセル
           </button>
         </div>
