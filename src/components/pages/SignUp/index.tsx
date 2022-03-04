@@ -1,14 +1,14 @@
 import React from "react";
 import SignUpForm from "../../organisms/signUp/SignUpForm";
-import styles from "./style.module.css";
+import PageContainer from "../../atoms/PageContainer";
+import PageTitle from "../../atoms/PageTitle";
 
 const SignUp = () => {
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>サインアップ</h1>
-      <hr />
+    <PageContainer>
+      <PageTitle title="サインアップ" />
       <SignUpForm />
-    </div>
+    </PageContainer>
   );
 };
 

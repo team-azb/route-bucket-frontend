@@ -1,13 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { pagePaths } from "../../../consts/uriComponents";
-import { useSignedInUserInfoContext } from "../../../contexts/signedInUserContext";
+import { pagePaths, dynamicPathGenerator } from "../../../consts/uriComponents";
+import { useAuthenticationInfoContext } from "../../../contexts/AuthenticationProvider";
 import styles from "./style.module.css";
 
 export const HEADER_HEIGHT_PX = 64;
 
 const Header = () => {
-  const { signedInUser } = useSignedInUserInfoContext();
+  const { authenticatedUser, hasCheckedAuth } = useAuthenticationInfoContext();
   return (
     <div className={styles.container} style={{ height: HEADER_HEIGHT_PX }}>
       <div className={styles.leftSection}>
@@ -19,11 +19,28 @@ const Header = () => {
         <Link className={styles.rightSectionLink} to={pagePaths.ROUTE_INDEX}>
           ルート検索
         </Link>
-        {signedInUser ? null : (
-          <Link className={styles.rightSectionLink} to={pagePaths.SIGN_IN}>
-            サインイン
-          </Link>
-        )}
+
+        {hasCheckedAuth &&
+          (authenticatedUser ? (
+            <>
+              <Link
+                className={styles.rightSectionLink}
+                to={pagePaths.ROUTE_NEW}
+              >
+                ルート作成
+              </Link>
+              <Link
+                className={styles.rightSectionLink}
+                to={dynamicPathGenerator.mypage(authenticatedUser.uid)}
+              >
+                マイページ
+              </Link>
+            </>
+          ) : (
+            <Link className={styles.rightSectionLink} to={pagePaths.SIGN_IN}>
+              サインイン
+            </Link>
+          ))}
       </div>
     </div>
   );

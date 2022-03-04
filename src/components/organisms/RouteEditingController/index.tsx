@@ -14,8 +14,9 @@ import { Route, FocusedMarkerInfo, DrawingMode } from "../../../types";
 import { meters2kilometers } from "../../../utils";
 import { pagePaths } from "../../../consts/uriComponents";
 import styles from "./style.module.css";
+import { useAuthenticationInfoContext } from "../../../contexts/AuthenticationProvider";
 
-type RouteEditControllerProps = {
+type RouteEditingControllerProps = {
   isInsideMap: boolean;
   routeId: string;
   route: Route;
@@ -27,31 +28,39 @@ type RouteEditControllerProps = {
   setDrawingMode: React.Dispatch<React.SetStateAction<DrawingMode>>;
 };
 
-function RouteEditControllerDisplay(props: RouteEditControllerProps) {
+function RouteEditingControllerDisplay(props: RouteEditingControllerProps) {
   const history = useHistory();
-  const clearHandler = () => {
+  const { getIdToken } = useAuthenticationInfoContext();
+
+  const clearHandler = async () => {
     const approval = window.confirm(
       "経路をクリアします。(クリアの取り消しはできません)\nよろしいですか？"
     );
     if (approval) {
+      const token = await getIdToken();
       props.setIsLoading(true);
       props.dispatchRoute({
         type: "CLEAR",
+        token: token,
       });
     }
   };
 
-  const undoHandler = () => {
+  const undoHandler = async () => {
+    const token = await getIdToken();
     props.setIsLoading(true);
     props.dispatchRoute({
       type: "UNDO",
+      token: token,
     });
   };
 
-  const redoHandler = () => {
+  const redoHandler = async () => {
+    const token = await getIdToken();
     props.setIsLoading(true);
     props.dispatchRoute({
       type: "REDO",
+      token: token,
     });
   };
 
@@ -121,7 +130,9 @@ function RouteEditControllerDisplay(props: RouteEditControllerProps) {
   );
 }
 
-export default function RouteEditController(props: RouteEditControllerProps) {
+export default function RouteEditingController(
+  props: RouteEditingControllerProps
+) {
   const divRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -140,11 +151,11 @@ export default function RouteEditController(props: RouteEditControllerProps) {
             className="leaflet-control leaflet-bar"
             style={{ width: 600 }}
           >
-            <RouteEditControllerDisplay {...props} />
+            <RouteEditingControllerDisplay {...props} />
           </div>
         </div>
       ) : (
-        <RouteEditControllerDisplay {...props} />
+        <RouteEditingControllerDisplay {...props} />
       )}
     </>
   );
