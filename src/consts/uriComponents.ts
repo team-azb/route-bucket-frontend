@@ -14,13 +14,4 @@ export const pagePaths = {
   userIcon: () => "/icons/account_circle.svg",
 };
 
-// export const dynamicPathGenerator = {
-//   routeEditor: (routeId: string) => {
-//     return `/routes/${routeId}`;
-//   },
-//   mypage: (userId: string) => {
-//     return `/${userId}`;
-//   },
-// };
-
 export const ORIGIN = "http://localhost:3000";
