@@ -60,7 +60,7 @@ function RouteEditControllerDisplay(props: RouteEditControllerProps) {
   };
 
   const moveToIndexPageHandler = () => {
-    history.push(pagePaths.ROUTE_INDEX);
+    history.push(pagePaths.routeIndex());
   };
 
   const changeDrawingModeHandler = useCallback(

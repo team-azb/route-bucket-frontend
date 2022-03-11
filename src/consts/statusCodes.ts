@@ -1,0 +1,5 @@
+export const STATUS_CODES = {
+  OK: 200,
+  STATUS_NOT_FOUND: 404,
+  STATUS_INTERNAL_ERROR: 500,
+};

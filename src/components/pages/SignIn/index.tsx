@@ -17,7 +17,7 @@ const SignIn = () => {
     try {
       await signInWithEmailAndPassword(emailInput, passwordInput);
       toast.success("サインイン成功");
-      history.push(pagePaths.ROUTE_INDEX);
+      history.push(pagePaths.routeIndex());
     } catch (error) {
       toast.error("サインイン失敗");
     }
@@ -61,7 +61,7 @@ const SignIn = () => {
             <button className={styles.formButton} onClick={signInHandler}>
               サインイン
             </button>
-            <Link className={styles.formAnchor} to={pagePaths.PASSWORD_RESET}>
+            <Link className={styles.formAnchor} to={pagePaths.passwordReset()}>
               パスワードを忘れた場合
             </Link>
           </div>

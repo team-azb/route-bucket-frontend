@@ -51,7 +51,7 @@ function RouteIndex() {
       return (
         <li key={route.id}>
           <h3>{route.name}</h3>
-          <Link to={pagePaths.routeEditorPath(route.id)}>
+          <Link to={pagePaths.routeEditor(route.id)}>
             <button>ルートを編集</button>
           </Link>
           <button

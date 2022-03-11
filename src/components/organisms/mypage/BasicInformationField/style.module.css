@@ -1,0 +1,13 @@
+.container {
+  margin: 30px 0;
+}
+
+.label {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.value {
+  margin: 5px 0;
+  font-size: 1.5rem;
+}

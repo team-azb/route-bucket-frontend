@@ -1,17 +1,17 @@
 export const pagePaths = {
-  TOP: "/",
-  ROUTE_INDEX: "/routes",
-  ROUTE_EDITOR: "/routes/:routeId",
-  SIGN_IN: "/signin",
-  SIGN_UP: "/signup",
-  PASSWORD_RESET: "/password_reset",
-  routeEditorPath: (routeId: string) => {
-    return `/routes/${routeId}`;
-  },
-  START_MARKER_ICON: "/icons/start_pin.svg",
-  MARKER_ICON: "/icons/fmd_good_black_24dp.svg",
-  GOAL_MARKER_ICON: "/icons/goal_pin.svg",
-  FOCUSED_MARKER_ICON: "/icons/circle_black_24dp.svg",
+  top: () => "/",
+  mypage: (userId?: string) => (userId ? `/${userId}` : "/:userId"),
+  routeIndex: () => "/routes",
+  routeEditor: (routeId?: string) =>
+    routeId ? `/routes/${routeId}` : "/routes/:routeId",
+  signIn: () => "/signin",
+  signUp: () => "/signup",
+  passwordReset: () => "/password_reset",
+  startMarkerIcon: () => "/icons/start_pin.svg",
+  markerIcon: () => "/icons/fmd_good_black_24dp.svg",
+  goalMarkerIcon: () => "/icons/goal_pin.svg",
+  focusedMarkerIcon: () => "/icons/circle_black_24dp.svg",
+  userIcon: () => "/icons/account_circle.svg",
 };
 
 export const ORIGIN = "http://localhost:3000";
