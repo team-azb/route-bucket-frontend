@@ -66,16 +66,19 @@ export default function EditableFocusedMarker(
           draggable={true}
           position={props.focusedMarkerInfo.position}
           eventHandlers={{
-            click: async (event) => {
-              L.DomEvent.stopPropagation(event); //clickLayerに対してクリックイベントを送らない
+            contextmenu: (event) => {
               props.focusedMarkerInfo.idx &&
                 clickMarkerHandler(
                   event.latlng,
                   props.focusedMarkerInfo.idx + 1
                 );
             },
-            dragend: () => {
-              dragMarkerHandler();
+            click: (event) => {
+              // clickはdragendに付随して発火するので、これをstopPropagationする
+              L.DomEvent.stopPropagation(event);
+            },
+            dragend: async () => {
+              await dragMarkerHandler();
             },
           }}
         />
