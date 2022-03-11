@@ -1,18 +1,13 @@
-import { useState, useEffect, FunctionComponent, useMemo } from "react";
-import { useParams } from "react-router-dom";
+import { useState, useEffect, useMemo } from "react";
 import { MapContainer, TileLayer, useMapEvent, useMap } from "react-leaflet";
 import L, { LatLng, LeafletMouseEvent } from "leaflet";
 import "leaflet.locatecontrol";
-import { useReducerAsync } from "use-reducer-async";
-import { toast } from "react-toastify";
-import Markers from "../../organisms/Markers";
+import EditableMarkers from "../../organisms/EditableMarkers";
 import Polylines from "../../organisms/Polylines";
-import FocusedMarker from "../../organisms/FocusedMarker";
-import RouteEditController from "../../organisms/RouteEditController";
-import { FocusedMarkerInfo, DrawingMode } from "../../../types";
+import EditableFocusedMarker from "../../organisms/EditableFocusedMarker";
+import RouteEditingController from "../../organisms/RouteEditingController";
+import { FocusedMarkerInfo, DrawingMode, Route } from "../../../types";
 import {
-  routeReducer,
-  routeAsyncActionHandlers,
   routeReducerAction,
   routeAsyncAction,
 } from "../../../reducers/routeReducer";
@@ -21,6 +16,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import SignInRequiredTemplate from "../../organisms/SignInRequiredTemplate";
 import { HEADER_HEIGHT_PX } from "../../organisms/Header";
 import styles from "./style.module.css";
+import { useAuthenticationInfoContext } from "../../../contexts/AuthenticationProvider";
 
 //ClickLayerコンポーネントのpropsの型
 type ClickLayerProps = {
@@ -29,11 +25,6 @@ type ClickLayerProps = {
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   drawingMode: DrawingMode;
 };
-
-//URLのパラメータのinerface
-interface RouteEditorParams {
-  routeId: string;
-}
 
 const focusedMarkerInfoInitValue: FocusedMarkerInfo = {
   isDisplayed: false,
@@ -67,7 +58,9 @@ function LocateController() {
 }
 
 function ClickLayer(props: ClickLayerProps) {
+  const { getIdToken } = useAuthenticationInfoContext();
   useMapEvent("click", async (e: LeafletMouseEvent) => {
+    const token = await getIdToken();
     props.isLoading || props.setIsLoading(true);
     props.dispatchRoute({
       type: "APPEND",
@@ -76,12 +69,20 @@ function ClickLayer(props: ClickLayerProps) {
         longitude: e.latlng.lng,
       },
       mode: props.drawingMode,
+      token: token,
     });
   });
   return <></>;
 }
 
-const RouteEditor: FunctionComponent = () => {
+type RouteEditorProps = {
+  route: Route;
+  dispatchRoute: React.Dispatch<routeReducerAction | routeAsyncAction>;
+  isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const RouteEditor = (props: RouteEditorProps) => {
   const { width, height } = useWindowDimensions();
   const mapHeight = useMemo(() => {
     return height - HEADER_HEIGHT_PX;
@@ -89,21 +90,7 @@ const RouteEditor: FunctionComponent = () => {
   const isMobile = useMemo(() => {
     return width < 600;
   }, [width]);
-  const { routeId } = useParams<RouteEditorParams>();
-  const [route, dispatchRoute] = useReducerAsync(
-    routeReducer,
-    {
-      id: routeId,
-      name: "",
-      waypoints: [],
-      segments: [],
-      total_distance: 0,
-      elevation_gain: 0,
-      isLoaded: false,
-    },
-    routeAsyncActionHandlers
-  );
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+
   const [zoomSize, setZoomSize] = useState<number>(13);
   const [focusedMarkerInfo, setFocusedMarkerInfo] = useState<FocusedMarkerInfo>(
     focusedMarkerInfoInitValue
@@ -114,27 +101,12 @@ const RouteEditor: FunctionComponent = () => {
 
   useEffect(() => {
     setFocusedMarkerInfo(focusedMarkerInfoInitValue);
-    //routeに変更が見られたらrouteのローディングが完了したものとし、isLoadingをfalseにする
-    setIsLoading(false);
-    if (route.error) {
-      toast.error(route.error.message);
-    }
-  }, [route]);
-
-  //Mapのルート変更時にルートを取得してwaypointsを変更する
-  useEffect(() => {
-    setIsLoading(true);
-    dispatchRoute({
-      type: "GET",
-      id: routeId,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [routeId]);
+  }, [props.route]);
 
   return (
     <SignInRequiredTemplate>
       <div className={styles.loadingWrapper}>
-        {isLoading && (
+        {props.isLoading && (
           <div
             className={styles.loadingContainer}
             style={{
@@ -145,7 +117,7 @@ const RouteEditor: FunctionComponent = () => {
             {/* FIXME: opacityがCircularProgressなどにも適用されてしまう */}
             <CircularProgress />
             <p className={styles.loadingText}>
-              {route.isLoaded ? "ルート計算中" : "ルート取得中"}
+              {props.route.isLoaded ? "ルート計算中" : "ルート取得中"}
             </p>
           </div>
         )}
@@ -166,40 +138,40 @@ const RouteEditor: FunctionComponent = () => {
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          <Markers
-            route={route}
-            dispatchRoute={dispatchRoute}
-            setIsLoading={setIsLoading}
+          <EditableMarkers
+            route={props.route}
+            dispatchRoute={props.dispatchRoute}
+            setIsLoading={props.setIsLoading}
             setFocusedMarkerInfo={setFocusedMarkerInfo}
             drawingMode={drawingMode}
           />
           <Polylines
             setZoomSize={setZoomSize}
             setFocusedMarkerInfo={setFocusedMarkerInfo}
-            route={route}
+            route={props.route}
           />
-          <FocusedMarker
+          <EditableFocusedMarker
             zoomSize={zoomSize}
-            route={route}
-            dispatchRoute={dispatchRoute}
-            setIsLoading={setIsLoading}
+            route={props.route}
+            dispatchRoute={props.dispatchRoute}
+            setIsLoading={props.setIsLoading}
             focusedMarkerInfo={focusedMarkerInfo}
             setFocusedMarkerInfo={setFocusedMarkerInfo}
             drawingMode={drawingMode}
           />
           <ClickLayer
-            dispatchRoute={dispatchRoute}
-            isLoading={isLoading}
-            setIsLoading={setIsLoading}
+            dispatchRoute={props.dispatchRoute}
+            isLoading={props.isLoading}
+            setIsLoading={props.setIsLoading}
             drawingMode={drawingMode}
           />
           {!isMobile && (
-            <RouteEditController
+            <RouteEditingController
               isInsideMap={true}
-              routeId={routeId}
-              route={route}
-              dispatchRoute={dispatchRoute}
-              setIsLoading={setIsLoading}
+              routeId={props.route.id}
+              route={props.route}
+              dispatchRoute={props.dispatchRoute}
+              setIsLoading={props.setIsLoading}
               focusedMarkerInfo={focusedMarkerInfo}
               setFocusedMarkerInfo={setFocusedMarkerInfo}
               drawingMode={drawingMode}
@@ -208,12 +180,12 @@ const RouteEditor: FunctionComponent = () => {
           )}
         </MapContainer>
         {isMobile && (
-          <RouteEditController
+          <RouteEditingController
             isInsideMap={false}
-            routeId={routeId}
-            route={route}
-            dispatchRoute={dispatchRoute}
-            setIsLoading={setIsLoading}
+            routeId={props.route.id}
+            route={props.route}
+            dispatchRoute={props.dispatchRoute}
+            setIsLoading={props.setIsLoading}
             focusedMarkerInfo={focusedMarkerInfo}
             setFocusedMarkerInfo={setFocusedMarkerInfo}
             drawingMode={drawingMode}
