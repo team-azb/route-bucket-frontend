@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Route } from "../../../types";
 import {
   routeReducerAction,
@@ -10,6 +10,8 @@ import { useAuthenticationInfoContext } from "../../../contexts/AuthenticationPr
 type EditableNameDisplayProps = {
   route: Route;
   dispatchRoute: React.Dispatch<routeReducerAction | routeAsyncAction>;
+  activateKeyboardControl: () => void;
+  inactivateKeyboardControl: () => void;
 };
 
 type NameInputProps = {
@@ -97,6 +99,15 @@ function NameDisplay(props: NameDisplayProps) {
 
 export default function EditableNameDisplay(props: EditableNameDisplayProps) {
   const [isEditable, setIsEditable] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isEditable) {
+      props.inactivateKeyboardControl();
+    } else {
+      props.activateKeyboardControl();
+    }
+  }, [isEditable, props]);
+
   return (
     <>
       {isEditable ? (

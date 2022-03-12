@@ -90,12 +90,20 @@ function RouteEditingControllerDisplay(props: RouteEditingControllerProps) {
     [redoHandler, undoHandler]
   );
 
-  useEffect(() => {
+  const activateKeyboardControl = useCallback(() => {
     document.addEventListener("keydown", keyDownEventHadler);
-    return () => {
-      document.removeEventListener("keydown", keyDownEventHadler);
-    };
   }, [keyDownEventHadler]);
+
+  const inactivateKeyboardControl = useCallback(() => {
+    document.removeEventListener("keydown", keyDownEventHadler);
+  }, [keyDownEventHadler]);
+
+  useEffect(() => {
+    activateKeyboardControl();
+    return () => {
+      inactivateKeyboardControl();
+    };
+  }, [activateKeyboardControl, inactivateKeyboardControl]);
 
   return (
     <div style={{ background: "#fff", opacity: 0.85 }}>
@@ -108,6 +116,8 @@ function RouteEditingControllerDisplay(props: RouteEditingControllerProps) {
         <EditableNameDisplay
           route={props.route}
           dispatchRoute={props.dispatchRoute}
+          activateKeyboardControl={activateKeyboardControl}
+          inactivateKeyboardControl={inactivateKeyboardControl}
         />
         <p>
           総距離: {meters2kilometers(props.route.total_distance).toFixed(2)}km
