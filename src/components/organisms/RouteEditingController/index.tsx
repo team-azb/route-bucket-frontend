@@ -46,23 +46,23 @@ function RouteEditingControllerDisplay(props: RouteEditingControllerProps) {
     }
   };
 
-  const undoHandler = async () => {
+  const undoHandler = useCallback(async () => {
     const token = await getIdToken();
     props.setIsLoading(true);
     props.dispatchRoute({
       type: "UNDO",
       token: token,
     });
-  };
+  }, [getIdToken, props]);
 
-  const redoHandler = async () => {
+  const redoHandler = useCallback(async () => {
     const token = await getIdToken();
     props.setIsLoading(true);
     props.dispatchRoute({
       type: "REDO",
       token: token,
     });
-  };
+  }, [getIdToken, props]);
 
   const exportGpxHandler = () => {
     window.open(`${config.BACKEND_ORIGIN}/routes/${props.routeId}/gpx/`);
@@ -78,6 +78,25 @@ function RouteEditingControllerDisplay(props: RouteEditingControllerProps) {
     },
     [props]
   );
+
+  const keyDownEventHadler = useCallback(
+    (event: KeyboardEvent) => {
+      if (event.metaKey && event.shiftKey && event.code === "KeyZ") {
+        redoHandler();
+      } else if (event.metaKey && event.code === "KeyZ") {
+        undoHandler();
+      }
+    },
+    [redoHandler, undoHandler]
+  );
+
+  useEffect(() => {
+    document.addEventListener("keydown", keyDownEventHadler);
+    return () => {
+      document.removeEventListener("keydown", keyDownEventHadler);
+    };
+  }, [keyDownEventHadler]);
+
   return (
     <div style={{ background: "#fff", opacity: 0.85 }}>
       <div style={{ padding: props.isInsideMap ? 20 : 5 }}>
