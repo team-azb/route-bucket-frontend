@@ -84,7 +84,7 @@ export const updateValidationMessages = (
         isValidEmail(value),
         "不適切なemailの形式"
       );
-    case RequiredFields.PASSWORD:
+    case RequiredFields.PASSWORD: {
       const tempMessageForm = mergeValidationMessageForm(
         prevValidationMessage,
         RequiredFields.PASSWORD,
@@ -100,6 +100,7 @@ export const updateValidationMessages = (
         ),
         "パスワードと不一致"
       );
+    }
     case RequiredFields.PASSWORD_CONFIRMATION:
       return mergeValidationMessageForm(
         prevValidationMessage,

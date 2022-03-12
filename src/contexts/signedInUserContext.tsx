@@ -11,6 +11,8 @@ const SignedInUserInfoContext = createContext<signedInUserInfo>({
   hasCheckedAuth: false,
 });
 
+//TODO: React.FCを消す時にここのlintのエラーも対応する
+// eslint-disable-next-line react/prop-types
 export const SignedInUserInfoProvider: React.FC = ({ children }) => {
   const [signedInUser, setSignedInUser] = useState<User | null>(null);
   const [hasCheckedAuth, setHasCheckedAuth] = useState<boolean>(false);

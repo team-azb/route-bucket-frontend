@@ -56,7 +56,7 @@ export default function Polylines(props: PolylineProps) {
     props.setZoomSize(event.target._zoom);
   });
 
-  let polylines = props.route.segments.map((segment, idx) => {
+  const polylines = props.route.segments.map((segment, idx) => {
     return polylineGenerator(segment, idx, props);
   });
 

@@ -11,6 +11,8 @@ const AuthenticationContext = createContext<authenticatedUserInfo>({
   hasCheckedAuth: false,
 });
 
+//TODO: React.FCを削除した時にlintのエラーも直す
+// eslint-disable-next-line react/prop-types
 export const AuthenticationProvider: React.FC = ({ children }) => {
   const [authenticatedUser, setAuthenticatedUser] = useState<User | null>(null);
   const [hasCheckedAuth, sethasCheckedAuth] = useState<boolean>(false);
