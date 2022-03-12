@@ -21,6 +21,13 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "@typescript-eslint/explicit-module-boundary-types": "off"
+        "@typescript-eslint/explicit-module-boundary-types": "off",
+        "react/react-in-jsx-scope": "off",
+        "@typescript-eslint/triple-slash-reference": "off"
+    },
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
     }
 }
