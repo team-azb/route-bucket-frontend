@@ -9,7 +9,7 @@ jobs:
         id: nodenv
       - uses: actions/setup-node@v1
         with:
-          node-version: '${{ steps.nodenv.outputs.node-version }}'
+          node-version: "${{ steps.nodenv.outputs.node-version }}"
       - name: Install node packeages
         run: npm install
       - name: Check format
