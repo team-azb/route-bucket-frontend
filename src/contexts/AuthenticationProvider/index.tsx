@@ -40,7 +40,7 @@ export const AuthenticationInfoProvider = ({
   const getIdToken = useCallback(() => {
     return authenticatedUser?.getIdToken();
   }, [authenticatedUser]);
-  
+
   return (
     <AuthenticationInfoContext.Provider
       value={{
