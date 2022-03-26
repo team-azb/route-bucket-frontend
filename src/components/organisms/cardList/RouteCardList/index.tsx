@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { searchRoutes } from "../../../../api/routes";
 import { RouteInfo } from "../../../../types";
 import RouteCard from "../../RouteCard";
@@ -15,20 +15,19 @@ type RouteCardListProps = {
 const RouteCardList = ({ userId }: RouteCardListProps) => {
   const [routes, setRoutes] = useState<RouteInfo[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [pageStartIdx, pageEndIdx, numberOfPages] = useMemo(() => {
-    return [
-      (currentPage - 1) * PAGE_SIZE,
-      currentPage * PAGE_SIZE,
-      Math.ceil(routes.length / PAGE_SIZE),
-    ];
-  }, [currentPage, routes]);
+  const [numberOfPages, setNumberOfPages] = useState<number>(0);
 
   useEffect(() => {
     (async () => {
-      const { routes } = await searchRoutes(userId);
+      const { routes, result_num } = await searchRoutes({
+        ownerId: userId,
+        pageOffset: currentPage - 1,
+        pageSize: PAGE_SIZE,
+      });
       setRoutes(routes);
+      setNumberOfPages(Math.ceil(result_num / PAGE_SIZE));
     })();
-  }, [userId]);
+  }, [userId, currentPage]);
 
   const changePageHandler = useCallback(
     (_event: React.ChangeEvent<unknown>, page: number) => {
@@ -39,7 +38,7 @@ const RouteCardList = ({ userId }: RouteCardListProps) => {
 
   return (
     <div className={styles.container}>
-      {routes.slice(pageStartIdx, pageEndIdx).map((route) => {
+      {routes.map((route) => {
         return <RouteCard route={route} key={route.id} />;
       })}
       <Stack direction="row" justifyContent="center">

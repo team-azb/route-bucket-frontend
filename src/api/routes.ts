@@ -16,6 +16,7 @@ interface PatchResponseBody extends RouteGeometry {}
 
 interface RoutesResponseBody {
   routes: RouteInfo[];
+  result_num: number;
 }
 
 interface RouteResponseBody extends Route {}
@@ -37,6 +38,12 @@ interface RenameRequestBody {
 
 type PostRouteResponseBody = {
   id: string;
+};
+
+type SearchRequestBody = {
+  ownerId?: string;
+  pageOffset?: number;
+  pageSize?: number;
 };
 
 export async function getRoute(routeId: string) {
@@ -216,10 +223,16 @@ export async function deleteRoute(id: string, token?: string) {
   }
 }
 
-export const searchRoutes = async (userId: string) => {
+export const searchRoutes = async ({
+  ownerId,
+  pageOffset,
+  pageSize,
+}: SearchRequestBody) => {
   const { data } = await axios.get<RoutesResponseBody>(`/routes/search`, {
     params: {
-      owner_id: userId,
+      owner_id: ownerId,
+      page_offset: pageOffset,
+      page_size: pageSize,
     },
   });
   return data;
