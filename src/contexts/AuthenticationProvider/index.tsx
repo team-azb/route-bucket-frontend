@@ -36,7 +36,7 @@ export const AuthenticationProvider = ({
   );
 };
 
-export const useSignedInUserInfoContext = () => {
-  const signedInUser = useContext(AuthenticationContext);
-  return signedInUser;
+export const useAuthenticatedUserInfoContext = () => {
+  const authenticatedUserInfo = useContext(AuthenticationContext);
+  return authenticatedUserInfo;
 };

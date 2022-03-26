@@ -4,7 +4,7 @@ import { UserInfo, ValidationMessages } from "../../../../types";
 import IconImageUpload from "../IconImageUpload";
 import FormField from "../../../atoms/FormField";
 import InputWithError from "../../../molecules/InputWithError";
-import { useSignedInUserInfoContext } from "../../../../contexts/AuthenticationProvider";
+import { useAuthenticatedUserInfoContext } from "../../../../contexts/AuthenticationProvider";
 import { Fields, Form, isUnableToSend, validateAndGetMessages } from "./helper";
 import { updateUser } from "../../../../api/users";
 import styles from "./style.module.css";
@@ -28,7 +28,7 @@ const BasicInformationUpdateForm = ({
   const previewUrl = useMemo(() => {
     return previewFile ? URL.createObjectURL(previewFile) : userInfo.icon_url;
   }, [previewFile, userInfo.icon_url]);
-  const { authenticatedUser } = useSignedInUserInfoContext();
+  const { authenticatedUser } = useAuthenticatedUserInfoContext();
   const history = useHistory();
 
   const asyncUpdatgeValidationMessages = async (

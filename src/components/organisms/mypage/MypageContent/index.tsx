@@ -1,13 +1,13 @@
 import React, { useCallback, useMemo, useState } from "react";
 import BasicInformation from "../BasicInformation";
-import { useSignedInUserInfoContext } from "../../../../contexts/AuthenticationProvider";
+import { useAuthenticatedUserInfoContext } from "../../../../contexts/AuthenticationProvider";
 import styles from "./style.module.css";
 import { useUserInfo } from "../../../../contexts/UserInfoProvider";
 import BasicInformationUpdateForm from "../BasicInformationUpdateForm";
 
 const MypageContent = () => {
   const userInfo = useUserInfo();
-  const { authenticatedUser } = useSignedInUserInfoContext();
+  const { authenticatedUser } = useAuthenticatedUserInfoContext();
   const [isEditingMode, setIsEditingMode] = useState(false);
 
   const changeEditingModeHandler = useCallback((isActive: boolean) => {

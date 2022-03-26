@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { useSignedInUserInfoContext } from "../../../contexts/AuthenticationProvider";
+import { useAuthenticatedUserInfoContext } from "../../../contexts/AuthenticationProvider";
 import { Link } from "react-router-dom";
 import LoadingDisplay from "../../atoms/LoadingDisplay";
 import { pagePaths } from "../../../consts/uriComponents";
@@ -21,7 +21,8 @@ const redirectMessage = (
 );
 
 const SignInRequiredTemplate = ({ children }: SignInRequiredTemplateProps) => {
-  const { authenticatedUser, hasCheckedAuth } = useSignedInUserInfoContext();
+  const { authenticatedUser, hasCheckedAuth } =
+    useAuthenticatedUserInfoContext();
 
   const displayedContent = useMemo(() => {
     if (!hasCheckedAuth) {
