@@ -4,11 +4,11 @@ import { RouteInfo } from "../../../../types";
 import RouteCard from "../../RouteCard";
 import styles from "./style.module.css";
 
-type EouteCardListProps = {
+type RouteCardListProps = {
   userId: string;
 };
 
-const EouteCardList = ({ userId }: EouteCardListProps) => {
+const RouteCardList = ({ userId }: RouteCardListProps) => {
   const [routes, setRoutes] = useState<RouteInfo[]>([]);
 
   useEffect(() => {
@@ -27,4 +27,4 @@ const EouteCardList = ({ userId }: EouteCardListProps) => {
   );
 };
 
-export default EouteCardList;
+export default RouteCardList;
