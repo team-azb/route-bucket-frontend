@@ -5,7 +5,7 @@ import IconImageUpload from "../IconImageUpload";
 import FormField from "../../../atoms/FormField";
 import InputWithError from "../../../molecules/InputWithError";
 import { useAuthenticatedUserInfoContext } from "../../../../contexts/AuthenticationProvider";
-import { Fields, Form, isUnableToSend, validateAndGetMessages } from "./helper";
+import { Fields, Form, isInvalidForm, validateAndGetMessages } from "./helper";
 import { updateUser } from "../../../../api/users";
 import styles from "./style.module.css";
 import { toast } from "react-toastify";
@@ -123,7 +123,7 @@ const BasicInformationUpdateForm = ({
             />
           </FormField>
           <button
-            disabled={isUnableToSend(userInfoForm, validatonMessages)}
+            disabled={isInvalidForm(userInfoForm, validatonMessages)}
             className={styles.submitButton}
             onClick={submitFormHandler}
           >

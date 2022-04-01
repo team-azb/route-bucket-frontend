@@ -40,7 +40,7 @@ export const validateAndGetMessages = async (
   }
 };
 
-export const isUnableToSend = (
+export const isInvalidForm = (
   form: Form,
   validatonMessages: ValidationMessages
 ) => {

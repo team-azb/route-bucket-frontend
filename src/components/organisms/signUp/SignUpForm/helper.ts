@@ -130,7 +130,7 @@ export const form2payload = (form: Form) => {
   return payload as CreateUserRequestBody;
 };
 
-export const isUnableToSend = (
+export const isInvalidForm = (
   form: Form,
   validatonMessages: ValidationMessages
 ) => {

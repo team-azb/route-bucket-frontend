@@ -17,7 +17,7 @@ import {
   Form,
   form2payload,
   initialFormValue,
-  isUnableToSend,
+  isInvalidForm,
   Fields,
   validateAndGetMessages,
 } from "./helper";
@@ -162,7 +162,7 @@ const SignUpForm = () => {
         </FormField>
         <FormField className={styles.buttonWrapper}>
           <SubmitButton
-            disabled={isUnableToSend(form, validatonMessages)}
+            disabled={isInvalidForm(form, validatonMessages)}
             onClick={sendFormHandler}
           >
             サインアップ
