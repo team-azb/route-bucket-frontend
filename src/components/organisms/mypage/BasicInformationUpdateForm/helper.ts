@@ -11,7 +11,7 @@ export type Form = {
   [field in Fields]: string;
 };
 
-export const validateAndGetMessages = async (
+export const validateBasicInfoFormAndGetMessages = async (
   fieldName: Fields,
   value: string
 ): Promise<ValidationMessages> => {

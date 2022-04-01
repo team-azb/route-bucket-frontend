@@ -2,6 +2,7 @@ import { CreateUserRequestBody } from "../../../../api/auth";
 import { validateUserInfo } from "../../../../api/users";
 import { errorCode2ErrorMessage } from "../../../../helpers/form";
 import { Gender, ValidationMessages } from "../../../../types";
+import { Fields as BasicInfoFormFields } from "../../mypage/BasicInformationUpdateForm/helper";
 
 enum RequiredFields {
   ID = "id",
@@ -46,8 +47,8 @@ const passwordConfimationErrorMessage = (
   return password === confirmation ? "" : "パスワードと不一致";
 };
 
-export const validateAndGetMessages = async (
-  fieldName: Fields,
+export const validateSignUpFormAndGetMessages = async (
+  fieldName: Fields | BasicInfoFormFields,
   value: string,
   prevForm: Form
 ): Promise<ValidationMessages> => {

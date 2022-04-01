@@ -5,7 +5,12 @@ import IconImageUpload from "../IconImageUpload";
 import FormField from "../../../atoms/FormField";
 import InputWithError from "../../../molecules/InputWithError";
 import { useAuthenticatedUserInfoContext } from "../../../../contexts/AuthenticationProvider";
-import { Fields, Form, isInvalidForm, validateAndGetMessages } from "./helper";
+import {
+  Fields,
+  Form,
+  isInvalidForm,
+  validateBasicInfoFormAndGetMessages,
+} from "./helper";
 import { updateUser } from "../../../../api/users";
 import styles from "./style.module.css";
 import { toast } from "react-toastify";
@@ -35,7 +40,7 @@ const BasicInformationUpdateForm = ({
     fieldName: Fields,
     value: string
   ) => {
-    const result = await validateAndGetMessages(fieldName, value);
+    const result = await validateBasicInfoFormAndGetMessages(fieldName, value);
     setValidatonMessages((prevState) => {
       return {
         ...prevState,
