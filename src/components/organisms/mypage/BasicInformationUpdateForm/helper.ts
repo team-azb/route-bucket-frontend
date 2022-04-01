@@ -16,7 +16,7 @@ export const validateAndGetMessages = async (
   value: string
 ): Promise<ValidationMessages> => {
   switch (fieldName) {
-    case Fields.NAME:
+    case Fields.NAME: {
       const { name } = await validateUserInfo({ [fieldName]: value });
       return {
         [Fields.NAME]: errorCode2ErrorMessage(
@@ -24,7 +24,8 @@ export const validateAndGetMessages = async (
           "ニックネームは1文字以上50文字以下"
         ),
       };
-    case Fields.BIRTHDATE:
+    }
+    case Fields.BIRTHDATE: {
       const { birthdate } = await validateUserInfo({ [fieldName]: value });
       return {
         [Fields.BIRTHDATE]: errorCode2ErrorMessage(
@@ -32,6 +33,8 @@ export const validateAndGetMessages = async (
           "生年月日が不適切です"
         ),
       };
+    }
+
     default:
       return {};
   }

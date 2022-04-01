@@ -78,14 +78,22 @@ function segments2data(segments: Segment[]) {
       });
     })
     .flat()
-    .filter((pos) => pos.elevation);
+    .filter((pos) => pos.elevation) as pointsData[];
 }
+
+type pointsData = {
+  idx: number;
+  latitude: number;
+  longitude: number;
+  elevation?: number | undefined;
+  distance_from_start?: number | undefined;
+};
 
 export default function ElevationGraph(props: ElevationGraphProp) {
   /**
    * rechartsにdataとして渡す配列
    */
-  const pointsData = useMemo<any[]>(() => {
+  const pointsData = useMemo<pointsData[]>(() => {
     return segments2data(props.segments);
   }, [props.segments]);
 

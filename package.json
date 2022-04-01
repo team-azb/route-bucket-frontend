@@ -94,7 +94,9 @@
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
     "format": "prettier --write 'src/**/*.tsx' 'src/**/*.ts' 'src/**/*.css'",
-    "mock": "npx prism mock swagger/openapi.yml -p 8080"
+    "format-check": "prettier --check 'src/**/*.tsx' 'src/**/*.ts' 'src/**/*.css'",
+    "mock": "npx prism mock swagger/openapi.yml -p 8080",
+    "lint": "eslint ./src --ext .ts,.tsx"
   },
   "proxy": "http://localhost:8080",
   "eslintConfig": {
@@ -121,7 +123,8 @@
     "@types/react-router-dom": "^5.1.7",
     "@types/recharts": "^2.0.0",
     "prettier": "^2.3.2",
-    "prism": "^4.1.2"
+    "prism": "^4.1.2",
+    "react-codemod": "^5.4.3"
   },
   "jest": {
     "roots": [

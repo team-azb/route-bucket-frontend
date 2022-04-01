@@ -20,6 +20,8 @@ const redirectMessage = (
   </div>
 );
 
+// TODO: React.FCを直す時にlintに怒られている箇所も治す
+// eslint-disable-next-line react/prop-types
 const SignInRequiredTemplate = ({ children }: SignInRequiredTemplateProps) => {
   const { authenticatedUser, hasCheckedAuth } =
     useAuthenticatedUserInfoContext();

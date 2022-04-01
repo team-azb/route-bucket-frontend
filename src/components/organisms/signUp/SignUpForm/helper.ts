@@ -52,7 +52,7 @@ export const validateAndGetMessages = async (
   prevForm: Form
 ): Promise<ValidationMessages> => {
   switch (fieldName) {
-    case RequiredFields.ID:
+    case RequiredFields.ID: {
       const { id } = await validateUserInfo({ [fieldName]: value });
       return {
         [RequiredFields.ID]: errorCode2ErrorMessage(
@@ -62,7 +62,8 @@ export const validateAndGetMessages = async (
           "そのidは使用できない文字列です"
         ),
       };
-    case RequiredFields.NAME:
+    }
+    case RequiredFields.NAME: {
       const { name } = await validateUserInfo({ [fieldName]: value });
       return {
         [RequiredFields.NAME]: errorCode2ErrorMessage(
@@ -70,7 +71,8 @@ export const validateAndGetMessages = async (
           "ニックネームは1文字以上50文字以下"
         ),
       };
-    case RequiredFields.EMAIL:
+    }
+    case RequiredFields.EMAIL: {
       const { email } = await validateUserInfo({ [fieldName]: value });
       return {
         [RequiredFields.EMAIL]: errorCode2ErrorMessage(
@@ -79,7 +81,8 @@ export const validateAndGetMessages = async (
           "すでに登録されているemail"
         ),
       };
-    case RequiredFields.PASSWORD:
+    }
+    case RequiredFields.PASSWORD: {
       const { password } = await validateUserInfo({ [fieldName]: value });
       return {
         [RequiredFields.PASSWORD]: errorCode2ErrorMessage(
@@ -91,6 +94,7 @@ export const validateAndGetMessages = async (
           prevForm.password_confirmation
         ),
       };
+    }
     case RequiredFields.PASSWORD_CONFIRMATION:
       return {
         [RequiredFields.PASSWORD_CONFIRMATION]: passwordConfimationErrorMessage(
@@ -98,7 +102,7 @@ export const validateAndGetMessages = async (
           value
         ),
       };
-    case OptionalFields.BIRTHDATE:
+    case OptionalFields.BIRTHDATE: {
       const { birthdate } = await validateUserInfo({ [fieldName]: value });
       return {
         [OptionalFields.BIRTHDATE]: errorCode2ErrorMessage(
@@ -106,6 +110,7 @@ export const validateAndGetMessages = async (
           "生年月日が不適切です"
         ),
       };
+    }
     default:
       return {};
   }
