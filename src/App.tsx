@@ -19,21 +19,27 @@ function App() {
       <SignedInUserInfoProvider>
         <Header />
         <Switch>
-          <Route exact path={pagePaths.top()} children={<Top />} />
-          <Route
-            exact
-            path={pagePaths.routeIndex()}
-            children={<RouteIndex />}
-          />
-          <Route exact path={pagePaths.signIn()} children={<SignIn />} />
-          <Route exact path={pagePaths.signUp()} children={<SignUp />} />
-          <Route path={pagePaths.routeEditor()} children={<RouteEditor />} />
-          <Route
-            exact
-            path={pagePaths.passwordReset()}
-            children={<PasswordReset />}
-          />
-          <Route path={pagePaths.mypage()} children={<Mypage />} />
+          <Route exact path={pagePaths.top()}>
+            <Top />
+          </Route>
+          <Route exact path={pagePaths.routeIndex()}>
+            <RouteIndex />
+          </Route>
+          <Route exact path={pagePaths.signIn()}>
+            <SignIn />
+          </Route>
+          <Route exact path={pagePaths.signUp()}>
+            <SignUp />
+          </Route>
+          <Route path={pagePaths.routeEditor()}>
+            <RouteEditor />
+          </Route>
+          <Route exact path={pagePaths.passwordReset()}>
+            <PasswordReset />
+          </Route>
+          <Route path={pagePaths.mypage()}>
+            <Mypage />
+          </Route>
         </Switch>
       </SignedInUserInfoProvider>
     </Router>

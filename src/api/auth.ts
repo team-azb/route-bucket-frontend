@@ -32,7 +32,7 @@ type CreateUserResponseBody = {
   id: string;
 };
 
-export interface User extends FirebaseUser {}
+export type User = FirebaseUser;
 
 export const signOut = async () => {
   const auth = getAuth();

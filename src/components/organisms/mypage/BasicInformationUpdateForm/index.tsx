@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useMemo, useState } from "react";
+import { ChangeEvent, useCallback, useMemo, useState } from "react";
 import { UserInfo } from "../../../../types";
 import IconImageUpload from "../IconImageUpload";
 import FormField from "../../../atoms/FormField";

@@ -128,7 +128,6 @@ const RouteEditor: FunctionComponent = () => {
       type: "GET",
       id: routeId,
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [routeId]);
 
   return (
