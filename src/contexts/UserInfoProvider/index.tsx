@@ -5,7 +5,6 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { useLocation } from "react-router-dom";
 import { UserInfo } from "../../types";
 import { getUser } from "../../api/users";
 import LoadingDisplay from "../../components/atoms/LoadingDisplay";
@@ -31,7 +30,6 @@ const UserInfoProvider = ({ children, userId }: UserInfoProviderProps) => {
     name: "",
   });
   const [status, setStatus] = useState<Status>("LOADING");
-  const location = useLocation();
 
   useEffect(() => {
     setStatus("LOADING");
@@ -50,7 +48,7 @@ const UserInfoProvider = ({ children, userId }: UserInfoProviderProps) => {
         toast.error("データの取得中にエラーが発生しました。");
       }
     })();
-  }, [userId, location]);
+  }, [userId]);
 
   const displayedElem = useMemo(() => {
     switch (status) {
