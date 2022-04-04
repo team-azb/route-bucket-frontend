@@ -8,9 +8,9 @@ const Top = () => {
   const signOutHandler = async () => {
     try {
       await signOut();
-      toast.success("サインアウト成功");
+      toast.success("サインアウトに成功しました。");
     } catch (error) {
-      toast.error("サインアウト失敗");
+      toast.error("サインアウトに失敗しました。");
     }
   };
 
@@ -19,17 +19,17 @@ const Top = () => {
       <h1>トップページ</h1>
       <ul>
         <li>
-          <Link to={pagePaths.ROUTE_INDEX}>
+          <Link to={pagePaths.routeIndex()}>
             <button>ルート一覧</button>
           </Link>
         </li>
         <li>
-          <Link to={pagePaths.SIGN_IN}>
+          <Link to={pagePaths.signIn()}>
             <button>サインイン</button>
           </Link>
         </li>
         <li>
-          <Link to={pagePaths.SIGN_UP}>
+          <Link to={pagePaths.signUp()}>
             <button>サインアップ</button>
           </Link>
         </li>

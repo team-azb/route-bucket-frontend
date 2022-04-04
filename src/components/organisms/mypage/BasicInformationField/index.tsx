@@ -17,7 +17,7 @@ const BasicInformationField = ({
     <div className={styles.container}>
       <FormLabel htmlFor={id}>{labelName}</FormLabel>
       <p className={styles.value} id={id}>
-        {fieldValue ? fieldValue : "未設定"}
+        {fieldValue || "未設定"}
       </p>
     </div>
   );

@@ -15,32 +15,36 @@ import {
   signInWithEmailAndPassword,
   sendEmailVerification,
 } from "../../../../api/auth";
-import { dynamicPathGenerator } from "../../../../consts/uriComponents";
+import { pagePaths } from "../../../../consts/uriComponents";
 import {
   Form,
   form2payload,
   initialFormValue,
-  isUnableToSend,
+  isInvalidForm,
   Fields,
-  validateAndGetMessages,
+  validateSignUpFormFieldAndGetMessages,
 } from "./helper";
 import styles from "./style.module.css";
 import { ValidationMessages } from "../../../../types";
 
 const SignUpForm = () => {
   const [form, setForm] = useState<Form>(initialFormValue);
-  const [validatonMessages, setValidatonMessages] =
+  const [validationMessages, setvalidationMessages] =
     useState<ValidationMessages>(initialFormValue);
   const [dialogFlag, setDialogFlag] = useState(false);
   const history = useHistory();
 
-  const asyncUpdatgeValidationMessages = async (
+  const asyncUpdateValidationMessages = async (
     fieldName: Fields,
     value: string,
     prevForm: Form
   ) => {
-    const result = await validateAndGetMessages(fieldName, value, prevForm);
-    setValidatonMessages((prevState) => {
+    const result = await validateSignUpFormFieldAndGetMessages(
+      fieldName,
+      value,
+      prevForm
+    );
+    setvalidationMessages((prevState) => {
       return {
         ...prevState,
         ...result,
@@ -51,7 +55,7 @@ const SignUpForm = () => {
   const changeFormHandler = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       setForm((prevForm) => {
-        asyncUpdatgeValidationMessages(
+        asyncUpdateValidationMessages(
           event.target.name as Fields,
           event.target.value,
           prevForm
@@ -83,10 +87,10 @@ const SignUpForm = () => {
       const user = await signInWithEmailAndPassword(form.email, form.password);
       await sendEmailVerification(user);
       setDialogFlag(false);
-      toast.success("サインイン成功");
-      history.push(dynamicPathGenerator.mypage(user.uid));
+      toast.success("サインインに成功しました。");
+      history.push(pagePaths.mypage(user.uid));
     } catch (error) {
-      toast.error("サインイン失敗");
+      toast.error("サインインに失敗しました。");
     }
   }, [form.email, form.password, history]);
 
@@ -106,7 +110,7 @@ const SignUpForm = () => {
             name="id"
             type="text"
             onChange={changeFormHandler}
-            errorMessage={validatonMessages.id}
+            errorMessage={validationMessages.id}
           />
         </FormField>
         <FormField className={styles.field}>
@@ -116,7 +120,7 @@ const SignUpForm = () => {
             name="name"
             type="text"
             onChange={changeFormHandler}
-            errorMessage={validatonMessages.name}
+            errorMessage={validationMessages.name}
           />
         </FormField>
         <FormField className={styles.field}>
@@ -126,7 +130,7 @@ const SignUpForm = () => {
             name="email"
             type="email"
             onChange={changeFormHandler}
-            errorMessage={validatonMessages.email}
+            errorMessage={validationMessages.email}
           />
         </FormField>
         <FormField className={styles.field}>
@@ -136,7 +140,7 @@ const SignUpForm = () => {
             name="password"
             type="password"
             onChange={changeFormHandler}
-            errorMessage={validatonMessages.password}
+            errorMessage={validationMessages.password}
           />
         </FormField>
         <FormField className={styles.field}>
@@ -146,7 +150,7 @@ const SignUpForm = () => {
             name="password_confirmation"
             type="password"
             onChange={changeFormHandler}
-            errorMessage={validatonMessages.password_confirmation}
+            errorMessage={validationMessages.password_confirmation}
           />
         </FormField>
         <FormField className={styles.field}>
@@ -160,12 +164,12 @@ const SignUpForm = () => {
             name="birthdate"
             type="date"
             onChange={changeFormHandler}
-            errorMessage={validatonMessages.birthdate}
+            errorMessage={validationMessages.birthdate}
           />
         </FormField>
         <FormField className={styles.buttonWrapper}>
           <SubmitButton
-            disabled={isUnableToSend(form, validatonMessages)}
+            disabled={isInvalidForm(form, validationMessages)}
             onClick={sendFormHandler}
           >
             サインアップ

@@ -1,29 +1,34 @@
-import React, { ChangeEvent, useCallback, useMemo, useState } from "react";
+import { ChangeEvent, useCallback, useMemo, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { UserInfo, ValidationMessages } from "../../../../types";
 import IconImageUpload from "../IconImageUpload";
 import FormField from "../../../atoms/form/FormField";
-import FormLabel from "../../../atoms/form/FormLabel";
 import InputWithError from "../../../molecules/InputWithError";
 import { useAuthenticationInfoContext } from "../../../../contexts/AuthenticationProvider";
-import { Fields, Form, isUnableToSend, validateAndGetMessages } from "./helper";
+import {
+  Fields,
+  Form,
+  isInvalidForm,
+  validateBasicInfoFormFieldAndGetMessages,
+} from "./helper";
 import { updateUser } from "../../../../api/users";
 import styles from "./style.module.css";
 import { toast } from "react-toastify";
-import { dynamicPathGenerator } from "../../../../consts/uriComponents";
+import { pagePaths } from "../../../../consts/uriComponents";
 import { uploadUserIconAndGetUrl } from "../../../../api/storage";
+import FormLabel from "../../../atoms/form/FormLabel";
 
-type BasicInformationFormProps = {
-  exitEditModeHandler: () => void;
+type BasicInformationUpdateFormProps = {
+  exitEditingModeHandler: () => void;
   userInfo: UserInfo;
 };
 
-const BasicInformationForm = ({
-  exitEditModeHandler,
+const BasicInformationUpdateForm = ({
+  exitEditingModeHandler,
   userInfo,
-}: BasicInformationFormProps) => {
+}: BasicInformationUpdateFormProps) => {
   const [userInfoForm, setUserInfoForm] = useState<Form>(userInfo as Form);
-  const [validatonMessages, setValidatonMessages] =
+  const [validationMessages, setvalidationMessages] =
     useState<ValidationMessages>({});
   const [previewFile, setPreviewFile] = useState<File>();
   const previewUrl = useMemo(() => {
@@ -36,8 +41,11 @@ const BasicInformationForm = ({
     fieldName: Fields,
     value: string
   ) => {
-    const result = await validateAndGetMessages(fieldName, value);
-    setValidatonMessages((prevState) => {
+    const result = await validateBasicInfoFormFieldAndGetMessages(
+      fieldName,
+      value
+    );
+    setvalidationMessages((prevState) => {
       return {
         ...prevState,
         ...result,
@@ -78,15 +86,23 @@ const BasicInformationForm = ({
           ...userInfoForm,
           icon_url: iconUrl,
         });
-        toast.success("ユーザー情報の更新に成功");
-        history.push(dynamicPathGenerator.mypage(userInfo.id));
+        toast.success("ユーザー情報の更新に成功しました。");
+        exitEditingModeHandler();
+        history.push(pagePaths.mypage(userInfo.id));
       } catch (error) {
-        toast.error("ユーザー情報の更新に失敗");
+        toast.error("ユーザー情報の更新に失敗しました。");
       }
     } else {
-      toast.error("ユーザートークンの取得に失敗");
+      toast.error("ユーザートークンの取得に失敗しました。");
     }
-  }, [authenticatedUser, previewFile, userInfo.id, userInfoForm, history]);
+  }, [
+    authenticatedUser,
+    previewFile,
+    userInfo.id,
+    userInfoForm,
+    exitEditingModeHandler,
+    history,
+  ]);
 
   return (
     <div className={styles.container}>
@@ -101,7 +117,7 @@ const BasicInformationForm = ({
               type="text"
               value={userInfoForm.name}
               onChange={changeFormHandler}
-              errorMessage={validatonMessages?.name}
+              errorMessage={validationMessages?.name}
             />
           </FormField>
           <FormField className={styles.field}>
@@ -112,17 +128,17 @@ const BasicInformationForm = ({
               type="date"
               value={userInfoForm.birthdate}
               onChange={changeFormHandler}
-              errorMessage={validatonMessages?.birthdate}
+              errorMessage={validationMessages?.birthdate}
             />
           </FormField>
           <button
-            disabled={isUnableToSend(userInfoForm, validatonMessages)}
+            disabled={isInvalidForm(userInfoForm, validationMessages)}
             className={styles.submitButton}
             onClick={submitFormHandler}
           >
             更新
           </button>
-          <button className={styles.button} onClick={exitEditModeHandler}>
+          <button className={styles.button} onClick={exitEditingModeHandler}>
             キャンセル
           </button>
         </div>
@@ -131,4 +147,4 @@ const BasicInformationForm = ({
   );
 };
 
-export default BasicInformationForm;
+export default BasicInformationUpdateForm;

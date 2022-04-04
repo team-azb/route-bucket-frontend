@@ -10,6 +10,8 @@ import { UserInfo } from "../../types";
 import { getUser } from "../../api/users";
 import LoadingDisplay from "../../components/atoms/LoadingDisplay";
 import NotFoundContent from "../../components/organisms/mypage/NotFoundContent";
+import { STATUS_CODES } from "../../consts/statusCodes";
+import { toast } from "react-toastify";
 
 type UserInfoProviderProps = {
   children?: React.ReactNode;
@@ -36,10 +38,16 @@ const UserInfoProvider = ({ children, userId }: UserInfoProviderProps) => {
     (async function () {
       try {
         const res = await getUser(userId);
-        res?.data && setUserInfo(res?.data);
-        setStatus("FOUND");
+        if (res.status === STATUS_CODES.OK) {
+          res?.data && setUserInfo(res?.data);
+          setStatus("FOUND");
+        } else if (res.status === STATUS_CODES.STATUS_NOT_FOUND) {
+          setStatus("NOT_FOUND");
+        } else {
+          toast.error("データの取得中にエラーが発生しました。");
+        }
       } catch (error) {
-        setStatus("NOT_FOUND");
+        toast.error("データの取得中にエラーが発生しました。");
       }
     })();
   }, [userId, location]);

@@ -1,5 +1,7 @@
-import { validateUserInfo } from "../../../../api/users";
-import { errorCode2ErrorMessage } from "../../../../helpers/form";
+import {
+  validateUserInfo,
+  usersRespErrCode2ErrMsg,
+} from "../../../../api/users";
 import { ValidationMessages } from "../../../../types";
 
 export enum Fields {
@@ -11,45 +13,45 @@ export type Form = {
   [field in Fields]: string;
 };
 
-export const validateAndGetMessages = async (
+export const validateBasicInfoFormFieldAndGetMessages = async (
   fieldName: Fields,
   value: string
 ): Promise<ValidationMessages> => {
   switch (fieldName) {
-    case Fields.NAME:
+    case Fields.NAME: {
       const { name } = await validateUserInfo({ [fieldName]: value });
       return {
-        [Fields.NAME]: errorCode2ErrorMessage(
+        [Fields.NAME]: usersRespErrCode2ErrMsg(
           name,
           "ニックネームは1文字以上50文字以下"
         ),
       };
-    case Fields.BIRTHDATE:
+    }
+    case Fields.BIRTHDATE: {
       const { birthdate } = await validateUserInfo({ [fieldName]: value });
       return {
-        [Fields.BIRTHDATE]: errorCode2ErrorMessage(
+        [Fields.BIRTHDATE]: usersRespErrCode2ErrMsg(
           birthdate,
           "生年月日が不適切です"
         ),
       };
+    }
+
     default:
       return {};
   }
 };
 
-export const isUnableToSend = (
+export const isInvalidForm = (
   form: Form,
-  validatonMessages: ValidationMessages
+  validationMessages: ValidationMessages
 ) => {
   const hasEmptyField = Object.values(Fields).some((key) => {
     return form[key] === "";
   });
 
-  if (!hasEmptyField) {
-    return Object.keys(validatonMessages).some((key) => {
-      return validatonMessages[key as Fields] !== "";
-    });
-  } else {
-    return true;
-  }
+  return (
+    hasEmptyField ||
+    Object.values(validationMessages).some((value) => value !== "")
+  );
 };

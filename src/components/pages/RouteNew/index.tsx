@@ -12,7 +12,7 @@ import styles from "./style.module.css";
 import { postRoute } from "../../../api/routes";
 import { useAuthenticationInfoContext } from "../../../contexts/AuthenticationProvider";
 import { useHistory } from "react-router-dom";
-import { dynamicPathGenerator } from "../../../consts/uriComponents";
+import { pagePaths } from "../../../consts/uriComponents";
 import { toast } from "react-toastify";
 
 const RouteNew = () => {
@@ -34,7 +34,7 @@ const RouteNew = () => {
           if (token) {
             const { id } = await postRoute(nameInput, token);
             toast.success("ルートを作成しました。");
-            history.push(dynamicPathGenerator.routeEditor(id));
+            history.push(pagePaths.routeEditor(id));
           }
         } catch (error) {
           toast.success("ルートの作成に失敗しました。");

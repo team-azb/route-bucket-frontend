@@ -1,3 +1,5 @@
+[![CI](https://github.com/team-azb/route-bucket-frontend/actions/workflows/ci.yml/badge.svg)](https://github.com/team-azb/route-bucket-frontend/actions/workflows/ci.yml)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

@@ -20,18 +20,30 @@ function App() {
       <AuthenticationInfoProvider>
         <Header />
         <Switch>
-          <Route exact path={pagePaths.TOP} children={<Top />} />
-          <Route exact path={pagePaths.ROUTE_INDEX} children={<RouteIndex />} />
-          <Route exact path={pagePaths.SIGN_IN} children={<SignIn />} />
-          <Route exact path={pagePaths.SIGN_UP} children={<SignUp />} />
-          <Route exact path={pagePaths.ROUTE_NEW} children={<RouteNew />} />
-          <Route path={pagePaths.ROUTE_EDITOR} children={<RouteEditor />} />
-          <Route
-            exact
-            path={pagePaths.PASSWORD_RESET}
-            children={<PasswordReset />}
-          />
-          <Route path={pagePaths.MYPAGE} children={<Mypage />} />
+          <Route exact path={pagePaths.top()}>
+            <Top />
+          </Route>
+          <Route exact path={pagePaths.routeIndex()}>
+            <RouteIndex />
+          </Route>
+          <Route exact path={pagePaths.signIn()}>
+            <SignIn />
+          </Route>
+          <Route exact path={pagePaths.signUp()}>
+            <SignUp />
+          </Route>
+          <Route exact path={pagePaths.routeNew()}>
+            <RouteNew />
+          </Route>
+          <Route path={pagePaths.routeEditor()}>
+            <RouteEditor />
+          </Route>
+          <Route exact path={pagePaths.passwordReset()}>
+            <PasswordReset />
+          </Route>
+          <Route path={pagePaths.mypage()}>
+            <Mypage />
+          </Route>
         </Switch>
       </AuthenticationInfoProvider>
     </Router>

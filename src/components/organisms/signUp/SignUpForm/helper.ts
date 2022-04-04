@@ -1,6 +1,8 @@
 import { CreateUserRequestBody } from "../../../../api/auth";
-import { validateUserInfo } from "../../../../api/users";
-import { errorCode2ErrorMessage } from "../../../../helpers/form";
+import {
+  validateUserInfo,
+  usersRespErrCode2ErrMsg,
+} from "../../../../api/users";
 import { Gender, ValidationMessages } from "../../../../types";
 
 enum RequiredFields {
@@ -46,43 +48,46 @@ const passwordConfimationErrorMessage = (
   return password === confirmation ? "" : "パスワードと不一致";
 };
 
-export const validateAndGetMessages = async (
+export const validateSignUpFormFieldAndGetMessages = async (
   fieldName: Fields,
   value: string,
   prevForm: Form
 ): Promise<ValidationMessages> => {
   switch (fieldName) {
-    case RequiredFields.ID:
+    case RequiredFields.ID: {
       const { id } = await validateUserInfo({ [fieldName]: value });
       return {
-        [RequiredFields.ID]: errorCode2ErrorMessage(
+        [RequiredFields.ID]: usersRespErrCode2ErrMsg(
           id,
           "ユーザーIDのパターンと不一致",
           "すでに登録されているid",
           "そのidは使用できない文字列です"
         ),
       };
-    case RequiredFields.NAME:
+    }
+    case RequiredFields.NAME: {
       const { name } = await validateUserInfo({ [fieldName]: value });
       return {
-        [RequiredFields.NAME]: errorCode2ErrorMessage(
+        [RequiredFields.NAME]: usersRespErrCode2ErrMsg(
           name,
           "ニックネームは1文字以上50文字以下"
         ),
       };
-    case RequiredFields.EMAIL:
+    }
+    case RequiredFields.EMAIL: {
       const { email } = await validateUserInfo({ [fieldName]: value });
       return {
-        [RequiredFields.EMAIL]: errorCode2ErrorMessage(
+        [RequiredFields.EMAIL]: usersRespErrCode2ErrMsg(
           email,
           "不適切なemailの形式",
           "すでに登録されているemail"
         ),
       };
-    case RequiredFields.PASSWORD:
+    }
+    case RequiredFields.PASSWORD: {
       const { password } = await validateUserInfo({ [fieldName]: value });
       return {
-        [RequiredFields.PASSWORD]: errorCode2ErrorMessage(
+        [RequiredFields.PASSWORD]: usersRespErrCode2ErrMsg(
           password,
           "パスワードは6文字以上"
         ),
@@ -91,6 +96,7 @@ export const validateAndGetMessages = async (
           prevForm.password_confirmation
         ),
       };
+    }
     case RequiredFields.PASSWORD_CONFIRMATION:
       return {
         [RequiredFields.PASSWORD_CONFIRMATION]: passwordConfimationErrorMessage(
@@ -98,14 +104,15 @@ export const validateAndGetMessages = async (
           value
         ),
       };
-    case OptionalFields.BIRTHDATE:
+    case OptionalFields.BIRTHDATE: {
       const { birthdate } = await validateUserInfo({ [fieldName]: value });
       return {
-        [OptionalFields.BIRTHDATE]: errorCode2ErrorMessage(
+        [OptionalFields.BIRTHDATE]: usersRespErrCode2ErrMsg(
           birthdate,
           "生年月日が不適切です"
         ),
       };
+    }
     default:
       return {};
   }
@@ -125,19 +132,16 @@ export const form2payload = (form: Form) => {
   return payload as CreateUserRequestBody;
 };
 
-export const isUnableToSend = (
+export const isInvalidForm = (
   form: Form,
-  validatonMessages: ValidationMessages
+  validationMessages: ValidationMessages
 ) => {
   const hasEmptyField = Object.values(RequiredFields).some((key) => {
     return form[key] === "";
   });
 
-  if (!hasEmptyField) {
-    return Object.keys(validatonMessages).some((key) => {
-      return validatonMessages[key as OptionalFields] !== "";
-    });
-  } else {
-    return true;
-  }
+  return (
+    hasEmptyField ||
+    Object.values(validationMessages).some((value) => value !== "")
+  );
 };
