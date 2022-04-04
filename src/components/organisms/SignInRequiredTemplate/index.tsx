@@ -1,9 +1,13 @@
 import React, { useMemo } from "react";
-import { useSignedInUserInfoContext } from "../../../contexts/signedInUserContext";
+import { useAuthenticatedUserInfoContext } from "../../../contexts/AuthenticationProvider";
 import { Link } from "react-router-dom";
 import LoadingDisplay from "../../atoms/LoadingDisplay";
 import { pagePaths } from "../../../consts/uriComponents";
 import styles from "./style.module.css";
+
+type SignInRequiredTemplateProps = {
+  children?: React.ReactNode;
+};
 
 const redirectMessage = (
   <div className={styles.container}>
@@ -18,18 +22,19 @@ const redirectMessage = (
 
 // TODO: React.FCを直す時にlintに怒られている箇所も治す
 // eslint-disable-next-line react/prop-types
-const SignInRequiredTemplate: React.FC = ({ children }) => {
-  const { signedInUser, hasCheckedAuth } = useSignedInUserInfoContext();
+const SignInRequiredTemplate = ({ children }: SignInRequiredTemplateProps) => {
+  const { authenticatedUser, hasCheckedAuth } =
+    useAuthenticatedUserInfoContext();
 
   const displayedContent = useMemo(() => {
     if (!hasCheckedAuth) {
       return <LoadingDisplay message="認証中です" />;
-    } else if (!signedInUser) {
+    } else if (!authenticatedUser) {
       return redirectMessage;
     } else {
       return children;
     }
-  }, [hasCheckedAuth, signedInUser, children]);
+  }, [hasCheckedAuth, authenticatedUser, children]);
 
   return <>{displayedContent}</>;
 };

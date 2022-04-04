@@ -1,9 +1,15 @@
-import React, { createContext, useEffect, useMemo, useState } from "react";
-import { UserInfo } from "../../../../types";
-import { getUser } from "../../../../api/users";
-import LoadingDisplay from "../../../atoms/LoadingDisplay";
-import NotFoundContent from "../NotFoundContent";
-import { STATUS_CODES } from "../../../../consts/statusCodes";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { UserInfo } from "../../types";
+import { getUser } from "../../api/users";
+import LoadingDisplay from "../../components/atoms/LoadingDisplay";
+import NotFoundContent from "../../components/organisms/mypage/NotFoundContent";
+import { STATUS_CODES } from "../../consts/statusCodes";
 import { toast } from "react-toastify";
 
 type UserInfoProviderProps = {
@@ -13,7 +19,7 @@ type UserInfoProviderProps = {
 
 type Status = "LOADING" | "NOT_FOUND" | "FOUND";
 
-export const UserInfoContext = createContext<UserInfo>({
+const UserInfoContext = createContext<UserInfo>({
   id: "",
   name: "",
 });
@@ -60,6 +66,11 @@ const UserInfoProvider = ({ children, userId }: UserInfoProviderProps) => {
   }, [children, status, userInfo]);
 
   return <>{displayedElem}</>;
+};
+
+export const useUserInfo = () => {
+  const userInfo = useContext(UserInfoContext);
+  return userInfo;
 };
 
 export default React.memo(UserInfoProvider);

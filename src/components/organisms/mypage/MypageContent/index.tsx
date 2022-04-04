@@ -1,13 +1,13 @@
-import React, { useCallback, useContext, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import BasicInformation from "../BasicInformation";
-import { useSignedInUserInfoContext } from "../../../../contexts/signedInUserContext";
+import { useAuthenticatedUserInfoContext } from "../../../../contexts/AuthenticationProvider";
 import styles from "./style.module.css";
-import { UserInfoContext } from "../UserInfoProvider";
+import { useUserInfo } from "../../../../contexts/UserInfoProvider";
 import BasicInformationUpdateForm from "../BasicInformationUpdateForm";
 
 const MypageContent = () => {
-  const userInfo = useContext(UserInfoContext);
-  const { signedInUser } = useSignedInUserInfoContext();
+  const userInfo = useUserInfo();
+  const { authenticatedUser } = useAuthenticatedUserInfoContext();
   const [isEditingMode, setIsEditingMode] = useState(false);
 
   const changeEditingModeHandler = useCallback((isActive: boolean) => {
@@ -44,10 +44,13 @@ const MypageContent = () => {
           </button>
         </div>
         <hr />
-        <BasicInformation userInfo={userInfo} email={signedInUser?.email} />
+        <BasicInformation
+          userInfo={userInfo}
+          email={authenticatedUser?.email}
+        />
       </>
     );
-  }, [userInfo, changeEditingModeHandler, signedInUser?.email]);
+  }, [userInfo, changeEditingModeHandler, authenticatedUser?.email]);
 
   return (
     <div className={styles.container}>

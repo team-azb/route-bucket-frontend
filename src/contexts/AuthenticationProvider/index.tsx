@@ -1,6 +1,10 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { onAuthStateChanged, User } from "../../api/auth";
 
+type AuthenticationProviderProps = {
+  children?: React.ReactNode;
+};
+
 type authenticatedUserInfo = {
   authenticatedUser: User | null;
   hasCheckedAuth: boolean;
@@ -11,9 +15,9 @@ const AuthenticationContext = createContext<authenticatedUserInfo>({
   hasCheckedAuth: false,
 });
 
-//TODO: React.FCを削除した時にlintのエラーも直す
-// eslint-disable-next-line react/prop-types
-export const AuthenticationProvider: React.FC = ({ children }) => {
+export const AuthenticationProvider = ({
+  children,
+}: AuthenticationProviderProps) => {
   const [authenticatedUser, setAuthenticatedUser] = useState<User | null>(null);
   const [hasCheckedAuth, sethasCheckedAuth] = useState<boolean>(false);
   useEffect(() => {
@@ -32,7 +36,7 @@ export const AuthenticationProvider: React.FC = ({ children }) => {
   );
 };
 
-export const useSignedInUserInfoContext = () => {
-  const signedInUser = useContext(AuthenticationContext);
-  return signedInUser;
+export const useAuthenticatedUserInfoContext = () => {
+  const authenticatedUserInfo = useContext(AuthenticationContext);
+  return authenticatedUserInfo;
 };

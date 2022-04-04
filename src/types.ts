@@ -57,3 +57,39 @@ export type UserInfo = {
   birthdate?: string;
   icon_url?: string;
 };
+
+export type ValidationFields = {
+  id?: string;
+  name?: string;
+  email?: string;
+  gender?: Gender;
+  birthdate?: string;
+  icon_url?: string;
+  password?: string;
+};
+
+export type ValidationErrorCode =
+  | "INVALID_FORMAT"
+  | "ALREADY_EXISTS"
+  | "RESERVED_WORD";
+
+export type ValidationMessages = {
+  id?: string;
+  name?: string;
+  email?: string;
+  gender?: string;
+  birthdate?: string;
+  icon_url?: string;
+  password?: string;
+  password_confirmation?: string;
+};
+
+export type ValidationResponse = {
+  id?: ValidationErrorCode;
+  name?: ValidationErrorCode;
+  email?: ValidationErrorCode;
+  gender?: ValidationErrorCode;
+  birthdate?: ValidationErrorCode;
+  icon_url?: ValidationErrorCode;
+  password?: ValidationErrorCode;
+};

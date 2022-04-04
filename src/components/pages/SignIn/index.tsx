@@ -15,11 +15,14 @@ const SignIn = () => {
   ) => {
     event.preventDefault();
     try {
-      await signInWithEmailAndPassword(emailInput, passwordInput);
-      toast.success("サインイン成功");
-      history.push(pagePaths.routeIndex());
+      const { uid } = await signInWithEmailAndPassword(
+        emailInput,
+        passwordInput
+      );
+      toast.success("サインインに成功しました。");
+      history.push(pagePaths.mypage(uid));
     } catch (error) {
-      toast.error("サインイン失敗");
+      toast.error("サインインに失敗しました。");
     }
   };
 
