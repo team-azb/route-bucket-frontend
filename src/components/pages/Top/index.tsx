@@ -8,9 +8,9 @@ const Top = () => {
   const signOutHandler = async () => {
     try {
       await signOut();
-      toast.success("サインアウト成功");
+      toast.success("サインアウトに成功しました。");
     } catch (error) {
-      toast.error("サインアウト失敗");
+      toast.error("サインアウトに失敗しました。");
     }
   };
 

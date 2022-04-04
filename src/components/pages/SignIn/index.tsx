@@ -19,10 +19,10 @@ const SignIn = () => {
         emailInput,
         passwordInput
       );
-      toast.success("サインイン成功");
+      toast.success("サインインに成功しました。");
       history.push(pagePaths.mypage(uid));
     } catch (error) {
-      toast.error("サインイン失敗");
+      toast.error("サインインに失敗しました。");
     }
   };
 

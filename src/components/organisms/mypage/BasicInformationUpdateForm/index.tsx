@@ -85,14 +85,14 @@ const BasicInformationUpdateForm = ({
           ...userInfoForm,
           icon_url: iconUrl,
         });
-        toast.success("ユーザー情報の更新に成功");
+        toast.success("ユーザー情報の更新に成功しました。");
         exitEditingModeHandler();
         history.push(pagePaths.mypage(userInfo.id));
       } catch (error) {
-        toast.error("ユーザー情報の更新に失敗");
+        toast.error("ユーザー情報の更新に失敗しました。");
       }
     } else {
-      toast.error("ユーザートークンの取得に失敗");
+      toast.error("ユーザートークンの取得に失敗しました。");
     }
   }, [
     authenticatedUser,

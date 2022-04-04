@@ -84,10 +84,10 @@ const SignUpForm = () => {
       const user = await signInWithEmailAndPassword(form.email, form.password);
       await sendEmailVerification(user);
       setDialogFlag(false);
-      toast.success("サインイン成功");
+      toast.success("サインインに成功しました。");
       history.push(pagePaths.mypage(user.uid));
     } catch (error) {
-      toast.error("サインイン失敗");
+      toast.error("サインインに失敗しました。");
     }
   }, [form.email, form.password, history]);
 
