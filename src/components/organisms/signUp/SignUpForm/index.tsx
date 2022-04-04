@@ -19,7 +19,7 @@ import {
   initialFormValue,
   isInvalidForm,
   Fields,
-  validateSignUpFormAndGetMessages,
+  validateSignUpFormFieldAndGetMessages,
 } from "./helper";
 import styles from "./style.module.css";
 import { ValidationMessages } from "../../../../types";
@@ -36,7 +36,7 @@ const SignUpForm = () => {
     value: string,
     prevForm: Form
   ) => {
-    const result = await validateSignUpFormAndGetMessages(
+    const result = await validateSignUpFormFieldAndGetMessages(
       fieldName,
       value,
       prevForm

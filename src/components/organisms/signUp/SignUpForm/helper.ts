@@ -47,7 +47,7 @@ const passwordConfimationErrorMessage = (
   return password === confirmation ? "" : "パスワードと不一致";
 };
 
-export const validateSignUpFormAndGetMessages = async (
+export const validateSignUpFormFieldAndGetMessages = async (
   fieldName: Fields | BasicInfoFormFields,
   value: string,
   prevForm: Form

@@ -9,7 +9,7 @@ import {
   Fields,
   Form,
   isInvalidForm,
-  validateBasicInfoFormAndGetMessages,
+  validateBasicInfoFormFieldAndGetMessages,
 } from "./helper";
 import { updateUser } from "../../../../api/users";
 import styles from "./style.module.css";
@@ -40,7 +40,10 @@ const BasicInformationUpdateForm = ({
     fieldName: Fields,
     value: string
   ) => {
-    const result = await validateBasicInfoFormAndGetMessages(fieldName, value);
+    const result = await validateBasicInfoFormFieldAndGetMessages(
+      fieldName,
+      value
+    );
     setValidatonMessages((prevState) => {
       return {
         ...prevState,
