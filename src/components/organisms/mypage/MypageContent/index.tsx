@@ -3,7 +3,7 @@ import BasicInformation from "../BasicInformation";
 import { useAuthenticationInfoContext } from "../../../../contexts/AuthenticationProvider";
 import styles from "./style.module.css";
 import { useUserInfo } from "../../../../contexts/UserInfoProvider";
-import BasicInformationForm from "../BasicInformationForm";
+import BasicInformationForm from "../BasicInformationUpdateForm";
 import PageContainer from "../../../atoms/PageContainer";
 import PageTitle from "../../../atoms/PageTitle";
 
