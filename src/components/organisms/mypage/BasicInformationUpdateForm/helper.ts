@@ -44,15 +44,15 @@ export const validateBasicInfoFormFieldAndGetMessages = async (
 
 export const isInvalidForm = (
   form: Form,
-  validatonMessages: ValidationMessages
+  validationMessages: ValidationMessages
 ) => {
   const hasEmptyField = Object.values(Fields).some((key) => {
     return form[key] === "";
   });
 
   if (!hasEmptyField) {
-    return Object.keys(validatonMessages).some((key) => {
-      return validatonMessages[key as Fields] !== "";
+    return Object.keys(validationMessages).some((key) => {
+      return validationMessages[key as Fields] !== "";
     });
   } else {
     return true;

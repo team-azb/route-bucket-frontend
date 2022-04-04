@@ -26,7 +26,7 @@ import { ValidationMessages } from "../../../../types";
 
 const SignUpForm = () => {
   const [form, setForm] = useState<Form>(initialFormValue);
-  const [validatonMessages, setValidatonMessages] =
+  const [validationMessages, setvalidationMessages] =
     useState<ValidationMessages>(initialFormValue);
   const [dialogFlag, setDialogFlag] = useState(false);
   const history = useHistory();
@@ -41,7 +41,7 @@ const SignUpForm = () => {
       value,
       prevForm
     );
-    setValidatonMessages((prevState) => {
+    setvalidationMessages((prevState) => {
       return {
         ...prevState,
         ...result,
@@ -107,7 +107,7 @@ const SignUpForm = () => {
             name="id"
             type="text"
             onChange={changeFormHandler}
-            errorMessage={validatonMessages.id}
+            errorMessage={validationMessages.id}
           />
         </FormField>
         <FormField>
@@ -117,7 +117,7 @@ const SignUpForm = () => {
             name="name"
             type="text"
             onChange={changeFormHandler}
-            errorMessage={validatonMessages.name}
+            errorMessage={validationMessages.name}
           />
         </FormField>
         <FormField>
@@ -127,7 +127,7 @@ const SignUpForm = () => {
             name="email"
             type="email"
             onChange={changeFormHandler}
-            errorMessage={validatonMessages.email}
+            errorMessage={validationMessages.email}
           />
         </FormField>
         <FormField>
@@ -137,7 +137,7 @@ const SignUpForm = () => {
             name="password"
             type="password"
             onChange={changeFormHandler}
-            errorMessage={validatonMessages.password}
+            errorMessage={validationMessages.password}
           />
         </FormField>
         <FormField>
@@ -147,7 +147,7 @@ const SignUpForm = () => {
             name="password_confirmation"
             type="password"
             onChange={changeFormHandler}
-            errorMessage={validatonMessages.password_confirmation}
+            errorMessage={validationMessages.password_confirmation}
           />
         </FormField>
         <FormField>
@@ -161,12 +161,12 @@ const SignUpForm = () => {
             name="birthdate"
             type="date"
             onChange={changeFormHandler}
-            errorMessage={validatonMessages.birthdate}
+            errorMessage={validationMessages.birthdate}
           />
         </FormField>
         <FormField className={styles.buttonWrapper}>
           <SubmitButton
-            disabled={isInvalidForm(form, validatonMessages)}
+            disabled={isInvalidForm(form, validationMessages)}
             onClick={sendFormHandler}
           >
             サインアップ

@@ -27,7 +27,7 @@ const BasicInformationUpdateForm = ({
   userInfo,
 }: BasicInformationUpdateFormProps) => {
   const [userInfoForm, setUserInfoForm] = useState<Form>(userInfo as Form);
-  const [validatonMessages, setValidatonMessages] =
+  const [validationMessages, setvalidationMessages] =
     useState<ValidationMessages>({});
   const [previewFile, setPreviewFile] = useState<File>();
   const previewUrl = useMemo(() => {
@@ -44,7 +44,7 @@ const BasicInformationUpdateForm = ({
       fieldName,
       value
     );
-    setValidatonMessages((prevState) => {
+    setvalidationMessages((prevState) => {
       return {
         ...prevState,
         ...result,
@@ -116,7 +116,7 @@ const BasicInformationUpdateForm = ({
               type="text"
               value={userInfoForm.name}
               onChange={changeFormHandler}
-              errorMessage={validatonMessages?.name}
+              errorMessage={validationMessages?.name}
             />
           </FormField>
           <FormField className={styles.field}>
@@ -127,11 +127,11 @@ const BasicInformationUpdateForm = ({
               type="date"
               value={userInfoForm.birthdate}
               onChange={changeFormHandler}
-              errorMessage={validatonMessages?.birthdate}
+              errorMessage={validationMessages?.birthdate}
             />
           </FormField>
           <button
-            disabled={isInvalidForm(userInfoForm, validatonMessages)}
+            disabled={isInvalidForm(userInfoForm, validationMessages)}
             className={styles.submitButton}
             onClick={submitFormHandler}
           >

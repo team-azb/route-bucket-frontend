@@ -135,15 +135,15 @@ export const form2payload = (form: Form) => {
 
 export const isInvalidForm = (
   form: Form,
-  validatonMessages: ValidationMessages
+  validationMessages: ValidationMessages
 ) => {
   const hasEmptyField = Object.values(RequiredFields).some((key) => {
     return form[key] === "";
   });
 
   if (!hasEmptyField) {
-    return Object.keys(validatonMessages).some((key) => {
-      return validatonMessages[key as OptionalFields] !== "";
+    return Object.keys(validationMessages).some((key) => {
+      return validationMessages[key as OptionalFields] !== "";
     });
   } else {
     return true;
