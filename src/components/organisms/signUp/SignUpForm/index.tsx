@@ -31,7 +31,7 @@ const SignUpForm = () => {
   const [dialogFlag, setDialogFlag] = useState(false);
   const history = useHistory();
 
-  const asyncUpdatgeValidationMessages = async (
+  const asyncUpdateValidationMessages = async (
     fieldName: Fields,
     value: string,
     prevForm: Form
@@ -52,7 +52,7 @@ const SignUpForm = () => {
   const changeFormHandler = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       setForm((prevForm) => {
-        asyncUpdatgeValidationMessages(
+        asyncUpdateValidationMessages(
           event.target.name as Fields,
           event.target.value,
           prevForm
