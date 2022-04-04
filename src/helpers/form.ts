@@ -3,8 +3,8 @@ import { ValidationErrorCode } from "../types";
 export const errorCode2ErrorMessage = (
   code: ValidationErrorCode | undefined,
   invalidFormatMsg: string,
-  alreadyExistsMsg: string = "",
-  reservedWordMsg: string = ""
+  alreadyExistsMsg = "",
+  reservedWordMsg = ""
 ): string => {
   switch (code) {
     case "INVALID_FORMAT":
