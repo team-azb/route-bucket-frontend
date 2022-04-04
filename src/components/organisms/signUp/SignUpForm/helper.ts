@@ -141,11 +141,8 @@ export const isInvalidForm = (
     return form[key] === "";
   });
 
-  if (!hasEmptyField) {
-    return Object.keys(validationMessages).some((key) => {
-      return validationMessages[key as OptionalFields] !== "";
-    });
-  } else {
-    return true;
-  }
+  return (
+    hasEmptyField ||
+    Object.values(validationMessages).some((value) => value !== "")
+  );
 };
