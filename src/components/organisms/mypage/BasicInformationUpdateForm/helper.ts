@@ -1,5 +1,7 @@
-import { validateUserInfo } from "../../../../api/users";
-import { errorCode2ErrorMessage } from "../../../../helpers/form";
+import {
+  validateUserInfo,
+  errorCode2ErrorMessage,
+} from "../../../../api/users";
 import { ValidationMessages } from "../../../../types";
 
 export enum Fields {

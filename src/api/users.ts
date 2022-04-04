@@ -2,6 +2,7 @@ import axios from "axios";
 import {
   Gender,
   UserInfo,
+  ValidationErrorCode,
   ValidationFields,
   ValidationResponse,
 } from "../types";
@@ -34,4 +35,22 @@ export const updateUser = async (
 export const validateUserInfo = async (payload: ValidationFields) => {
   const res = await axios.post<ValidationResponse>(`/users/validate/`, payload);
   return res.data;
+};
+
+export const errorCode2ErrorMessage = (
+  code: ValidationErrorCode | undefined,
+  invalidFormatMsg: string,
+  alreadyExistsMsg = "",
+  reservedWordMsg = ""
+): string => {
+  switch (code) {
+    case "INVALID_FORMAT":
+      return invalidFormatMsg;
+    case "ALREADY_EXISTS":
+      return alreadyExistsMsg;
+    case "RESERVED_WORD":
+      return reservedWordMsg;
+    default:
+      return "";
+  }
 };

@@ -1,6 +1,8 @@
 import { CreateUserRequestBody } from "../../../../api/auth";
-import { validateUserInfo } from "../../../../api/users";
-import { errorCode2ErrorMessage } from "../../../../helpers/form";
+import {
+  validateUserInfo,
+  errorCode2ErrorMessage,
+} from "../../../../api/users";
 import { Gender, ValidationMessages } from "../../../../types";
 import { Fields as BasicInfoFormFields } from "../../mypage/BasicInformationUpdateForm/helper";
 
