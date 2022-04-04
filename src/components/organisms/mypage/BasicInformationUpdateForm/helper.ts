@@ -1,6 +1,6 @@
 import {
   validateUserInfo,
-  errorCode2ErrorMessage,
+  usersRespErrCode2ErrMsg,
 } from "../../../../api/users";
 import { ValidationMessages } from "../../../../types";
 
@@ -21,7 +21,7 @@ export const validateBasicInfoFormFieldAndGetMessages = async (
     case Fields.NAME: {
       const { name } = await validateUserInfo({ [fieldName]: value });
       return {
-        [Fields.NAME]: errorCode2ErrorMessage(
+        [Fields.NAME]: usersRespErrCode2ErrMsg(
           name,
           "ニックネームは1文字以上50文字以下"
         ),
@@ -30,7 +30,7 @@ export const validateBasicInfoFormFieldAndGetMessages = async (
     case Fields.BIRTHDATE: {
       const { birthdate } = await validateUserInfo({ [fieldName]: value });
       return {
-        [Fields.BIRTHDATE]: errorCode2ErrorMessage(
+        [Fields.BIRTHDATE]: usersRespErrCode2ErrMsg(
           birthdate,
           "生年月日が不適切です"
         ),

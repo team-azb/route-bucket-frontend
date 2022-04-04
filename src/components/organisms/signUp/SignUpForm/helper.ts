@@ -1,7 +1,7 @@
 import { CreateUserRequestBody } from "../../../../api/auth";
 import {
   validateUserInfo,
-  errorCode2ErrorMessage,
+  usersRespErrCode2ErrMsg,
 } from "../../../../api/users";
 import { Gender, ValidationMessages } from "../../../../types";
 import { Fields as BasicInfoFormFields } from "../../mypage/BasicInformationUpdateForm/helper";
@@ -58,7 +58,7 @@ export const validateSignUpFormFieldAndGetMessages = async (
     case RequiredFields.ID: {
       const { id } = await validateUserInfo({ [fieldName]: value });
       return {
-        [RequiredFields.ID]: errorCode2ErrorMessage(
+        [RequiredFields.ID]: usersRespErrCode2ErrMsg(
           id,
           "ユーザーIDのパターンと不一致",
           "すでに登録されているid",
@@ -69,7 +69,7 @@ export const validateSignUpFormFieldAndGetMessages = async (
     case RequiredFields.NAME: {
       const { name } = await validateUserInfo({ [fieldName]: value });
       return {
-        [RequiredFields.NAME]: errorCode2ErrorMessage(
+        [RequiredFields.NAME]: usersRespErrCode2ErrMsg(
           name,
           "ニックネームは1文字以上50文字以下"
         ),
@@ -78,7 +78,7 @@ export const validateSignUpFormFieldAndGetMessages = async (
     case RequiredFields.EMAIL: {
       const { email } = await validateUserInfo({ [fieldName]: value });
       return {
-        [RequiredFields.EMAIL]: errorCode2ErrorMessage(
+        [RequiredFields.EMAIL]: usersRespErrCode2ErrMsg(
           email,
           "不適切なemailの形式",
           "すでに登録されているemail"
@@ -88,7 +88,7 @@ export const validateSignUpFormFieldAndGetMessages = async (
     case RequiredFields.PASSWORD: {
       const { password } = await validateUserInfo({ [fieldName]: value });
       return {
-        [RequiredFields.PASSWORD]: errorCode2ErrorMessage(
+        [RequiredFields.PASSWORD]: usersRespErrCode2ErrMsg(
           password,
           "パスワードは6文字以上"
         ),
@@ -108,7 +108,7 @@ export const validateSignUpFormFieldAndGetMessages = async (
     case OptionalFields.BIRTHDATE: {
       const { birthdate } = await validateUserInfo({ [fieldName]: value });
       return {
-        [OptionalFields.BIRTHDATE]: errorCode2ErrorMessage(
+        [OptionalFields.BIRTHDATE]: usersRespErrCode2ErrMsg(
           birthdate,
           "生年月日が不適切です"
         ),

@@ -37,7 +37,7 @@ export const validateUserInfo = async (payload: ValidationFields) => {
   return res.data;
 };
 
-export const errorCode2ErrorMessage = (
+export const usersRespErrCode2ErrMsg = (
   code: ValidationErrorCode | undefined,
   invalidFormatMsg: string,
   alreadyExistsMsg = "",
