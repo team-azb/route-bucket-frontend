@@ -5,12 +5,12 @@ type AuthenticationInfoProviderProps = {
   children?: React.ReactNode;
 };
 
-type authenticatedUserInfo = {
+type AuthenticationInfo = {
   authenticatedUser: User | null;
   hasCheckedAuth: boolean;
 };
 
-const AuthenticationInfoContext = createContext<authenticatedUserInfo>({
+const AuthenticationInfoContext = createContext<AuthenticationInfo>({
   authenticatedUser: null,
   hasCheckedAuth: false,
 });
@@ -37,6 +37,6 @@ export const AuthenticationInfoProvider = ({
 };
 
 export const useAuthenticationInfoContext = () => {
-  const signedInUser = useContext(AuthenticationInfoContext);
-  return signedInUser;
+  const authenticationInfo = useContext(AuthenticationInfoContext);
+  return authenticationInfo;
 };
