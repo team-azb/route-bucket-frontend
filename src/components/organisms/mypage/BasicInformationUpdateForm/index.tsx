@@ -37,7 +37,7 @@ const BasicInformationUpdateForm = ({
   const { authenticatedUser } = useAuthenticationInfoContext();
   const history = useHistory();
 
-  const asyncUpdatgeValidationMessages = async (
+  const asyncUpdateValidationMessages = async (
     fieldName: Fields,
     value: string
   ) => {
@@ -56,7 +56,7 @@ const BasicInformationUpdateForm = ({
   const changeFormHandler = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       setUserInfoForm((prevForm) => {
-        asyncUpdatgeValidationMessages(
+        asyncUpdateValidationMessages(
           event.target.name as Fields,
           event.target.value
         );
