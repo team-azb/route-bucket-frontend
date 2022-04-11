@@ -19,10 +19,10 @@ export const AuthenticationInfoProvider = ({
   children,
 }: AuthenticationInfoProviderProps) => {
   const [authenticatedUser, setAuthenticatedUser] = useState<User | null>(null);
-  const [hasCheckedAuth, sethasCheckedAuth] = useState<boolean>(false);
+  const [hasCheckedAuth, setHasCheckedAuth] = useState<boolean>(false);
   useEffect(() => {
     const unsubscribeWhenUnmounted = onAuthStateChanged((authenticatedUser) => {
-      sethasCheckedAuth(true);
+      setHasCheckedAuth(true);
       setAuthenticatedUser(authenticatedUser);
     });
     return unsubscribeWhenUnmounted;
