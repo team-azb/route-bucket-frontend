@@ -126,7 +126,7 @@ const SignUpForm = () => {
         <FormField className={styles.field}>
           <FormLabel>メールアドレス</FormLabel>
           <InputWithError
-            id="enamil"
+            id="emale"
             name="email"
             type="email"
             onChange={changeFormHandler}
