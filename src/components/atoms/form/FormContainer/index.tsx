@@ -4,9 +4,11 @@ import styles from "./style.module.css";
 type FormContainerProps = {
   children?: React.ReactNode;
   className?: string;
+  /** フォームをformタグで作成するかのフラグ */
   isPureForm?: boolean;
 };
 
+/** フォームの余白等のレイアウトを作成するコンポーネント */
 const FormContainer = ({
   children,
   className,

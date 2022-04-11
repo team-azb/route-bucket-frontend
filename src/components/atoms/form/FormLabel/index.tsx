@@ -7,6 +7,7 @@ type FormLabelProps = {
   className?: string;
 };
 
+/** フォームのフィールドの項目名等を表示するラベル */
 const FormLabel = ({ children, htmlFor, className }: FormLabelProps) => {
   return (
     <label className={[styles.label, className].join(" ")} htmlFor={htmlFor}>
