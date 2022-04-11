@@ -15,7 +15,8 @@ import { useHistory } from "react-router-dom";
 import { pagePaths } from "../../../consts/uriComponents";
 import { toast } from "react-toastify";
 
-const RouteNew = () => {
+//TODO: フォルダ名も変更して呼び出し元のパスも変更する
+const CreateRouteScreen = () => {
   const [nameInput, setNameInput] = useState<string>("");
   const { authenticatedUser } = useAuthenticationInfoContext();
   const history = useHistory();
@@ -62,4 +63,4 @@ const RouteNew = () => {
   );
 };
 
-export default RouteNew;
+export default CreateRouteScreen;

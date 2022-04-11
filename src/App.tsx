@@ -5,7 +5,7 @@ import SignUp from "./components/pages/SignUp";
 import Top from "./components/pages/Top";
 import PasswordReset from "./components/pages/PasswordReset";
 import Mypage from "./components/pages/Mypage";
-import RouteNew from "./components/pages/RouteNew";
+import CreateRouteScreen from "./components/pages/RouteNew";
 import Header from "./components/organisms/Header";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "leaflet/dist/leaflet.css";
@@ -33,7 +33,7 @@ function App() {
             <SignUp />
           </Route>
           <Route exact path={pagePaths.routeNew()}>
-            <RouteNew />
+            <CreateRouteScreen />
           </Route>
           <Route path={pagePaths.routeEditor()}>
             <RouteEditor />
