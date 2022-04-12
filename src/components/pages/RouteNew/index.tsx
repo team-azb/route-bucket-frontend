@@ -14,10 +14,15 @@ import { useAuthenticationInfoContext } from "../../../contexts/AuthenticationPr
 import { useHistory } from "react-router-dom";
 import { pagePaths } from "../../../consts/uriComponents";
 import { toast } from "react-toastify";
+import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
+
+type PUBLISHING_MODE = "public" | "private";
 
 //TODO: フォルダ名も変更して呼び出し元のパスも変更する
 const CreateRouteScreen = () => {
   const [nameInput, setNameInput] = useState<string>("");
+  const [publishingMode, setPublishingMode] =
+    useState<PUBLISHING_MODE>("private");
   const { authenticatedUser } = useAuthenticationInfoContext();
   const history = useHistory();
 
@@ -33,16 +38,26 @@ const CreateRouteScreen = () => {
         try {
           const token = await authenticatedUser?.getIdToken();
           if (token) {
-            const { id } = await postRoute(nameInput, token);
+            const { id } = await postRoute(token, {
+              name: nameInput,
+              is_public: publishingMode === "public",
+            });
             toast.success("ルートを作成しました。");
             history.push(pagePaths.routeEditor(id));
           }
         } catch (error) {
-          toast.success("ルートの作成に失敗しました。");
+          toast.error("ルートの作成に失敗しました。");
         }
       },
       [authenticatedUser, history, nameInput]
     );
+
+  const changePublishingSettingHandler = useCallback(
+    (event: SelectChangeEvent<string>) => {
+      setPublishingMode(event.target.value as PUBLISHING_MODE);
+    },
+    []
+  );
 
   return (
     <SignInRequiredTemplate>
@@ -55,7 +70,29 @@ const CreateRouteScreen = () => {
               <FormLabel htmlFor="name">ルート名</FormLabel>
               <FormInput value={nameInput} onChange={changeNameHandler} />
             </FormField>
-            <SubmitButton onClick={createRouteHandler}>作成</SubmitButton>
+            <FormField flexDirection="row">
+              <SubmitButton
+                onClick={createRouteHandler}
+                className={styles.submitButton}
+              >
+                {publishingMode === "public"
+                  ? "ルートを作成して公開する"
+                  : "非公開のルートを作成する"}
+              </SubmitButton>
+              <Select
+                id="publishing-mode-select"
+                value={""}
+                onChange={changePublishingSettingHandler}
+                className={styles.selectRoot}
+                classes={{
+                  select: styles.select,
+                  icon: styles.icon,
+                }}
+              >
+                <MenuItem value="private">非公開のルートを作成する</MenuItem>
+                <MenuItem value="public">ルートを作成して公開する</MenuItem>
+              </Select>
+            </FormField>
           </FormContainer>
         </SingleFormWrapper>
       </PageContainer>

@@ -1,3 +1,36 @@
 .form-field {
   margin: 15px 0;
 }
+
+.submit-button {
+  border-radius: 5px 0px 0px 5px;
+}
+
+.select-root:global(.MuiSelect-root) {
+  border-radius: 0px 5px 5px 0px;
+  background-color: #20746a;
+}
+
+.select:global(.MuiSelect-select) {
+  padding: 5px;
+  padding-left: 0px;
+  color: #fff;
+  font-size: 1.3rem;
+  line-height: 20px;
+}
+
+.select-root :global(.MuiOutlinedInput-notchedOutline) {
+  border: none;
+  border-left: solid 1px;
+  border-color: #fff;
+}
+
+.select-root:global(.MuiSelect-root.Mui-focused
+    .MuiOutlinedInput-notchedOutline) {
+  border-color: #fff;
+  border-width: 1px;
+}
+
+.icon:global(.MuiSelect-icon) {
+  color: #fff;
+}

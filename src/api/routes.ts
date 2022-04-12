@@ -33,6 +33,11 @@ type PostRouteResponseBody = {
   id: string;
 };
 
+type PostRouteRequest = {
+  name: string;
+  is_public: boolean;
+};
+
 export async function getRoute(routeId: string) {
   try {
     return await axios.get<RouteResponseBody>(`/routes/${routeId}`);
@@ -147,12 +152,10 @@ export async function patchRename(routeId: string, payload: RenameRequestBody) {
   }
 }
 
-export async function postRoute(name: string, token: string) {
+export async function postRoute(token: string, payload: PostRouteRequest) {
   const { data } = await axios.post<PostRouteResponseBody>(
     "/routes/",
-    {
-      name: name,
-    },
+    payload,
     generateAxiosHeaderWithBearer(token)
   );
   return data;
