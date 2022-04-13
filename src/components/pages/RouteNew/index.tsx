@@ -22,7 +22,7 @@ type PUBLISHING_MODE = "public" | "private";
 const CreateRouteScreen = () => {
   const [nameInput, setNameInput] = useState<string>("");
   const [publishingMode, setPublishingMode] =
-    useState<PUBLISHING_MODE>("private");
+    useState<PUBLISHING_MODE>("public");
   const { authenticatedUser } = useAuthenticationInfoContext();
   const history = useHistory();
 
@@ -89,8 +89,8 @@ const CreateRouteScreen = () => {
                   icon: styles.icon,
                 }}
               >
-                <MenuItem value="private">非公開のルートを作成する</MenuItem>
                 <MenuItem value="public">ルートを作成して公開する</MenuItem>
+                <MenuItem value="private">非公開のルートを作成する</MenuItem>
               </Select>
             </FormField>
           </FormContainer>
