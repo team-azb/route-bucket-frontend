@@ -71,12 +71,13 @@ const CreateRouteScreen = () => {
               <FormInput value={nameInput} onChange={changeNameHandler} />
             </FormField>
             <FormField flexDirection="row">
+              {/* TODO: 公開と非公開の意味がユーザーにわかりやすいUIにする */}
               <SubmitButton
                 onClick={createRouteHandler}
                 className={styles.submitButton}
               >
                 {publishingMode === "public"
-                  ? "ルートを作成して公開する"
+                  ? "ルートを作成する"
                   : "非公開のルートを作成する"}
               </SubmitButton>
               <Select
@@ -89,7 +90,7 @@ const CreateRouteScreen = () => {
                   icon: styles.icon,
                 }}
               >
-                <MenuItem value="public">ルートを作成して公開する</MenuItem>
+                <MenuItem value="public">ルートを作成する</MenuItem>
                 <MenuItem value="private">非公開のルートを作成する</MenuItem>
               </Select>
             </FormField>
