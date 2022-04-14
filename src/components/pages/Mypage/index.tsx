@@ -4,7 +4,7 @@ import SigninRequiredTemplate from "../../organisms/SignInRequiredTemplate";
 import MypageContent from "../../organisms/mypage/MypageContent";
 import ProfileContent from "../../organisms/mypage/ProfileContent";
 import UserInfoProvider from "../../../contexts/UserInfoProvider";
-import { useAuthenticatedUserInfoContext } from "../../../contexts/AuthenticationProvider";
+import { useAuthenticationInfoContext } from "../../../contexts/AuthenticationProvider";
 
 interface MypageParams {
   userId: string;
@@ -12,7 +12,7 @@ interface MypageParams {
 
 const Mypage = () => {
   const { userId } = useParams<MypageParams>();
-  const { authenticatedUser } = useAuthenticatedUserInfoContext();
+  const { authenticatedUser } = useAuthenticationInfoContext();
 
   const isMyOwnPage = useMemo(() => {
     return authenticatedUser ? authenticatedUser?.uid === userId : false;

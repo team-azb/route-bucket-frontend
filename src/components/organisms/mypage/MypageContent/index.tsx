@@ -1,13 +1,15 @@
 import React, { useCallback, useMemo, useState } from "react";
 import BasicInformation from "../BasicInformation";
-import { useAuthenticatedUserInfoContext } from "../../../../contexts/AuthenticationProvider";
+import { useAuthenticationInfoContext } from "../../../../contexts/AuthenticationProvider";
 import styles from "./style.module.css";
 import { useUserInfo } from "../../../../contexts/UserInfoProvider";
+import PageContainer from "../../../atoms/PageContainer";
+import PageTitle from "../../../atoms/PageTitle";
 import BasicInformationUpdateForm from "../BasicInformationUpdateForm";
 
 const MypageContent = () => {
   const userInfo = useUserInfo();
-  const { authenticatedUser } = useAuthenticatedUserInfoContext();
+  const { authenticatedUser } = useAuthenticationInfoContext();
   const [isEditingMode, setIsEditingMode] = useState(false);
 
   const changeEditingModeHandler = useCallback((isActive: boolean) => {
@@ -53,11 +55,10 @@ const MypageContent = () => {
   }, [userInfo, changeEditingModeHandler, authenticatedUser?.email]);
 
   return (
-    <div className={styles.container}>
+    <PageContainer>
       {isEditingMode ? editingModeContent : viewingModeContent}
-      <h2 className={styles.title}>公開ルート</h2>
-      <hr />
-    </div>
+      <PageTitle title="公開ルート" />
+    </PageContainer>
   );
 };
 

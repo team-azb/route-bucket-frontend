@@ -2,6 +2,7 @@ export const pagePaths = {
   top: () => "/",
   mypage: (userId?: string) => (userId ? `/${userId}` : "/:userId"),
   routeIndex: () => "/routes",
+  routeNew: () => "/routes/new",
   routeEditor: (routeId?: string) =>
     routeId ? `/routes/${routeId}` : "/routes/:routeId",
   signIn: () => "/signin",

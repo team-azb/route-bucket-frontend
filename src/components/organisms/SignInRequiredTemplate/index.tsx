@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { useAuthenticatedUserInfoContext } from "../../../contexts/AuthenticationProvider";
+import { useAuthenticationInfoContext } from "../../../contexts/AuthenticationProvider";
 import { Link } from "react-router-dom";
 import LoadingDisplay from "../../atoms/LoadingDisplay";
 import { pagePaths } from "../../../consts/uriComponents";
@@ -20,11 +20,8 @@ const redirectMessage = (
   </div>
 );
 
-// TODO: React.FCを直す時にlintに怒られている箇所も治す
-// eslint-disable-next-line react/prop-types
 const SignInRequiredTemplate = ({ children }: SignInRequiredTemplateProps) => {
-  const { authenticatedUser, hasCheckedAuth } =
-    useAuthenticatedUserInfoContext();
+  const { authenticatedUser, hasCheckedAuth } = useAuthenticationInfoContext();
 
   const displayedContent = useMemo(() => {
     if (!hasCheckedAuth) {

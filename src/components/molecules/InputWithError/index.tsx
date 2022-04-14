@@ -1,4 +1,6 @@
 import React from "react";
+import FormLabel from "../../atoms/form/FormLabel";
+import FormInput from "../../atoms/form/FormInput";
 import styles from "./style.module.css";
 
 type InputWithErrorProps = {
@@ -20,7 +22,7 @@ const InputWithError = ({
 }: InputWithErrorProps) => {
   return (
     <>
-      <input
+      <FormInput
         id={id}
         type={type}
         name={name}
@@ -28,9 +30,9 @@ const InputWithError = ({
         value={value}
         onChange={onChange}
       />
-      <label className={styles.errorLabel} htmlFor={id}>
+      <FormLabel className={styles.errorLabel} htmlFor={id}>
         {errorMessage}
-      </label>
+      </FormLabel>
     </>
   );
 };

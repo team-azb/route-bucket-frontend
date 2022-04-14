@@ -2,9 +2,9 @@ import { ChangeEvent, useCallback, useMemo, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { UserInfo, ValidationMessages } from "../../../../types";
 import IconImageUpload from "../IconImageUpload";
-import FormField from "../../../atoms/FormField";
+import FormField from "../../../atoms/form/FormField";
 import InputWithError from "../../../molecules/InputWithError";
-import { useAuthenticatedUserInfoContext } from "../../../../contexts/AuthenticationProvider";
+import { useAuthenticationInfoContext } from "../../../../contexts/AuthenticationProvider";
 import {
   Fields,
   Form,
@@ -16,6 +16,7 @@ import styles from "./style.module.css";
 import { toast } from "react-toastify";
 import { pagePaths } from "../../../../consts/uriComponents";
 import { uploadUserIconAndGetUrl } from "../../../../api/storage";
+import FormLabel from "../../../atoms/form/FormLabel";
 
 type BasicInformationUpdateFormProps = {
   exitEditingModeHandler: () => void;
@@ -33,10 +34,10 @@ const BasicInformationUpdateForm = ({
   const previewUrl = useMemo(() => {
     return previewFile ? URL.createObjectURL(previewFile) : userInfo.icon_url;
   }, [previewFile, userInfo.icon_url]);
-  const { authenticatedUser } = useAuthenticatedUserInfoContext();
+  const { authenticatedUser } = useAuthenticationInfoContext();
   const history = useHistory();
 
-  const asyncUpdatgeValidationMessages = async (
+  const asyncUpdateValidationMessages = async (
     fieldName: Fields,
     value: string
   ) => {
@@ -55,7 +56,7 @@ const BasicInformationUpdateForm = ({
   const changeFormHandler = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       setUserInfoForm((prevForm) => {
-        asyncUpdatgeValidationMessages(
+        asyncUpdateValidationMessages(
           event.target.name as Fields,
           event.target.value
         );
@@ -109,7 +110,7 @@ const BasicInformationUpdateForm = ({
         <IconImageUpload src={previewUrl} onChange={changeImageHandler} />
         <div className={styles.fieldContainer}>
           <FormField className={styles.field}>
-            <label className={styles.label}>ニックネーム</label>
+            <FormLabel>ニックネーム</FormLabel>
             <InputWithError
               id="name"
               name="name"
@@ -120,7 +121,7 @@ const BasicInformationUpdateForm = ({
             />
           </FormField>
           <FormField className={styles.field}>
-            <label className={styles.label}>生年月日</label>
+            <FormLabel>生年月日</FormLabel>
             <InputWithError
               id="birthdate"
               name="birthdate"

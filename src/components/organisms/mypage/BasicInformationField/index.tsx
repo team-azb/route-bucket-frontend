@@ -1,4 +1,5 @@
 import React from "react";
+import FormLabel from "../../../atoms/form/FormLabel";
 import styles from "./style.module.css";
 
 type BasicInformationFieldProps = {
@@ -14,9 +15,7 @@ const BasicInformationField = ({
 }: BasicInformationFieldProps) => {
   return (
     <div className={styles.container}>
-      <label className={styles.label} htmlFor={id}>
-        {labelName}
-      </label>
+      <FormLabel htmlFor={id}>{labelName}</FormLabel>
       <p className={styles.value} id={id}>
         {fieldValue || "未設定"}
       </p>

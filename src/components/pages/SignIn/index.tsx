@@ -4,6 +4,14 @@ import { toast } from "react-toastify";
 import { pagePaths } from "../../../consts/uriComponents";
 import { Link } from "react-router-dom";
 import { signInWithEmailAndPassword } from "../../../api/auth";
+import PageContainer from "../../atoms/PageContainer";
+import PageTitle from "../../atoms/PageTitle";
+import FormField from "../../atoms/form/FormField";
+import FormContainer from "../../atoms/form/FormContainer";
+import SingleFormWrapper from "../../atoms/form/SingleFormWrapper";
+import FormLabel from "../../atoms/form/FormLabel";
+import FormInput from "../../atoms/form/FormInput";
+import SubmitButton from "../../atoms/form/SubmitButton";
 import styles from "./style.module.css";
 
 const SignIn = () => {
@@ -27,17 +35,13 @@ const SignIn = () => {
   };
 
   return (
-    <form className={styles.container}>
-      <h1 className={styles.title}>サインイン</h1>
-      <hr />
-      <div className={styles.formWrapper}>
-        <div className={styles.formContainer}>
-          <div className={styles.formField}>
-            <label className={styles.formLabel} htmlFor="email">
-              メールアドレス
-            </label>
-            <input
-              className={styles.formInput}
+    <PageContainer>
+      <PageTitle title="サインイン" />
+      <SingleFormWrapper>
+        <FormContainer>
+          <FormField className={styles.formField}>
+            <FormLabel htmlFor="email">メールアドレス</FormLabel>
+            <FormInput
               value={emailInput}
               onChange={(event) => {
                 setEmailInput(event.target.value);
@@ -45,13 +49,10 @@ const SignIn = () => {
               name="email"
               type="email"
             />
-          </div>
-          <div className={styles.formField}>
-            <label className={styles.formLabel} htmlFor="password">
-              パスワード
-            </label>
-            <input
-              className={styles.formInput}
+          </FormField>
+          <FormField className={styles.formField}>
+            <FormLabel htmlFor="password">パスワード</FormLabel>
+            <FormInput
               value={passwordInput}
               onChange={(event) => {
                 setPasswordInput(event.target.value);
@@ -59,18 +60,16 @@ const SignIn = () => {
               name="password"
               type="password"
             />
-          </div>
-          <div className={styles.formField}>
-            <button className={styles.formButton} onClick={signInHandler}>
-              サインイン
-            </button>
+          </FormField>
+          <FormField className={styles.formField}>
+            <SubmitButton onClick={signInHandler}>サインイン</SubmitButton>
             <Link className={styles.formAnchor} to={pagePaths.passwordReset()}>
               パスワードを忘れた場合
             </Link>
-          </div>
-        </div>
-      </div>
-    </form>
+          </FormField>
+        </FormContainer>
+      </SingleFormWrapper>
+    </PageContainer>
   );
 };
 

@@ -1,13 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { pagePaths } from "../../../consts/uriComponents";
-import { useAuthenticatedUserInfoContext } from "../../../contexts/AuthenticationProvider";
+import { useAuthenticationInfoContext } from "../../../contexts/AuthenticationProvider";
 import styles from "./style.module.css";
 
 export const HEADER_HEIGHT_PX = 64;
 
 const Header = () => {
-  const { authenticatedUser } = useAuthenticatedUserInfoContext();
+  const { authenticatedUser, hasCheckedAuth } = useAuthenticationInfoContext();
   return (
     <div className={styles.container} style={{ height: HEADER_HEIGHT_PX }}>
       <div className={styles.leftSection}>
@@ -19,11 +19,17 @@ const Header = () => {
         <Link className={styles.rightSectionLink} to={pagePaths.routeIndex()}>
           ルート検索
         </Link>
-        {authenticatedUser ? null : (
-          <Link className={styles.rightSectionLink} to={pagePaths.signIn()}>
-            サインイン
-          </Link>
-        )}
+
+        {hasCheckedAuth &&
+          (authenticatedUser ? (
+            <Link className={styles.rightSectionLink} to={pagePaths.routeNew}>
+              ルート作成
+            </Link>
+          ) : (
+            <Link className={styles.rightSectionLink} to={pagePaths.signIn()}>
+              サインイン
+            </Link>
+          ))}
       </div>
     </div>
   );

@@ -1,23 +1,5 @@
-.wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .container {
-  margin-top: 80px;
-  display: flex;
-  justify-content: center;
-  align-items: left;
-  flex-direction: column;
-  border: 1px solid #707070;
-  border-radius: 20px;
-  padding: 20px 50px;
-}
-
-.label {
-  font-size: 1.5rem;
-  font-weight: 600;
+  align-items: unset;
 }
 
 .span {
@@ -27,4 +9,8 @@
 
 .button-wrapper {
   align-items: center;
+}
+
+.field {
+  margin: 10px 0;
 }

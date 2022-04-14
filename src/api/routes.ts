@@ -1,6 +1,9 @@
 import axios from "axios";
 import { Route, RouteGeometry, Coorinate, DrawingMode } from "../types";
-import { hasAxiosResponseMessage } from "./helpers";
+import {
+  hasAxiosResponseMessage,
+  generateAxiosHeaderWithBearer,
+} from "./helpers";
 
 //axiosからのレスポンスのデータのインターフェース
 type PatchResponseBody = RouteGeometry;
@@ -25,6 +28,15 @@ interface RouteRemoveRequestBody {
 interface RenameRequestBody {
   name: string;
 }
+
+type PostRouteResponseBody = {
+  id: string;
+};
+
+type PostRouteRequest = {
+  name: string;
+  is_public: boolean;
+};
 
 export async function getRoute(routeId: string) {
   try {
@@ -140,16 +152,13 @@ export async function patchRename(routeId: string, payload: RenameRequestBody) {
   }
 }
 
-export async function postRoutes(name: string) {
-  try {
-    await axios.post("/routes/", {
-      name: name,
-    });
-  } catch (error) {
-    if (hasAxiosResponseMessage(error)) {
-      console.error(error.response.data.message);
-    }
-  }
+export async function postRoute(token: string, payload: PostRouteRequest) {
+  const { data } = await axios.post<PostRouteResponseBody>(
+    "/routes/",
+    payload,
+    generateAxiosHeaderWithBearer(token)
+  );
+  return data;
 }
 
 export async function deleteRoute(id: string) {

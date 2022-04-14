@@ -1,18 +1,17 @@
 import React from "react";
 import BasicInformation from "../BasicInformation";
 import { useUserInfo } from "../../../../contexts/UserInfoProvider";
-import styles from "./style.module.css";
+import PageContainer from "../../../atoms/PageContainer";
+import PageTitle from "../../../atoms/PageTitle";
 
 const ProfileContent = () => {
   const userInfo = useUserInfo();
   return (
-    <div className={styles.container}>
-      <h2 className={styles.title}>基本情報</h2>
-      <hr />
+    <PageContainer>
+      <PageTitle title="基本情報" />
       <BasicInformation userInfo={userInfo} />
-      <h2 className={styles.title}>公開ルート</h2>
-      <hr />
-    </div>
+      <PageTitle title="公開ルート" />
+    </PageContainer>
   );
 };
 

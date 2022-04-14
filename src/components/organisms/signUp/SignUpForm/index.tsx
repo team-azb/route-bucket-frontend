@@ -4,8 +4,11 @@ import Dialog from "@mui/material/Dialog";
 import { toast } from "react-toastify";
 import GenderRadioGroup from "../GenderRadioGroup";
 import InputWithError from "../../../molecules/InputWithError";
-import FormField from "../../../atoms/FormField";
-import SubmitButton from "../SubmitButton";
+import FormField from "../../../atoms/form/FormField";
+import FormContainer from "../../../atoms/form/FormContainer";
+import SingleFormWrapper from "../../../atoms/form/SingleFormWrapper";
+import FormLabel from "../../../atoms/form/FormLabel";
+import SubmitButton from "../../../atoms/form/SubmitButton";
 import EmailVerificationDialogContent from "../../../atoms/EmailVerificationDialogContent";
 import {
   signUp,
@@ -92,16 +95,16 @@ const SignUpForm = () => {
   }, [form.email, form.password, history]);
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.container}>
-        <FormField>
-          <label className={styles.label}>
+    <SingleFormWrapper>
+      <FormContainer className={styles.container} isPureForm={false}>
+        <FormField className={styles.field}>
+          <FormLabel>
             ID
             <br />
             <span className={styles.span}>
               ※ユーザーの識別のために使用されます。後から変更することはできません。
             </span>
-          </label>
+          </FormLabel>
           <InputWithError
             id="id"
             name="id"
@@ -110,8 +113,8 @@ const SignUpForm = () => {
             errorMessage={validationMessages.id}
           />
         </FormField>
-        <FormField>
-          <label className={styles.label}>ニックネーム</label>
+        <FormField className={styles.field}>
+          <FormLabel>ニックネーム</FormLabel>
           <InputWithError
             id="name"
             name="name"
@@ -120,18 +123,18 @@ const SignUpForm = () => {
             errorMessage={validationMessages.name}
           />
         </FormField>
-        <FormField>
-          <label className={styles.label}>メールアドレス</label>
+        <FormField className={styles.field}>
+          <FormLabel>メールアドレス</FormLabel>
           <InputWithError
-            id="enamil"
+            id="email"
             name="email"
             type="email"
             onChange={changeFormHandler}
             errorMessage={validationMessages.email}
           />
         </FormField>
-        <FormField>
-          <label className={styles.label}>パスワード</label>
+        <FormField className={styles.field}>
+          <FormLabel>パスワード</FormLabel>
           <InputWithError
             id="password"
             name="password"
@@ -140,8 +143,8 @@ const SignUpForm = () => {
             errorMessage={validationMessages.password}
           />
         </FormField>
-        <FormField>
-          <label className={styles.label}>パスワード(確認用)</label>
+        <FormField className={styles.field}>
+          <FormLabel>パスワード(確認用)</FormLabel>
           <InputWithError
             id="password_confirmation"
             name="password_confirmation"
@@ -150,12 +153,12 @@ const SignUpForm = () => {
             errorMessage={validationMessages.password_confirmation}
           />
         </FormField>
-        <FormField>
-          <label className={styles.label}>（オプション）性別</label>
+        <FormField className={styles.field}>
+          <FormLabel>（オプション）性別</FormLabel>
           <GenderRadioGroup gender={form.gender} onChange={changeFormHandler} />
         </FormField>
-        <FormField>
-          <label className={styles.label}>（オプション）生年月日</label>
+        <FormField className={styles.field}>
+          <FormLabel>（オプション）生年月日</FormLabel>
           <InputWithError
             id="birthdate"
             name="birthdate"
@@ -172,14 +175,14 @@ const SignUpForm = () => {
             サインアップ
           </SubmitButton>
         </FormField>
-      </div>
+      </FormContainer>
       <Dialog open={dialogFlag} onClose={handleClose}>
         <EmailVerificationDialogContent
           email={form.email}
           handleClose={handleClose}
         />
       </Dialog>
-    </div>
+    </SingleFormWrapper>
   );
 };
 

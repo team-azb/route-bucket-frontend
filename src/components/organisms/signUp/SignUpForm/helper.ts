@@ -4,7 +4,6 @@ import {
   usersRespErrCode2ErrMsg,
 } from "../../../../api/users";
 import { Gender, ValidationMessages } from "../../../../types";
-import { Fields as BasicInfoFormFields } from "../../mypage/BasicInformationUpdateForm/helper";
 
 enum RequiredFields {
   ID = "id",
@@ -50,7 +49,7 @@ const passwordConfimationErrorMessage = (
 };
 
 export const validateSignUpFormFieldAndGetMessages = async (
-  fieldName: Fields | BasicInfoFormFields,
+  fieldName: Fields,
   value: string,
   prevForm: Form
 ): Promise<ValidationMessages> => {
