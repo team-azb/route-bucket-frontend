@@ -52,7 +52,7 @@ function getMarkerIcon(idx: number, firstIdx: number, lastIdx: number) {
 function markerGenerator(
   pos: RoutePoint,
   idx: number,
-  markerRef: RefObject<MarkerType<any>>,
+  markerRef: RefObject<MarkerType>,
   props: MakersProps,
   getIdToken: () => Promise<string> | undefined
 ) {
@@ -133,7 +133,6 @@ export default function Markers(props: MakersProps) {
       }
       setChangeCenterFlag(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.route]);
   const markers = props.route.waypoints.map((pos: RoutePoint, idx: number) => {
     return markerGenerator(

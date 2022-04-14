@@ -11,13 +11,13 @@ type AuthenticationInfoProviderProps = {
   children?: React.ReactNode;
 };
 
-type authenticatedUserInfo = {
+type AuthenticationInfo = {
   authenticatedUser: User | null;
   hasCheckedAuth: boolean;
   getIdToken: () => Promise<string> | undefined;
 };
 
-const AuthenticationInfoContext = createContext<authenticatedUserInfo>({
+const AuthenticationInfoContext = createContext<AuthenticationInfo>({
   authenticatedUser: null,
   hasCheckedAuth: false,
   getIdToken: async () => "",
@@ -28,7 +28,6 @@ export const AuthenticationInfoProvider = ({
 }: AuthenticationInfoProviderProps) => {
   const [authenticatedUser, setAuthenticatedUser] = useState<User | null>(null);
   const [hasCheckedAuth, setHasCheckedAuth] = useState<boolean>(false);
-
   useEffect(() => {
     const unsubscribeWhenUnmounted = onAuthStateChanged((authenticatedUser) => {
       setHasCheckedAuth(true);
@@ -40,7 +39,7 @@ export const AuthenticationInfoProvider = ({
   const getIdToken = useCallback(() => {
     return authenticatedUser?.getIdToken();
   }, [authenticatedUser]);
-  
+
   return (
     <AuthenticationInfoContext.Provider
       value={{
@@ -55,6 +54,6 @@ export const AuthenticationInfoProvider = ({
 };
 
 export const useAuthenticationInfoContext = () => {
-  const signedInUser = useContext(AuthenticationInfoContext);
-  return signedInUser;
+  const authenticationInfo = useContext(AuthenticationInfoContext);
+  return authenticationInfo;
 };

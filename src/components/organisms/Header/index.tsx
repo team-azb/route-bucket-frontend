@@ -11,22 +11,22 @@ const Header = () => {
   return (
     <div className={styles.container} style={{ height: HEADER_HEIGHT_PX }}>
       <div className={styles.leftSection}>
-        <Link className={styles.leftSectionLink} to={pagePaths.TOP}>
+        <Link className={styles.leftSectionLink} to={pagePaths.top()}>
           Route Bucket β
         </Link>
       </div>
       <div className={styles.rightSection}>
-        <Link className={styles.rightSectionLink} to={pagePaths.ROUTE_INDEX}>
+        <Link className={styles.rightSectionLink} to={pagePaths.routeIndex()}>
           ルート検索
         </Link>
 
         {hasCheckedAuth &&
           (authenticatedUser ? (
-            <Link className={styles.rightSectionLink} to={pagePaths.ROUTE_NEW}>
+            <Link className={styles.rightSectionLink} to={pagePaths.routeNew}>
               ルート作成
             </Link>
           ) : (
-            <Link className={styles.rightSectionLink} to={pagePaths.SIGN_IN}>
+            <Link className={styles.rightSectionLink} to={pagePaths.signIn()}>
               サインイン
             </Link>
           ))}

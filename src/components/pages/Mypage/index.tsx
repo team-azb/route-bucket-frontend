@@ -19,11 +19,15 @@ const Mypage = () => {
   }, [authenticatedUser, userId]);
 
   return (
-    <SigninRequiredTemplate>
-      <UserInfoProvider userId={userId}>
-        {isMyOwnPage ? <MypageContent /> : <ProfileContent />}
-      </UserInfoProvider>
-    </SigninRequiredTemplate>
+    <UserInfoProvider userId={userId}>
+      {isMyOwnPage ? (
+        <SigninRequiredTemplate>
+          <MypageContent />
+        </SigninRequiredTemplate>
+      ) : (
+        <ProfileContent />
+      )}
+    </UserInfoProvider>
   );
 };
 

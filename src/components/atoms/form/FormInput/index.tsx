@@ -10,6 +10,7 @@ type FormInputProps = {
   id?: string;
 };
 
+/** フォームで用いるinputフィールド */
 const FormInput = ({
   className,
   value,

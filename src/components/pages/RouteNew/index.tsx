@@ -12,12 +12,18 @@ import styles from "./style.module.css";
 import { postRoute } from "../../../api/routes";
 import { useAuthenticationInfoContext } from "../../../contexts/AuthenticationProvider";
 import { useHistory } from "react-router-dom";
-import { dynamicPathGenerator } from "../../../consts/uriComponents";
+import { pagePaths } from "../../../consts/uriComponents";
 import { toast } from "react-toastify";
+import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
 
-const RouteNew = () => {
+type PUBLISHING_MODE = "public" | "private";
+
+//TODO: フォルダ名も変更して呼び出し元のパスも変更する
+const CreateRouteScreen = () => {
   const [nameInput, setNameInput] = useState<string>("");
   const { getIdToken } = useAuthenticationInfoContext();
+  const [publishingMode, setPublishingMode] =
+    useState<PUBLISHING_MODE>("public");
   const history = useHistory();
 
   const changeNameHandler: React.ChangeEventHandler<HTMLInputElement> =
@@ -32,16 +38,26 @@ const RouteNew = () => {
         try {
           const token = await getIdToken();
           if (token) {
-            const { id } = await postRoute(nameInput, token);
+            const { id } = await postRoute(token, {
+              name: nameInput,
+              is_public: publishingMode === "public",
+            });
             toast.success("ルートを作成しました。");
-            history.push(dynamicPathGenerator.routeEditor(id));
+            history.push(pagePaths.routeEditor(id));
           }
         } catch (error) {
-          toast.success("ルートの作成に失敗しました。");
+          toast.error("ルートの作成に失敗しました。");
         }
       },
       [getIdToken, history, nameInput]
     );
+
+  const changePublishingSettingHandler = useCallback(
+    (event: SelectChangeEvent<string>) => {
+      setPublishingMode(event.target.value as PUBLISHING_MODE);
+    },
+    []
+  );
 
   return (
     <SignInRequiredTemplate>
@@ -54,7 +70,30 @@ const RouteNew = () => {
               <FormLabel htmlFor="name">ルート名</FormLabel>
               <FormInput value={nameInput} onChange={changeNameHandler} />
             </FormField>
-            <SubmitButton onClick={createRouteHandler}>作成</SubmitButton>
+            <FormField flexDirection="row">
+              {/* TODO: 公開と非公開の意味がユーザーにわかりやすいUIにする */}
+              <SubmitButton
+                onClick={createRouteHandler}
+                className={styles.submitButton}
+              >
+                {publishingMode === "public"
+                  ? "ルートを作成する"
+                  : "非公開のルートを作成する"}
+              </SubmitButton>
+              <Select
+                id="publishing-mode-select"
+                value={""}
+                onChange={changePublishingSettingHandler}
+                className={styles.selectRoot}
+                classes={{
+                  select: styles.select,
+                  icon: styles.icon,
+                }}
+              >
+                <MenuItem value="public">ルートを作成する</MenuItem>
+                <MenuItem value="private">非公開のルートを作成する</MenuItem>
+              </Select>
+            </FormField>
           </FormContainer>
         </SingleFormWrapper>
       </PageContainer>
@@ -62,4 +101,4 @@ const RouteNew = () => {
   );
 };
 
-export default RouteNew;
+export default CreateRouteScreen;

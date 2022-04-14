@@ -137,7 +137,6 @@ const RouteEditor: FunctionComponent = () => {
         token: token,
       });
     })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [routeId]);
 
   return (

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router";
 import { toast } from "react-toastify";
-import { dynamicPathGenerator, pagePaths } from "../../../consts/uriComponents";
+import { pagePaths } from "../../../consts/uriComponents";
 import { Link } from "react-router-dom";
 import { signInWithEmailAndPassword } from "../../../api/auth";
 import PageContainer from "../../atoms/PageContainer";
@@ -27,10 +27,10 @@ const SignIn = () => {
         emailInput,
         passwordInput
       );
-      toast.success("サインイン成功");
-      history.push(dynamicPathGenerator.mypage(uid));
+      toast.success("サインインに成功しました。");
+      history.push(pagePaths.mypage(uid));
     } catch (error) {
-      toast.error("サインイン失敗");
+      toast.error("サインインに失敗しました。");
     }
   };
 
@@ -63,7 +63,7 @@ const SignIn = () => {
           </FormField>
           <FormField className={styles.formField}>
             <SubmitButton onClick={signInHandler}>サインイン</SubmitButton>
-            <Link className={styles.formAnchor} to={pagePaths.PASSWORD_RESET}>
+            <Link className={styles.formAnchor} to={pagePaths.passwordReset()}>
               パスワードを忘れた場合
             </Link>
           </FormField>

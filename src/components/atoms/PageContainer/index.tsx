@@ -5,6 +5,7 @@ type PageContainerProps = {
   children?: React.ReactNode;
 };
 
+/** ページの上下左右の余白のレイアウトを作成するコンポーネント */
 const PageContainer = ({ children }: PageContainerProps) => {
   return <div className={styles.container}>{children}</div>;
 };

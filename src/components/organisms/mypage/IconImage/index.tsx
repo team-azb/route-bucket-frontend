@@ -11,7 +11,7 @@ const IconImage = ({ src }: IconImageProps) => {
     <div className={styles.container}>
       <img
         className={styles.image}
-        src={src ? src : pagePaths.USER_ICON}
+        src={src ? src : pagePaths.userIcon()}
         alt="userIcon"
       />
     </div>

@@ -5,6 +5,7 @@ type PageTitleProps = {
   title: string;
 };
 
+/** ページのタイトルを作成する */
 const PageTitle = ({ title }: PageTitleProps) => {
   return (
     <>

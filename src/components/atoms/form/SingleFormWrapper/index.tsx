@@ -6,6 +6,7 @@ type SingleFormWrapperProps = {
   className?: string;
 };
 
+/** ページの中心にコンポーネントを寄せるレイアウトを作成する */
 const SingleFormWrapper = ({ children, className }: SingleFormWrapperProps) => {
   return (
     <div className={[styles.wrapper, className].join(" ")}>{children}</div>
