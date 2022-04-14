@@ -21,9 +21,9 @@ type PUBLISHING_MODE = "public" | "private";
 //TODO: フォルダ名も変更して呼び出し元のパスも変更する
 const CreateRouteScreen = () => {
   const [nameInput, setNameInput] = useState<string>("");
+  const { getIdToken } = useAuthenticationInfoContext();
   const [publishingMode, setPublishingMode] =
     useState<PUBLISHING_MODE>("public");
-  const { authenticatedUser } = useAuthenticationInfoContext();
   const history = useHistory();
 
   const changeNameHandler: React.ChangeEventHandler<HTMLInputElement> =
@@ -36,7 +36,7 @@ const CreateRouteScreen = () => {
       async (event) => {
         event.preventDefault();
         try {
-          const token = await authenticatedUser?.getIdToken();
+          const token = await getIdToken();
           if (token) {
             const { id } = await postRoute(token, {
               name: nameInput,
@@ -49,7 +49,7 @@ const CreateRouteScreen = () => {
           toast.error("ルートの作成に失敗しました。");
         }
       },
-      [authenticatedUser, history, nameInput]
+      [getIdToken, history, nameInput]
     );
 
   const changePublishingSettingHandler = useCallback(

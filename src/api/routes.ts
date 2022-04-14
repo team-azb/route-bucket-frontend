@@ -61,12 +61,14 @@ export async function getRoutes() {
 export async function patchAdd(
   routeId: string,
   idx: number,
-  payload: RouteAddRequestBody
+  payload: RouteAddRequestBody,
+  token?: string
 ) {
   try {
     return await axios.patch<PatchResponseBody>(
       `/routes/${routeId}/add/${idx}`,
-      payload
+      payload,
+      generateAxiosHeaderWithBearer(token)
     );
   } catch (error) {
     if (hasAxiosResponseMessage(error)) {
@@ -78,12 +80,14 @@ export async function patchAdd(
 export async function patchRemove(
   routeId: string,
   pos: number,
-  payload: RouteRemoveRequestBody
+  payload: RouteRemoveRequestBody,
+  token?: string
 ) {
   try {
     return await axios.patch<PatchResponseBody>(
       `/routes/${routeId}/remove/${pos}`,
-      payload
+      payload,
+      generateAxiosHeaderWithBearer(token)
     );
   } catch (error) {
     if (hasAxiosResponseMessage(error)) {
@@ -92,9 +96,13 @@ export async function patchRemove(
   }
 }
 
-export async function patchClear(routeId: string) {
+export async function patchClear(routeId: string, token?: string) {
   try {
-    return await axios.patch<PatchResponseBody>(`/routes/${routeId}/clear/`);
+    return await axios.patch<PatchResponseBody>(
+      `/routes/${routeId}/clear/`,
+      undefined,
+      generateAxiosHeaderWithBearer(token)
+    );
   } catch (error) {
     if (hasAxiosResponseMessage(error)) {
       console.error(error.response.data.message);
@@ -102,9 +110,13 @@ export async function patchClear(routeId: string) {
   }
 }
 
-export async function patchUndo(routeId: string) {
+export async function patchUndo(routeId: string, token?: string) {
   try {
-    return await axios.patch<PatchResponseBody>(`/routes/${routeId}/undo/`);
+    return await axios.patch<PatchResponseBody>(
+      `/routes/${routeId}/undo/`,
+      undefined,
+      generateAxiosHeaderWithBearer(token)
+    );
   } catch (error) {
     if (hasAxiosResponseMessage(error)) {
       console.error(error.response.data.message);
@@ -112,9 +124,13 @@ export async function patchUndo(routeId: string) {
   }
 }
 
-export async function patchRedo(routeId: string) {
+export async function patchRedo(routeId: string, token?: string) {
   try {
-    return await axios.patch<PatchResponseBody>(`/routes/${routeId}/redo/`);
+    return await axios.patch<PatchResponseBody>(
+      `/routes/${routeId}/redo/`,
+      undefined,
+      generateAxiosHeaderWithBearer(token)
+    );
   } catch (error) {
     if (hasAxiosResponseMessage(error)) {
       console.error(error.response.data.message);
@@ -125,12 +141,14 @@ export async function patchRedo(routeId: string) {
 export async function patchMove(
   routeId: string,
   idx: number,
-  payload: RouteMoveRequestBody
+  payload: RouteMoveRequestBody,
+  token?: string
 ) {
   try {
     return await axios.patch<PatchResponseBody>(
       `/routes/${routeId}/move/${idx}`,
-      payload
+      payload,
+      generateAxiosHeaderWithBearer(token)
     );
   } catch (error) {
     if (hasAxiosResponseMessage(error)) {
@@ -139,11 +157,16 @@ export async function patchMove(
   }
 }
 
-export async function patchRename(routeId: string, payload: RenameRequestBody) {
+export async function patchRename(
+  routeId: string,
+  payload: RenameRequestBody,
+  token?: string
+) {
   try {
     return await axios.patch<RouteResponseBody>(
       `/routes/${routeId}/rename/`,
-      payload
+      payload,
+      generateAxiosHeaderWithBearer(token)
     );
   } catch (error) {
     if (hasAxiosResponseMessage(error)) {
@@ -161,9 +184,9 @@ export async function postRoute(token: string, payload: PostRouteRequest) {
   return data;
 }
 
-export async function deleteRoute(id: string) {
+export async function deleteRoute(id: string, token?: string) {
   try {
-    await axios.delete(`/routes/${id}`);
+    await axios.delete(`/routes/${id}`, generateAxiosHeaderWithBearer(token));
   } catch (error) {
     if (hasAxiosResponseMessage(error)) {
       console.error(error.response.data.message);

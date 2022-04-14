@@ -34,7 +34,7 @@ const BasicInformationUpdateForm = ({
   const previewUrl = useMemo(() => {
     return previewFile ? URL.createObjectURL(previewFile) : userInfo.icon_url;
   }, [previewFile, userInfo.icon_url]);
-  const { authenticatedUser } = useAuthenticationInfoContext();
+  const { getIdToken } = useAuthenticationInfoContext();
   const history = useHistory();
 
   const asyncUpdateValidationMessages = async (
@@ -76,7 +76,7 @@ const BasicInformationUpdateForm = ({
   };
 
   const submitFormHandler = useCallback(async () => {
-    const token = await authenticatedUser?.getIdToken();
+    const token = await getIdToken();
     if (token) {
       try {
         const iconUrl =
@@ -96,7 +96,7 @@ const BasicInformationUpdateForm = ({
       toast.error("ユーザートークンの取得に失敗しました。");
     }
   }, [
-    authenticatedUser,
+    getIdToken,
     previewFile,
     userInfo.id,
     userInfoForm,

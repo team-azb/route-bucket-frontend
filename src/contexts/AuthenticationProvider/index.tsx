@@ -1,4 +1,10 @@
-import React, { createContext, useState, useEffect, useContext } from "react";
+import React, {
+  createContext,
+  useState,
+  useEffect,
+  useContext,
+  useCallback,
+} from "react";
 import { onAuthStateChanged, User } from "../../api/auth";
 
 type AuthenticationInfoProviderProps = {
@@ -8,11 +14,13 @@ type AuthenticationInfoProviderProps = {
 type AuthenticationInfo = {
   authenticatedUser: User | null;
   hasCheckedAuth: boolean;
+  getIdToken: () => Promise<string> | undefined;
 };
 
 const AuthenticationInfoContext = createContext<AuthenticationInfo>({
   authenticatedUser: null,
   hasCheckedAuth: false,
+  getIdToken: async () => "",
 });
 
 export const AuthenticationInfoProvider = ({
@@ -27,9 +35,18 @@ export const AuthenticationInfoProvider = ({
     });
     return unsubscribeWhenUnmounted;
   }, []);
+
+  const getIdToken = useCallback(() => {
+    return authenticatedUser?.getIdToken();
+  }, [authenticatedUser]);
+
   return (
     <AuthenticationInfoContext.Provider
-      value={{ authenticatedUser, hasCheckedAuth }}
+      value={{
+        authenticatedUser,
+        hasCheckedAuth,
+        getIdToken: getIdToken,
+      }}
     >
       {children}
     </AuthenticationInfoContext.Provider>
