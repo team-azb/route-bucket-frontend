@@ -43,6 +43,9 @@ Set up a mock server on port 8080 based on swagger/openapi.yml.
 
 ### `npm run eject`
 
+## File Dependencies
+![components.svg](docs/components.svg)
+
 **Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
 If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
